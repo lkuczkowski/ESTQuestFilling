@@ -1,0 +1,135 @@
+﻿<Window x:Class="ESTQuestFilling.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="ESTQuestFilling" Height="524.029" Width="1054.382"
+        Name="MainWin" ResizeMode="NoResize">
+    <Window.Resources>
+    </Window.Resources>
+    <Grid Margin="0,0,2,10">
+        <TabControl>
+            <TabItem Header="Main">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="300"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <DockPanel HorizontalAlignment="Stretch" LastChildFill="False">
+                        <Label DockPanel.Dock="Top" Content="Database read" FontWeight="Bold"/>
+                        <GroupBox DockPanel.Dock="Top" Header="Database info:">
+                            <StackPanel>
+                                <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding DatabaseName}"></TextBlock>
+                                <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding DatabasePath}"></TextBlock>
+                            </StackPanel>
+                        </GroupBox>
+                        <Button DockPanel.Dock="Top" Margin="10" Command="{Binding ReadDatabaseCommand}" Height="44">Read database</Button>
+                        <Label DockPanel.Dock="Top">Tables in Database:</Label>
+                        <ListBox DockPanel.Dock="Top" Margin="10" Height="150" ItemsSource="{Binding DatabaseTableNamesList}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding}" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <Button DockPanel.Dock="Bottom" HorizontalAlignment="Right" Margin="10" Content="Exit" Width="75" Command="{Binding CloseAppCommand}"/>
+                    </DockPanel>
+                    <DockPanel Grid.Column="1">
+                        <Label DockPanel.Dock="Top" Content="Generate XML code" FontWeight="Bold"></Label>
+                        <Border Margin="5" DockPanel.Dock="Top" BorderBrush="#FFA893AE" BorderThickness="2" CornerRadius="5">
+                            <Border.Background>
+                                <SolidColorBrush Color="#FFF5EAF5" Opacity="0.5"/>
+                            </Border.Background>
+                            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger SourceObject="{Binding ElementName=CompanyNameComboBox}" EventName="SelectionChanged">
+                                        <i:InvokeCommandAction Command="{Binding ReadInstitutionCommand}" CommandParameter="{Binding ElementName=CompanyNameComboBox, Path=SelectedItem}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>
+                                <ComboBox x:Name="CompanyNameComboBox" Width="200" Height="25" DockPanel.Dock="Top" Margin="10,10,60,10" ItemsSource="{Binding CompanyListCollection}"/>
+                                <Button DockPanel.Dock="Top" Margin="10" Content="Read institution" Height="30" Width="100" Command="{Binding ReadInstitutionCommand}" CommandParameter="{Binding ElementName=CompanyListCollectionComboBox, Path=SelectedItem}"/>
+                                <Button DockPanel.Dock="Top" Margin="10" Content="Write to files" Height="30" Width="100"  Command="{Binding WriteInstitutionCheckpointsToFilesCommand}"/>
+                            </StackPanel>
+                        </Border>
+                        <Label Margin="5" DockPanel.Dock="Top" MinHeight="20" Content="{Binding CurrentInstitutionName}" FontWeight="Bold" FontSize="14" BorderThickness="1" Foreground="DarkRed" HorizontalContentAlignment="Center">
+                            <Label.Background>
+                                <SolidColorBrush Color="#FFE3DFE4" Opacity="0.5"/>
+                            </Label.Background>
+                        </Label>
+                        <Label DockPanel.Dock="Top">Checkpoint list:</Label>
+                        <Border Margin="5" BorderBrush="#FF59A8A8" DockPanel.Dock="Top" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" CornerRadius="5" BorderThickness="2">
+                            <ScrollViewer>
+                                <ItemsControl Margin="2" DataContext="{Binding CurrentInstitution}" ItemsSource="{Binding CheckpointViewModelsList}" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Margin="2" BorderThickness="1" BorderBrush="Black" CornerRadius="10" >
+                                                <Border.Background>
+                                                    <SolidColorBrush Color="#FFC4E8E8" Opacity="0.5"/>
+                                                </Border.Background>
+                                                <StackPanel Margin="10">
+                                                    <TextBlock TextWrapping="Wrap" Text="{Binding CheckpointName}" FontWeight="Bold" FontSize="14" TextDecorations="Underline" Margin="0,0,0,10" Foreground="DarkSlateGray"/>
+                                                    <ItemsControl ItemsSource="{Binding QuestionListViewModel}">
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <StackPanel>
+                                                                    <DockPanel Margin="0,10,0,0">
+                                                                        <TextBlock DockPanel.Dock="Left" FontSize="13" Text="{Binding Number}" FontWeight="Bold" Margin="0,0,5,0"/>
+                                                                        <TextBlock DockPanel.Dock="Left" FontSize="13" TextWrapping="Wrap" Text="{Binding QuestionText}" TextDecorations="Underline" Margin="0,0,0,5"/>
+                                                                    </DockPanel>
+                                                                    <StackPanel Orientation="Horizontal" Margin="30,5,0,5">
+                                                                        <TextBlock Text="Kwantyfikowanie:   "/>
+                                                                        <TextBlock TextWrapping="Wrap" Text="{Binding Answer}" Foreground="#FF1811A2"/>
+                                                                    </StackPanel>
+                                                                    <GroupBox Header="Czynniki ryzyka">
+                                                                        <TextBlock TextWrapping="Wrap" Text="{Binding Evaluation}" Margin="3"/>
+                                                                    </GroupBox>
+                                                                </StackPanel>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </StackPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Border>
+                    </DockPanel>
+                </Grid>
+            </TabItem>
+            <TabItem  Name="QuestionDatabaseTab" Header="Questions database">
+                <DockPanel>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                        <GroupBox DockPanel.Dock="Top" Margin="5" Header="Question list">
+                            <DataGrid RowDetailsVisibilityMode="VisibleWhenSelected" ItemsSource="{Binding QuestionsCollection, UpdateSourceTrigger=PropertyChanged}" Name="QuestionsDataGrid" AutoGenerateColumns="False" ScrollViewer.CanContentScroll="False">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Width="800" Header="Pytanie" Binding="{Binding QuestionText, Mode=OneWay}" IsReadOnly="True" />
+                                    <DataGridTextColumn Header="Kwantyfikowanie" Binding="{Binding Answer, Mode=OneWay}" IsReadOnly="True" />
+                                </DataGrid.Columns>
+                                <DataGrid.RowDetailsTemplate>
+                                    <DataTemplate>
+                                        <DockPanel>
+                                            <GroupBox DockPanel.Dock="Left" Header="Czynniki ryzyka">
+                                                <TextBlock Text="{Binding Evaluation}" Margin="5" />
+                                            </GroupBox>
+                                            <GroupBox DockPanel.Dock="Left" Header="Tag">
+                                                <GroupBox.Background>
+                                                    <SolidColorBrush Color="#FFEEE8E8" Opacity="0.5"/>
+                                                </GroupBox.Background>
+                                                <TextBlock TextWrapping="Wrap" Text="{Binding Tag}" Margin="5"/>
+                                            </GroupBox>
+                                        </DockPanel>
+                                    </DataTemplate>
+                                </DataGrid.RowDetailsTemplate>
+                            </DataGrid>
+                        </GroupBox>
+                    </ScrollViewer>
+                </DockPanel>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

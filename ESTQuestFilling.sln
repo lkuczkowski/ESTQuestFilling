@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.852
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESTQuestFilling", "ESTQuestFilling\ESTQuestFilling.csproj", "{E8C4B4C5-CF89-4DED-B9AE-FD0A2F7FF9D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESTQuestFilling.Tests", "ESTQuestFilling.Tests\ESTQuestFilling.Tests.csproj", "{ADF46DE4-E80C-4509-A025-A79D331F450C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E8C4B4C5-CF89-4DED-B9AE-FD0A2F7FF9D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E8C4B4C5-CF89-4DED-B9AE-FD0A2F7FF9D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E8C4B4C5-CF89-4DED-B9AE-FD0A2F7FF9D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E8C4B4C5-CF89-4DED-B9AE-FD0A2F7FF9D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADF46DE4-E80C-4509-A025-A79D331F450C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADF46DE4-E80C-4509-A025-A79D331F450C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADF46DE4-E80C-4509-A025-A79D331F450C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADF46DE4-E80C-4509-A025-A79D331F450C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4563BC5E-182D-48E5-9AA3-0E91A2172740}
+	EndGlobalSection
+EndGlobal
