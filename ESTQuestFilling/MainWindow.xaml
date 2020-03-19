@@ -7,6 +7,8 @@
         mc:Ignorable="d"
         Title="ESTQuestFilling" Height="524.029" Width="1054.382"
         Name="MainWin" ResizeMode="NoResize">
+<!--TODO - Wprowadzić możliwość zmiany rozmiaru okna-->
+<!--TODO - Przycisk minimalizacji okna-->
     <Window.Resources>
     </Window.Resources>
     <Grid Margin="0,0,2,10">
@@ -51,6 +53,7 @@
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                                 <ComboBox x:Name="CompanyNameComboBox" Width="200" Height="25" DockPanel.Dock="Top" Margin="10,10,60,10" ItemsSource="{Binding CompanyListCollection}"/>
+                                <!-- TODO - Wywalić przycisk dead institution - nie jest używany-->
                                 <Button DockPanel.Dock="Top" Margin="10" Content="Read institution" Height="30" Width="100" Command="{Binding ReadInstitutionCommand}" CommandParameter="{Binding ElementName=CompanyListCollectionComboBox, Path=SelectedItem}"/>
                                 <Button DockPanel.Dock="Top" Margin="10" Content="Write to files" Height="30" Width="100"  Command="{Binding WriteInstitutionCheckpointsToFilesCommand}"/>
                             </StackPanel>
@@ -61,6 +64,7 @@
                             </Label.Background>
                         </Label>
                         <Label DockPanel.Dock="Top">Checkpoint list:</Label>
+                        <!--TODO - sprawdzić ja będzie wyglądał interface pytań jak wstawimy DataGrid w to miejsce-->
                         <Border Margin="5" BorderBrush="#FF59A8A8" DockPanel.Dock="Top" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" CornerRadius="5" BorderThickness="2">
                             <ScrollViewer>
                                 <ItemsControl Margin="2" DataContext="{Binding CurrentInstitution}" ItemsSource="{Binding CheckpointViewModelsList}" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
@@ -103,9 +107,19 @@
             </TabItem>
             <TabItem  Name="QuestionDatabaseTab" Header="Questions database">
                 <DockPanel>
+                    <!--TODO - Dodać textboxa z możliwością wpisywania treści do karty z bazą pytań-->
+                    <DockPanel DockPanel.Dock="Top" Margin="10,3,0,3">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger SourceObject="{Binding ElementName=SearchTextBox}" EventName="TextChanged">
+                                <i:InvokeCommandAction Command="{Binding GetSearchedQuestionsCommand}" CommandParameter="{Binding ElementName=SearchTextBox, Path=Text}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        <Label DockPanel.Dock="Left" Content="Search: "></Label>
+                        <TextBox Name="SearchTextBox" Margin="2" DockPanel.Dock="Left" Width="300" HorizontalAlignment="Left"></TextBox>
+                    </DockPanel>
                     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                         <GroupBox DockPanel.Dock="Top" Margin="5" Header="Question list">
-                            <DataGrid RowDetailsVisibilityMode="VisibleWhenSelected" ItemsSource="{Binding QuestionsCollection, UpdateSourceTrigger=PropertyChanged}" Name="QuestionsDataGrid" AutoGenerateColumns="False" ScrollViewer.CanContentScroll="False">
+                            <DataGrid RowDetailsVisibilityMode="VisibleWhenSelected" ItemsSource="{Binding SearchQuestionCollection, UpdateSourceTrigger=PropertyChanged}" Name="QuestionsDataGrid" AutoGenerateColumns="False" ScrollViewer.CanContentScroll="False">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Width="800" Header="Pytanie" Binding="{Binding QuestionText, Mode=OneWay}" IsReadOnly="True" />
                                     <DataGridTextColumn Header="Kwantyfikowanie" Binding="{Binding Answer, Mode=OneWay}" IsReadOnly="True" />

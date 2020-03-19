@@ -17,6 +17,20 @@ namespace ESTQuestFilling.ViewModel
             "No database read"
         };
 
+        // TODO - Dodać kolejną kolekcję zawierającą tylko pytania z wybranym Tagiem
+
+        private ObservableCollection<QuestionViewModel> _searchQuestionCollection;
+
+        public ObservableCollection<QuestionViewModel> SearchQuestionCollection
+        {
+            get { return _searchQuestionCollection; }
+            set
+            {
+                _searchQuestionCollection = value;
+                OnPropertyChanged(nameof(SearchQuestionCollection));
+            }
+        }
+
         public static ObservableCollection<QuestionViewModel> QuestionsCollection { get; } = new ObservableCollection<QuestionViewModel>();
 
         private CompanyViewModel _currentInstitution;
@@ -67,14 +81,28 @@ namespace ESTQuestFilling.ViewModel
                 ReadQuestionDatabase();
             });
             CloseAppCommand = new DelegateCommand((object n) => Application.Current.Shutdown());
+            GetSearchedQuestionsCommand = new DelegateCommand(GetSearchedQuestions);
             DatabaseName = "Not read";
             DatabasePath = "Not read";
+            SearchQuestionCollection = QuestionsCollection;
         }
 
         public DelegateCommand ReadInstitutionCommand { get; }
         public DelegateCommand WriteInstitutionCheckpointsToFilesCommand { get; }
         public DelegateCommand ReadDatabaseCommand { get; }
         public DelegateCommand CloseAppCommand { get; }
+        public DelegateCommand GetSearchedQuestionsCommand { get; }
+
+        private void GetSearchedQuestions(object tag)
+        {
+            string tagString = tag.ToString();
+            if (tagString == " " || tagString == string.Empty)
+                SearchQuestionCollection = QuestionsCollection;
+            else
+            {
+                SearchQuestionCollection = new ObservableCollection<QuestionViewModel>(QuestionsCollection.Where( n => n.Tag.Contains(tagString)));
+            }
+        }
 
         private void ReadDatebase()
         {

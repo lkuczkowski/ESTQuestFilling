@@ -13,6 +13,8 @@ namespace ESTQuestFilling.Model
 
         public int[][] EvaluationTable { get; private set; }
 
+
+        // TODO - sprawdzać inne przypadku np.: "brak;" oraz pusty string 
         private void SetEvaluation(string marks)
         {
             _evaluation = marks;
@@ -59,6 +61,10 @@ namespace ESTQuestFilling.Model
             EvaluationTable = splitMarksStrings.Select(n => n.Select(Int32.Parse).ToArray()).ToArray();
         }
 
+
+        // TODO - czy można jakoś uprościć teksty z kodem (fragment z oceną)???
+
+        // TODO - dodać obsługę pola z komentarzem z bazy danych
         private string GetTAK_nieCode()
         {
             return "<InputRadio required=\"true\">\n" +

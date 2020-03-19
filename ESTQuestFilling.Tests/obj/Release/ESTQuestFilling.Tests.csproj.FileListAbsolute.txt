@@ -1,0 +1,13 @@
+C:\Users\Łukasz\Desktop\ESTQuestFilling\ESTQuestFilling\ESTQuestFilling.Tests\bin\Release\ESTQuestFilling.Tests.dll
+C:\Users\Łukasz\Desktop\ESTQuestFilling\ESTQuestFilling\ESTQuestFilling.Tests\bin\Release\ESTQuestFilling.Tests.pdb
+C:\Users\Łukasz\Desktop\ESTQuestFilling\ESTQuestFilling\ESTQuestFilling.Tests\bin\Release\ESTQuestFilling.exe
+C:\Users\Łukasz\Desktop\ESTQuestFilling\ESTQuestFilling\ESTQuestFilling.Tests\bin\Release\nunit.framework.dll
+C:\Users\Łukasz\Desktop\ESTQuestFilling\ESTQuestFilling\ESTQuestFilling.Tests\bin\Release\ESTQuestFilling.pdb
+C:\Users\Łukasz\Desktop\ESTQuestFilling\ESTQuestFilling\ESTQuestFilling.Tests\bin\Release\ESTQuestFilling.exe.config
+C:\Users\Łukasz\Desktop\ESTQuestFilling\ESTQuestFilling\ESTQuestFilling.Tests\bin\Release\nunit.framework.pdb
+C:\Users\Łukasz\Desktop\ESTQuestFilling\ESTQuestFilling\ESTQuestFilling.Tests\bin\Release\nunit.framework.xml
+C:\Users\Łukasz\Desktop\ESTQuestFilling\ESTQuestFilling\ESTQuestFilling.Tests\obj\Release\ESTQuestFilling.Tests.csprojAssemblyReference.cache
+C:\Users\Łukasz\Desktop\ESTQuestFilling\ESTQuestFilling\ESTQuestFilling.Tests\obj\Release\ESTQuestFilling.Tests.csproj.CoreCompileInputs.cache
+C:\Users\Łukasz\Desktop\ESTQuestFilling\ESTQuestFilling\ESTQuestFilling.Tests\obj\Release\ESTQuestFilling.Tests.csproj.CopyComplete
+C:\Users\Łukasz\Desktop\ESTQuestFilling\ESTQuestFilling\ESTQuestFilling.Tests\obj\Release\ESTQuestFilling.Tests.dll
+C:\Users\Łukasz\Desktop\ESTQuestFilling\ESTQuestFilling\ESTQuestFilling.Tests\obj\Release\ESTQuestFilling.Tests.pdb
