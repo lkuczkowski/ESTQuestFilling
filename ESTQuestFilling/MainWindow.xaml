@@ -107,7 +107,6 @@
             </TabItem>
             <TabItem  Name="QuestionDatabaseTab" Header="Questions database">
                 <DockPanel>
-                    <!--TODO - Dodać textboxa z możliwością wpisywania treści do karty z bazą pytań-->
                     <DockPanel DockPanel.Dock="Top" Margin="10,3,0,3">
                         <i:Interaction.Triggers>
                             <i:EventTrigger SourceObject="{Binding ElementName=SearchTextBox}" EventName="TextChanged">

@@ -65,7 +65,7 @@ namespace ESTQuestFilling.Model
         // TODO - czy można jakoś uprościć teksty z kodem (fragment z oceną)???
 
         // TODO - dodać obsługę pola z komentarzem z bazy danych
-        private string GetTAK_nieCode()
+        private string GetTAKnieCode()
         {
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
@@ -86,7 +86,7 @@ namespace ESTQuestFilling.Model
                    "</InputRadio>";
         }
 
-        private string GetOcena_eksperckaCode()
+        private string GetOcenaEksperckaCode()
         {
             return "<InputImage allowCamera=\"true\" allowFile=\"false\" required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
@@ -94,13 +94,13 @@ namespace ESTQuestFilling.Model
                             "\t\t<AnalyticsLink>\n" +
                                 EvaluationTable.Aggregate("", (n, s) => n + $"\t\t\t<Factor refWeight = \"{s[1]}\" refId = \"{s[0]}\"/>\n") +
                             "\t\t</AnalyticsLink>\n" +
-                        "<ByOperator expiredMark=\"warning\" initialMark=\"normal\" refusalMark=\"alarm\"/>\n" +
+                            "\t\t<ByOperator expiredMark=\"warning\" initialMark=\"normal\" refusalMark=\"alarm\"/>\n" +
                         "\t</Mark>\n" +
                         "\t<NotEdited/>\n" +
                    "</InputImage>";
         }
 
-        private string GetBRAKUWAG_Uwagi_TekstCode()
+        private string GetBRAKUWAG_UwagiTekstCode()
         {
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
@@ -131,7 +131,7 @@ namespace ESTQuestFilling.Model
                    "</InputRadio>";
         }
 
-        private string GetCiagloscZachowana_Uszkodzenie_OknoZUwagamiCode()
+        private string GetCiagloscZachowanaUszkodzenieOknoZUwagamiCode()
         {
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
@@ -162,7 +162,7 @@ namespace ESTQuestFilling.Model
                    "</InputRadio>";
         }
 
-        private string Get_tak_Zdjecie_NIECode()
+        private string Get_takZdjecieNIECode()
         {
             return "<InputRadio required=\"true\">\n" +
                             $"\t<Title>{QuestionText}</Title>\n" +
@@ -193,7 +193,7 @@ namespace ESTQuestFilling.Model
                           "</InputRadio>";
         }
 
-        private string GetBRAKUWAG_uwagi_Tekst_ZdjecieCode()
+        private string GetBRAKUWAGuwagiTekstZdjecieCode()
         {
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
@@ -228,7 +228,7 @@ namespace ESTQuestFilling.Model
                    "</InputRadio>";
         }
 
-        private string Get_tak_NIECode()
+        private string Get_takNIECode()
         {
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
@@ -248,8 +248,7 @@ namespace ESTQuestFilling.Model
                         "\t<NotEdited/>\n" +
                    "</InputRadio>";
         }
-
-        private string Get_TAK_nie_ZdjecieCode()
+        private string GetTAKnieZdjecieCode()
         {
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
@@ -280,7 +279,7 @@ namespace ESTQuestFilling.Model
                    "</InputRadio>";
         }
 
-        private string Get_tak_Tekst_NIECode()
+        private string Get_takTekstNIECode()
         {
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
@@ -331,7 +330,7 @@ namespace ESTQuestFilling.Model
                        "</InputSliderInt>";
         }
 
-        private string Get_TAK_nie_TekstCode()
+        private string GetTAKnieTekstCode()
         {
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
@@ -362,6 +361,69 @@ namespace ESTQuestFilling.Model
                    "</InputRadio>";
         }
 
+        private string GetFakultatywneTekstZdjecieCode()
+        {
+           return "<InputText required=\"false\">" +
+                        $"\t<Title>{QuestionText}</Title>" +
+                        "\t<Inner>" +
+                            "\t\t<OnValue/>" +
+                            "\t\t<InnerInputs>" +
+                                "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\">" +
+                                    "\t\t\t\t<Title>Wykonaj zdjęcie dotyczące uwag (fakultatywne).</Title>" +
+                                    "\t\t\t\t<NotEdited/>" +
+                                "\t\t\t</InputImage>" + 
+                                "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\">" +
+                                    "\t\t\t\t<Title>Wykonaj dodatkowe zdjęcie dotyczące uwag (fakultatywne).</Title>" +
+                                    "\t\t\t\t<NotEdited/>" +
+                                "\t\t\t</InputImage>" +
+                            "\t\t</InnerInputs>" +
+                        "\t</Inner>" +
+                        "\t<Mark>" +
+                            "\t\t<ByOperator expiredMark = \"normal\" initialMark = \"normal\" refusalMark = \"normal\"/>" +
+                        "\t</Mark>" +
+                        "\t<NotEdited/>" +
+                "</InputText>";
+        }
+
+        private string GetTekstCode()
+        {
+            return "<InputText required = \"true\">" +
+                        $"\t<Title>{QuestionText}</Title>" +
+                        "\t<Mark>" +
+                        "   \t\t<AnalyticsLink>\n" +
+                                EvaluationTable.Aggregate("", (n, s) => n + $"\t\t\t<Factor refWeight = \"{s[1]}\" refId = \"{s[0]}\"/>\n") +
+                            "\t\t</AnalyticsLink>\n" +
+                            "\t\t<ByOperator expiredMark = \"normal\" initialMark = \"normal\" refusalMark = \"alarm\"/>" +
+                        "\t</Mark>" +
+                        "\t<NotEdited/>" +
+                   "</InputText>";
+        }
+
+        private string GetListaRozwijanaCode()
+        {
+            return "<InputCombo required=\"true\">\n" +
+                        $"\t<Title>{QuestionText}</Title>\n" +
+                        "\t<SelectionList>\n" +
+                        "\t<!--___________________WPROWADŹ POLA WYBORU________________-->\n" +
+                            "\t\t<Selection></Selection>\n" +
+                            "\t\t<Selection></Selection>\n" +
+                            "\t\t<Selection></Selection>\n" +
+                        "\t</SelectionList>\n" +
+                        "\t<Mark>\n" +
+                            "\t\t<AnalyticsLink>\n" +
+                                EvaluationTable.Aggregate("", (n, s) => n + $"\t\t\t<Factor refWeight = \"{s[1]}\" refId = \"{s[0]}\"/>\n") +
+                            "\t\t</AnalyticsLink>\n" +
+                            "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                            "\t\t<!--___________________WPROWADŹ OCENY DLA PÓL WYBORU________________-->\n" +
+                                "\t\t\t<MarkDef mark = \"normal\"></MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"warning\"></MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"alarm\"></MarkDef>\n" +
+                            "\t\t</Definition>\n" +
+                        "\t</Mark>\n" +
+                        "\t<NotEdited/>\n" +
+                   "</InputCombo>";
+        }
+
         private string GetCode(string answerType)
         {
             try
@@ -369,27 +431,33 @@ namespace ESTQuestFilling.Model
                 switch (answerType)
                 {
                     case "[TAK / nie]":
-                        return GetTAK_nieCode();
+                        return GetTAKnieCode();
                     case "[Ocena ekspercka]":
-                        return GetOcena_eksperckaCode();
+                        return GetOcenaEksperckaCode();
                     case "[BRAK UWAG / uwagi --> Tekst]":
-                        return GetBRAKUWAG_Uwagi_TekstCode();
+                        return GetBRAKUWAG_UwagiTekstCode();
                     case "[Ciągłość zachowana / Uszkodzenie --> Tekst]":
-                        return GetCiagloscZachowana_Uszkodzenie_OknoZUwagamiCode();
+                        return GetCiagloscZachowanaUszkodzenieOknoZUwagamiCode();
                     case "[tak --> Zdjęcie / NIE]":
-                        return Get_tak_Zdjecie_NIECode();
+                        return Get_takZdjecieNIECode();
                     case "[BRAK UWAG / uwagi --> Tekst + zdjęcie]":
-                        return GetBRAKUWAG_uwagi_Tekst_ZdjecieCode();
+                        return GetBRAKUWAGuwagiTekstZdjecieCode();
                     case "[tak / NIE]":
-                        return Get_tak_NIECode();
+                        return Get_takNIECode();
                     case "[TAK / nie --> Zdjęcie]":
-                        return Get_TAK_nie_ZdjecieCode();
+                        return GetTAKnieZdjecieCode();
                     case "[tak --> Tekst / NIE]":
-                        return Get_tak_Tekst_NIECode();
+                        return Get_takTekstNIECode();
                     case "[Suwak (odczyt wartości)]":
                         return GetSuwak_odczytWartosciCode();
                     case "[TAK / nie --> Tekst]":
-                        return Get_TAK_nie_TekstCode();
+                        return GetTAKnieTekstCode();
+                    case "[Fakultatywne --> Tekst + zdjęcie":
+                        return GetFakultatywneTekstZdjecieCode();
+                    case "[Tekst]":
+                        return GetTekstCode();
+                    case "[Lista rozwijana]":
+                        return GetListaRozwijanaCode();
                     default:
                         throw new NotImplementedException("Switch statement error");
                 }
