@@ -363,39 +363,39 @@ namespace ESTQuestFilling.Model
 
         private string GetFakultatywneTekstZdjecieCode()
         {
-            return "<InputText required=\"false\">" +
-                         $"\t<Title>{QuestionText}</Title>" +
-                         "\t<Inner>" +
-                             "\t\t<OnValue/>" +
-                             "\t\t<InnerInputs>" +
-                                 "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\">" +
-                                     "\t\t\t\t<Title>Wykonaj zdjęcie dotyczące uwag (fakultatywne).</Title>" +
-                                     "\t\t\t\t<NotEdited/>" +
-                                 "\t\t\t</InputImage>" +
-                                 "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\">" +
-                                     "\t\t\t\t<Title>Wykonaj dodatkowe zdjęcie dotyczące uwag (fakultatywne).</Title>" +
-                                     "\t\t\t\t<NotEdited/>" +
-                                 "\t\t\t</InputImage>" +
-                             "\t\t</InnerInputs>" +
-                         "\t</Inner>" +
-                         "\t<Mark>" +
-                             "\t\t<ByOperator expiredMark = \"normal\" initialMark = \"normal\" refusalMark = \"normal\"/>" +
-                         "\t</Mark>" +
-                         "\t<NotEdited/>" +
+            return "<InputText required=\"false\">\n" +
+                         $"\t<Title>{QuestionText}</Title>\n" +
+                         "\t<Inner>\n" +
+                             "\t\t<OnValue/>\n" +
+                             "\t\t<InnerInputs>\n" +
+                                 "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\">\n" +
+                                     "\t\t\t\t<Title>Wykonaj zdjęcie dotyczące uwag (fakultatywne).</Title>\n" +
+                                     "\t\t\t\t<NotEdited/>\n" +
+                                 "\t\t\t</InputImage>\n" +
+                                 "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\">\n" +
+                                     "\t\t\t\t<Title>Wykonaj dodatkowe zdjęcie dotyczące uwag (fakultatywne).</Title>\n" +
+                                     "\t\t\t\t<NotEdited/>\n" +
+                                 "\t\t\t</InputImage>\n" +
+                             "\t\t</InnerInputs>\n" +
+                         "\t</Inner>\n" +
+                         "\t<Mark>\n" +
+                             "\t\t<ByOperator expiredMark = \"normal\" initialMark = \"normal\" refusalMark = \"normal\"/>\n" +
+                         "\t</Mark>\n" +
+                         "\t<NotEdited/>\n" +
                  "</InputText>";
         }
 
         private string GetTekstCode()
         {
-            return "<InputText required = \"true\">" +
-                        $"\t<Title>{QuestionText}</Title>" +
-                        "\t<Mark>" +
+            return "<InputText required = \"true\">\n" +
+                        $"\t<Title>{QuestionText}</Title>\n" +
+                        "\t<Mark>\n" +
                         "   \t\t<AnalyticsLink>\n" +
                                 EvaluationTable.Aggregate("", (n, s) => n + $"\t\t\t<Factor refWeight = \"{s[1]}\" refId = \"{s[0]}\"/>\n") +
                             "\t\t</AnalyticsLink>\n" +
-                            "\t\t<ByOperator expiredMark = \"normal\" initialMark = \"normal\" refusalMark = \"alarm\"/>" +
-                        "\t</Mark>" +
-                        "\t<NotEdited/>" +
+                            "\t\t<ByOperator expiredMark = \"normal\" initialMark = \"normal\" refusalMark = \"alarm\"/>\n" +
+                        "\t</Mark>\n" +
+                        "\t<NotEdited/>\n" +
                    "</InputText>";
         }
 
