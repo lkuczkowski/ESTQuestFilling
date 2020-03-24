@@ -6,10 +6,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="ESTQuestFilling" Height="524.029" Width="1054.382"
+        xmlns:view="clr-namespace:ESTQuestFilling.View"
         Name="MainWin" ResizeMode="NoResize">
 <!--TODO - Wprowadzić możliwość zmiany rozmiaru okna-->
 <!--TODO - Przycisk minimalizacji okna-->
     <Window.Resources>
+        <view:BoolToDataGridRowDetailsVisibilityModeConverter x:Key="BoolToDataGridRowDetailsVisibilityModeValueConverter"></view:BoolToDataGridRowDetailsVisibilityModeConverter>
+        <view:StringToBoolVisibilityConverter x:Key="StringToBoolVisibilityConverter"></view:StringToBoolVisibilityConverter>
     </Window.Resources>
     <Grid Margin="0,0,2,10">
         <TabControl>
@@ -24,7 +27,7 @@
                         <GroupBox DockPanel.Dock="Top" Header="Database info:">
                             <StackPanel>
                                 <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding DatabaseName}"></TextBlock>
-                                <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding DatabasePath}"></TextBlock>
+                                <TextBlock Name="DatabasePathTextBox" Margin="2" TextWrapping="Wrap" Text="{Binding DatabasePath}"></TextBlock>
                             </StackPanel>
                         </GroupBox>
                         <Button DockPanel.Dock="Top" Margin="10" Command="{Binding ReadDatabaseCommand}" Height="44">Read database</Button>
@@ -40,7 +43,7 @@
                         </ListBox>
                         <Button DockPanel.Dock="Bottom" HorizontalAlignment="Right" Margin="10" Content="Exit" Width="75" Command="{Binding CloseAppCommand}"/>
                     </DockPanel>
-                    <DockPanel Grid.Column="1">
+                    <DockPanel IsEnabled="{Binding ElementName=DatabasePathTextBox, Path=Text, Converter={StaticResource StringToBoolVisibilityConverter}}" Grid.Column="1">
                         <Label DockPanel.Dock="Top" Content="Generate XML code" FontWeight="Bold"></Label>
                         <Border Margin="5" DockPanel.Dock="Top" BorderBrush="#FFA893AE" BorderThickness="2" CornerRadius="5">
                             <Border.Background>
@@ -53,8 +56,6 @@
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                                 <ComboBox x:Name="CompanyNameComboBox" Width="200" Height="25" DockPanel.Dock="Top" Margin="10,10,60,10" ItemsSource="{Binding CompanyListCollection}"/>
-                                <!-- TODO - Wywalić przycisk dead institution - nie jest używany-->
-                                <Button DockPanel.Dock="Top" Margin="10" Content="Read institution" Height="30" Width="100" Command="{Binding ReadInstitutionCommand}" CommandParameter="{Binding ElementName=CompanyListCollectionComboBox, Path=SelectedItem}"/>
                                 <Button DockPanel.Dock="Top" Margin="10" Content="Write to files" Height="30" Width="100"  Command="{Binding WriteInstitutionCheckpointsToFilesCommand}"/>
                             </StackPanel>
                         </Border>
@@ -105,7 +106,7 @@
                     </DockPanel>
                 </Grid>
             </TabItem>
-            <TabItem  Name="QuestionDatabaseTab" Header="Questions database">
+            <TabItem IsEnabled="{Binding ElementName=DatabasePathTextBox, Path=Text, Converter={StaticResource StringToBoolVisibilityConverter}}" Name="QuestionDatabaseTab" Header="Questions database">
                 <DockPanel>
                     <DockPanel DockPanel.Dock="Top" Margin="10,3,0,3">
                         <i:Interaction.Triggers>
@@ -115,10 +116,11 @@
                         </i:Interaction.Triggers>
                         <Label DockPanel.Dock="Left" Content="Search: "></Label>
                         <TextBox Name="SearchTextBox" Margin="2" DockPanel.Dock="Left" Width="300" HorizontalAlignment="Left"></TextBox>
+                        <CheckBox Name="DetailViewCheckBox" DockPanel.Dock="Left" Margin="25,2,2,2" VerticalAlignment="Center">Detail view</CheckBox>
                     </DockPanel>
                     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                         <GroupBox DockPanel.Dock="Top" Margin="5" Header="Question list">
-                            <DataGrid RowDetailsVisibilityMode="VisibleWhenSelected" ItemsSource="{Binding SearchQuestionCollection, UpdateSourceTrigger=PropertyChanged}" Name="QuestionsDataGrid" AutoGenerateColumns="False" ScrollViewer.CanContentScroll="False">
+                            <DataGrid Name="QuestionsDataGrid" RowDetailsVisibilityMode="{Binding ElementName=DetailViewCheckBox, Path=IsChecked, Converter={StaticResource BoolToDataGridRowDetailsVisibilityModeValueConverter}}" ItemsSource="{Binding SearchQuestionCollection, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" ScrollViewer.CanContentScroll="False">
                                 <DataGrid.Columns>
                                     <DataGridTextColumn Width="800" Header="Pytanie" Binding="{Binding QuestionText, Mode=OneWay}" IsReadOnly="True" />
                                     <DataGridTextColumn Header="Kwantyfikowanie" Binding="{Binding Answer, Mode=OneWay}" IsReadOnly="True" />
@@ -126,10 +128,10 @@
                                 <DataGrid.RowDetailsTemplate>
                                     <DataTemplate>
                                         <DockPanel>
-                                            <GroupBox DockPanel.Dock="Left" Header="Czynniki ryzyka">
+                                            <GroupBox Width="600" DockPanel.Dock="Left" Header="Czynniki ryzyka">
                                                 <TextBlock Text="{Binding Evaluation}" Margin="5" />
                                             </GroupBox>
-                                            <GroupBox DockPanel.Dock="Left" Header="Tag">
+                                            <GroupBox Width="350" DockPanel.Dock="Left" Header="Tag">
                                                 <GroupBox.Background>
                                                     <SolidColorBrush Color="#FFEEE8E8" Opacity="0.5"/>
                                                 </GroupBox.Background>
