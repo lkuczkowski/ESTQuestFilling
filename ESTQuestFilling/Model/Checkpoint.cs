@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
+using System.Windows;
 
 namespace ESTQuestFilling.Model
 {
@@ -36,12 +38,18 @@ namespace ESTQuestFilling.Model
 
             sb.Append(firstPart);
 
-            foreach (var question in QuestionsList)
+            try
             {
-                sb.Append(question.GetQuestionCode());
-                sb.AppendLine("\n");
+                foreach (var question in QuestionsList)
+                {
+                    sb.Append(question.GetQuestionCode());
+                    sb.AppendLine("\n");
+                }
             }
-
+            catch (Exception e)
+            {
+                MessageBox.Show(e.ToString());
+            }
             sb.Append(lastPart);
             return sb.ToString();
         }

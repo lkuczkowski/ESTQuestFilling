@@ -61,7 +61,7 @@ namespace ESTQuestFilling.Model
             EvaluationTable = splitMarksStrings.Select(n => n.Select(Int32.Parse).ToArray()).ToArray();
         }
 
-
+        // TODO - bug z analityticsLink - nie powinno tego fragmentu być w ogóle, jeżeli ocena równa 0
         // TODO - czy można jakoś uprościć teksty z kodem (fragment z oceną)???
 
         // TODO - dodać obsługę pola z komentarzem z bazy danych
@@ -363,26 +363,26 @@ namespace ESTQuestFilling.Model
 
         private string GetFakultatywneTekstZdjecieCode()
         {
-           return "<InputText required=\"false\">" +
-                        $"\t<Title>{QuestionText}</Title>" +
-                        "\t<Inner>" +
-                            "\t\t<OnValue/>" +
-                            "\t\t<InnerInputs>" +
-                                "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\">" +
-                                    "\t\t\t\t<Title>Wykonaj zdjęcie dotyczące uwag (fakultatywne).</Title>" +
-                                    "\t\t\t\t<NotEdited/>" +
-                                "\t\t\t</InputImage>" + 
-                                "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\">" +
-                                    "\t\t\t\t<Title>Wykonaj dodatkowe zdjęcie dotyczące uwag (fakultatywne).</Title>" +
-                                    "\t\t\t\t<NotEdited/>" +
-                                "\t\t\t</InputImage>" +
-                            "\t\t</InnerInputs>" +
-                        "\t</Inner>" +
-                        "\t<Mark>" +
-                            "\t\t<ByOperator expiredMark = \"normal\" initialMark = \"normal\" refusalMark = \"normal\"/>" +
-                        "\t</Mark>" +
-                        "\t<NotEdited/>" +
-                "</InputText>";
+            return "<InputText required=\"false\">" +
+                         $"\t<Title>{QuestionText}</Title>" +
+                         "\t<Inner>" +
+                             "\t\t<OnValue/>" +
+                             "\t\t<InnerInputs>" +
+                                 "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\">" +
+                                     "\t\t\t\t<Title>Wykonaj zdjęcie dotyczące uwag (fakultatywne).</Title>" +
+                                     "\t\t\t\t<NotEdited/>" +
+                                 "\t\t\t</InputImage>" +
+                                 "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\">" +
+                                     "\t\t\t\t<Title>Wykonaj dodatkowe zdjęcie dotyczące uwag (fakultatywne).</Title>" +
+                                     "\t\t\t\t<NotEdited/>" +
+                                 "\t\t\t</InputImage>" +
+                             "\t\t</InnerInputs>" +
+                         "\t</Inner>" +
+                         "\t<Mark>" +
+                             "\t\t<ByOperator expiredMark = \"normal\" initialMark = \"normal\" refusalMark = \"normal\"/>" +
+                         "\t</Mark>" +
+                         "\t<NotEdited/>" +
+                 "</InputText>";
         }
 
         private string GetTekstCode()
@@ -426,46 +426,38 @@ namespace ESTQuestFilling.Model
 
         private string GetCode(string answerType)
         {
-            try
+            switch (answerType)
             {
-                switch (answerType)
-                {
-                    case "[TAK / nie]":
-                        return GetTAKnieCode();
-                    case "[Ocena ekspercka]":
-                        return GetOcenaEksperckaCode();
-                    case "[BRAK UWAG / uwagi --> Tekst]":
-                        return GetBRAKUWAG_UwagiTekstCode();
-                    case "[Ciągłość zachowana / Uszkodzenie --> Tekst]":
-                        return GetCiagloscZachowanaUszkodzenieOknoZUwagamiCode();
-                    case "[tak --> Zdjęcie / NIE]":
-                        return Get_takZdjecieNIECode();
-                    case "[BRAK UWAG / uwagi --> Tekst + zdjęcie]":
-                        return GetBRAKUWAGuwagiTekstZdjecieCode();
-                    case "[tak / NIE]":
-                        return Get_takNIECode();
-                    case "[TAK / nie --> Zdjęcie]":
-                        return GetTAKnieZdjecieCode();
-                    case "[tak --> Tekst / NIE]":
-                        return Get_takTekstNIECode();
-                    case "[Suwak (odczyt wartości)]":
-                        return GetSuwak_odczytWartosciCode();
-                    case "[TAK / nie --> Tekst]":
-                        return GetTAKnieTekstCode();
-                    case "[Fakultatywne --> Tekst + zdjęcie":
-                        return GetFakultatywneTekstZdjecieCode();
-                    case "[Tekst]":
-                        return GetTekstCode();
-                    case "[Lista rozwijana]":
-                        return GetListaRozwijanaCode();
-                    default:
-                        throw new NotImplementedException("Switch statement error");
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-                throw;
+                case "[TAK / nie]":
+                    return GetTAKnieCode();
+                case "[Ocena ekspercka]":
+                    return GetOcenaEksperckaCode();
+                case "[BRAK UWAG / uwagi --> Tekst]":
+                    return GetBRAKUWAG_UwagiTekstCode();
+                case "[Ciągłość zachowana / Uszkodzenie --> Tekst]":
+                    return GetCiagloscZachowanaUszkodzenieOknoZUwagamiCode();
+                case "[tak --> Zdjęcie / NIE]":
+                    return Get_takZdjecieNIECode();
+                case "[BRAK UWAG / uwagi --> Tekst + zdjęcie]":
+                    return GetBRAKUWAGuwagiTekstZdjecieCode();
+                case "[tak / NIE]":
+                    return Get_takNIECode();
+                case "[TAK / nie --> Zdjęcie]":
+                    return GetTAKnieZdjecieCode();
+                case "[tak --> Tekst / NIE]":
+                    return Get_takTekstNIECode();
+                case "[Suwak (odczyt wartości)]":
+                    return GetSuwak_odczytWartosciCode();
+                case "[TAK / nie --> Tekst]":
+                    return GetTAKnieTekstCode();
+                case "[Fakultatywne --> Tekst + zdjęcie]":
+                    return GetFakultatywneTekstZdjecieCode();
+                case "[Tekst]":
+                    return GetTekstCode();
+                case "[Lista rozwijana]":
+                    return GetListaRozwijanaCode();
+                default:
+                    throw new NotImplementedException("Switch statement error");
             }
         }
 
