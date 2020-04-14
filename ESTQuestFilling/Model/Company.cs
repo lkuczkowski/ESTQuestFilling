@@ -20,6 +20,7 @@ namespace ESTQuestFilling.Model
             CheckpointsList.Add(checkpoint);
         }
 
+        // TODO - sprawdzać czy istnieją już pliki i pytać czy nadpisać
         public void WriteInstitutionCodeFiles()
         {
             System.Windows.Forms.FolderBrowserDialog f = new System.Windows.Forms.FolderBrowserDialog();

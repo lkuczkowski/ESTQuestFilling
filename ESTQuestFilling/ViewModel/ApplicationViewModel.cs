@@ -104,6 +104,7 @@ namespace ESTQuestFilling.ViewModel
             }
         }
 
+        // TODO - Repository pattern
         private void ReadDatebase()
         {
             OpenFileDialog fileDialog = new OpenFileDialog();

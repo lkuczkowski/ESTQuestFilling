@@ -6,6 +6,7 @@ namespace ESTQuestFilling.Model
 {
     public class Question
     {
+        private string _analyticsLink = "";
         private string _evaluation;
         public string Answer { get; }
         public string Number { get; }
@@ -13,18 +14,22 @@ namespace ESTQuestFilling.Model
 
         public int[][] EvaluationTable { get; private set; }
 
-
-        // TODO - sprawdzać inne przypadku np.: "brak;" oraz pusty string 
         private void SetEvaluation(string marks)
         {
+            string[] noAnalyticsIndicataors = {"", "brak", "brak;", "brak; "};
             _evaluation = marks;
-            if (marks != "brak")
+            if (noAnalyticsIndicataors.Contains(marks))
             {
-                CreateEvaluateTable();
+                EvaluationTable = new int[1][] { new int[] { 0, 0 } };
+                _analyticsLink = "";
             }
             else
             {
-                EvaluationTable = new int[1][] { new int[] { 0, 0 } };
+                CreateEvaluateTable();
+                _analyticsLink = "\t\t<AnalyticsLink>\n" +
+                                 EvaluationTable.Aggregate("",
+                                     (n, s) => n + $"\t\t\t<Factor refWeight = \"{s[1]}\" refId = \"{s[0]}\"/>\n") +
+                                 "\t\t</AnalyticsLink>\n";
             }
         }
 
@@ -60,7 +65,7 @@ namespace ESTQuestFilling.Model
 
             EvaluationTable = splitMarksStrings.Select(n => n.Select(Int32.Parse).ToArray()).ToArray();
         }
-
+        // TODO - zastosować wzorzec lub dziedziczenie???
         // TODO - bug z analityticsLink - nie powinno tego fragmentu być w ogóle, jeżeli ocena równa 0
         // TODO - czy można jakoś uprościć teksty z kodem (fragment z oceną)???
 
@@ -74,9 +79,7 @@ namespace ESTQuestFilling.Model
                             "\t\t<Selection>NIE</Selection>\n" +
                         "\t</SelectionList>\n" +
                         "\t<Mark>\n" +
-                            "\t\t<AnalyticsLink>\n" +
-                                EvaluationTable.Aggregate("", (n, s) => n + $"\t\t\t<Factor refWeight = \"{s[1]}\" refId = \"{s[0]}\"/>\n") +
-                            "\t\t</AnalyticsLink>\n" +
+                            _analyticsLink +
                             "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
                                 "\t\t\t<MarkDef mark = \"normal\">TAK</MarkDef>\n" +
                                 "\t\t\t<MarkDef mark = \"alarm\">NIE</MarkDef>\n" +
@@ -91,9 +94,7 @@ namespace ESTQuestFilling.Model
             return "<InputImage allowCamera=\"true\" allowFile=\"false\" required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
                         "\t<Mark>\n" +
-                            "\t\t<AnalyticsLink>\n" +
-                                EvaluationTable.Aggregate("", (n, s) => n + $"\t\t\t<Factor refWeight = \"{s[1]}\" refId = \"{s[0]}\"/>\n") +
-                            "\t\t</AnalyticsLink>\n" +
+                            _analyticsLink +
                             "\t\t<ByOperator expiredMark=\"warning\" initialMark=\"normal\" refusalMark=\"alarm\"/>\n" +
                         "\t</Mark>\n" +
                         "\t<NotEdited/>\n" +
@@ -118,10 +119,7 @@ namespace ESTQuestFilling.Model
                             "\t\t</InnerInputs>\n" +
                         "\t</Inner>\n" +
                         "\t<Mark>\n" +
-                            "\t\t<AnalyticsLink>\n" +
-                                EvaluationTable.Aggregate("",
-                                (n, s) => n + $"\t\t\t<Factor refWeight = \"{s[1]}\" refId = \"{s[0]}\"/>\n") +
-                            "\t\t</AnalyticsLink>\n" +
+                            _analyticsLink +
                             "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
                                 "\t\t\t<MarkDef mark = \"normal\">BRAK UWAG</MarkDef>\n" +
                                 "\t\t\t<MarkDef mark = \"alarm\">UWAGI</MarkDef>\n" +
@@ -149,10 +147,7 @@ namespace ESTQuestFilling.Model
                             "\t\t</InnerInputs>\n" +
                         "\t</Inner>\n" +
                         "\t<Mark>\n" +
-                            "\t\t<AnalyticsLink>\n" +
-                                EvaluationTable.Aggregate("",
-                                (n, s) => n + $"\t\t\t<Factor refWeight = \"{s[1]}\" refId = \"{s[0]}\"/>\n") +
-                            "\t\t</AnalyticsLink>\n" +
+                            _analyticsLink +
                             "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
                                 "\t\t\t<MarkDef mark = \"normal\">Ciągłość zachowana</MarkDef>\n" +
                                 "\t\t\t<MarkDef mark = \"alarm\">Uszkodzenie</MarkDef>\n" +
@@ -181,9 +176,7 @@ namespace ESTQuestFilling.Model
                                 "\t\t</InnerInputs>\n" +
                             "\t</Inner>\n" +
                             "\t<Mark>\n" +
-                                "\t\t<AnalyticsLink>\n" +
-                                    EvaluationTable.Aggregate("", (n, s) => n + $"\t\t\t<Factor refWeight = \"{s[1]}\" refId = \"{s[0]}\"/>\n") +
-                                "\t\t</AnalyticsLink>\n" +
+                                _analyticsLink +
                                 "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
                                     "\t\t\t<MarkDef mark = \"alarm\">TAK</MarkDef>\n" +
                                     "\t\t\t<MarkDef mark = \"normal\">NIE</MarkDef>\n" +
@@ -209,16 +202,13 @@ namespace ESTQuestFilling.Model
                                     "\t\t\t\t<NotEdited/>\n" +
                                 "\t\t\t</InputText>\n" +
                                 "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\" required = \"true\">\n" +
-                                    "<\t\t\t\tTitle>Zrób zdjęcie</Title>\n" +
-                                    "<\t\t\t\tNotEdited/>\n" +
+                                    "\t\t\t\t<Title>Zrób zdjęcie</Title>\n" +
+                                    "\t\t\t\t<NotEdited/>\n" +
                                 "\t\t\t</InputImage>\n" +
                             "\t\t</InnerInputs>\n" +
                         "\t</Inner>\n" +
                         "\t<Mark>\n" +
-                            "\t\t<AnalyticsLink>\n" +
-                                EvaluationTable.Aggregate("",
-                                (n, s) => n + $"\t\t\t<Factor refWeight = \"{s[1]}\" refId = \"{s[0]}\"/>\n") +
-                            "\t\t</AnalyticsLink>\n" +
+                            _analyticsLink +
                             "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
                                 "\t\t\t<MarkDef mark = \"normal\">BRAK UWAG</MarkDef>\n" +
                                 "\t\t\t<MarkDef mark = \"alarm\">UWAGI</MarkDef>\n" +
@@ -237,9 +227,7 @@ namespace ESTQuestFilling.Model
                             "\t\t<Selection>NIE</Selection>\n" +
                         "\t</SelectionList>\n" +
                         "\t<Mark>\n" +
-                            "\t\t<AnalyticsLink>\n" +
-                                EvaluationTable.Aggregate("", (n, s) => n + $"\t\t\t<Factor refWeight = \"{s[1]}\" refId = \"{s[0]}\"/>\n") +
-                            "\t\t</AnalyticsLink>\n" +
+                            _analyticsLink +
                             "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
                                 "\t\t\t<MarkDef mark = \"alarm\">TAK</MarkDef>\n" +
                                 "\t\t\t<MarkDef mark = \"normal\">NIE</MarkDef>\n" +
@@ -267,9 +255,7 @@ namespace ESTQuestFilling.Model
                             "\t\t</InnerInputs>\n" +
                         "\t</Inner>\n" +
                         "\t<Mark>\n" +
-                            "\t\t<AnalyticsLink>\n" +
-                                EvaluationTable.Aggregate("", (n, s) => n + $"\t\t\t<Factor refWeight = \"{s[1]}\" refId = \"{s[0]}\"/>\n") +
-                            "\t\t</AnalyticsLink>\n" +
+                            _analyticsLink +
                             "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
                                 "\t\t\t<MarkDef mark = \"normal\">TAK</MarkDef>\n" +
                                 "\t\t\t<MarkDef mark = \"alarm\">NIE</MarkDef>\n" +
@@ -298,9 +284,7 @@ namespace ESTQuestFilling.Model
                             "\t\t</InnerInputs>\n" +
                         "\t</Inner>\n" +
                         "\t<Mark>\n" +
-                            "\t\t<AnalyticsLink>\n" +
-                                EvaluationTable.Aggregate("", (n, s) => n + $"\t\t\t<Factor refWeight = \"{s[1]}\" refId = \"{s[0]}\"/>\n") +
-                            "\t\t</AnalyticsLink>\n" +
+                            _analyticsLink +
                             "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
                                 "\t\t\t<MarkDef mark = \"alarm\">TAK</MarkDef>\n" +
                                 "\t\t\t<MarkDef mark = \"normal\">NIE</MarkDef>\n" +
@@ -316,9 +300,7 @@ namespace ESTQuestFilling.Model
                     "<InputSliderInt minValue=\"\" maxValue=\"\" defaultValue=\"\" required=\"true\">\n" +
                             $"\t<Title>{QuestionText}</Title>\n" +
                             "\t<Mark>\n" +
-                                "\t\t<AnalyticsLink>\n" +
-                                    EvaluationTable.Aggregate("", (n, s) => n + $"\t\t\t<Factor refWeight = \"{s[1]}\" refId = \"{s[0]}\"/>\n") +
-                                "\t\t</AnalyticsLink>\n" +
+                                _analyticsLink +
                                 "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
                                     "\t\t\t<!--___________________UZUPEŁNIJ PRZEDZIAŁY________________-->\n" +
                                     "\t\t\t<MarkDef rangeMin = \"\" rangeMax = \"\" mark = \"alarm\"/>\n" +
@@ -349,9 +331,7 @@ namespace ESTQuestFilling.Model
                             "\t\t</InnerInputs>\n" +
                         "\t</Inner>\n" +
                         "\t<Mark>\n" +
-                            "\t\t<AnalyticsLink>\n" +
-                                EvaluationTable.Aggregate("", (n, s) => n + $"\t\t\t<Factor refWeight = \"{s[1]}\" refId = \"{s[0]}\"/>\n") +
-                            "\t\t</AnalyticsLink>\n" +
+                            _analyticsLink +
                             "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
                                 "\t\t\t<MarkDef mark = \"normal\">TAK</MarkDef>\n" +
                                 "\t\t\t<MarkDef mark = \"alarm\">NIE</MarkDef>\n" +
@@ -390,9 +370,7 @@ namespace ESTQuestFilling.Model
             return "<InputText required = \"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
                         "\t<Mark>\n" +
-                        "   \t\t<AnalyticsLink>\n" +
-                                EvaluationTable.Aggregate("", (n, s) => n + $"\t\t\t<Factor refWeight = \"{s[1]}\" refId = \"{s[0]}\"/>\n") +
-                            "\t\t</AnalyticsLink>\n" +
+                            _analyticsLink +
                             "\t\t<ByOperator expiredMark = \"normal\" initialMark = \"normal\" refusalMark = \"alarm\"/>\n" +
                         "\t</Mark>\n" +
                         "\t<NotEdited/>\n" +
@@ -410,9 +388,7 @@ namespace ESTQuestFilling.Model
                             "\t\t<Selection></Selection>\n" +
                         "\t</SelectionList>\n" +
                         "\t<Mark>\n" +
-                            "\t\t<AnalyticsLink>\n" +
-                                EvaluationTable.Aggregate("", (n, s) => n + $"\t\t\t<Factor refWeight = \"{s[1]}\" refId = \"{s[0]}\"/>\n") +
-                            "\t\t</AnalyticsLink>\n" +
+                            _analyticsLink +
                             "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
                             "\t\t<!--___________________WPROWADŹ OCENY DLA PÓL WYBORU________________-->\n" +
                                 "\t\t\t<MarkDef mark = \"normal\"></MarkDef>\n" +
@@ -457,7 +433,7 @@ namespace ESTQuestFilling.Model
                 case "[Lista rozwijana]":
                     return GetListaRozwijanaCode();
                 default:
-                    throw new NotImplementedException("Switch statement error");
+                    throw new InvalidOperationException("Switch statement error: no match expression");
             }
         }
 
