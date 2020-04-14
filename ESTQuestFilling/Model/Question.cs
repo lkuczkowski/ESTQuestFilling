@@ -65,10 +65,8 @@ namespace ESTQuestFilling.Model
 
             EvaluationTable = splitMarksStrings.Select(n => n.Select(Int32.Parse).ToArray()).ToArray();
         }
-        // TODO - zastosować wzorzec lub dziedziczenie???
-        // TODO - bug z analityticsLink - nie powinno tego fragmentu być w ogóle, jeżeli ocena równa 0
-        // TODO - czy można jakoś uprościć teksty z kodem (fragment z oceną)???
 
+        // TODO - zastosować wzorzec lub dziedziczenie???
         // TODO - dodać obsługę pola z komentarzem z bazy danych
         private string GetTAKnieCode()
         {

@@ -24,7 +24,8 @@ namespace ESTQuestFilling.Model
         public void WriteInstitutionCodeFiles()
         {
             System.Windows.Forms.FolderBrowserDialog f = new System.Windows.Forms.FolderBrowserDialog();
-            f.ShowDialog();
+            if (f.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+                return;
             string companyDirectory = $"{f.SelectedPath}\\{Name}";
             if (!Directory.Exists(companyDirectory))
             {

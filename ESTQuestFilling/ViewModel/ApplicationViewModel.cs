@@ -17,8 +17,6 @@ namespace ESTQuestFilling.ViewModel
             "No database read"
         };
 
-        // TODO - Dodać kolejną kolekcję zawierającą tylko pytania z wybranym Tagiem
-
         private ObservableCollection<QuestionViewModel> _searchQuestionCollection;
 
         public ObservableCollection<QuestionViewModel> SearchQuestionCollection
