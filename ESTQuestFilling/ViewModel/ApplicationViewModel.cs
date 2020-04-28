@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
+using System.Data.Linq;
 using System.Data.OleDb;
 using System.Linq;
 using System.Windows;
@@ -16,6 +17,8 @@ namespace ESTQuestFilling.ViewModel
         {
             "No database read"
         };
+
+        public ObservableCollection<RiskFactor> RiskFactors { get; set; } = new ObservableCollection<RiskFactor>();
 
         private ObservableCollection<QuestionViewModel> _searchQuestionCollection;
 
@@ -127,6 +130,16 @@ namespace ESTQuestFilling.ViewModel
                 "INNER JOIN [Kategorie ryzyka] ON [Czynniki ryzyka].[Kategoria ryzyka] = [Kategorie ryzyka].[Identyfikator];";
 
             DatabaseName = fileDialog.SafeFileName;
+
+            OleDbConnection L2QConnection = new OleDbConnection(connectionString);
+            DataContext dbContext = new DataContext(L2QConnection);
+            Table<RiskFactor> trf = dbContext.GetTable<RiskFactor>();
+            RiskFactors.Clear();
+
+            foreach (var factor in trf)
+            {
+                RiskFactors.Add(factor);
+            }
 
             using (OleDbConnection connection = new OleDbConnection(connectionString))
             {

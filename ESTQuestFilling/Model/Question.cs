@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Data.Linq.Mapping;
 using System.Linq;
 using System.Windows;
 
 namespace ESTQuestFilling.Model
 {
+    [Table]
     public class Question
     {
         private string _analyticsLink = "";
