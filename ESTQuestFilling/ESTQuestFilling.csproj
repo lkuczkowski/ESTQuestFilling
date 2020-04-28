@@ -73,8 +73,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>Resources\logo_v2.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>E826A72AFBF39A4DBCD2D8F8501BBF38075A5AC1</ManifestCertificateThumbprint>
@@ -114,6 +113,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\RiskCategory.cs" />
+    <Compile Include="Model\RiskFactor.cs" />
+    <Compile Include="Model\RiskField.cs" />
     <Compile Include="ViewModel\DelegateCommand.cs" />
     <Compile Include="Model\Checkpoint.cs" />
     <Compile Include="Model\Company.cs" />
@@ -182,7 +184,7 @@
     <Resource Include="Resources\logo.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+    <Resource Include="Resources\logo_v2.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
