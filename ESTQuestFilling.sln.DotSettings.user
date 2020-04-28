@@ -2,5 +2,4 @@
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=E8C4B4C5_002DCF89_002D4DED_002DB9AE_002DFD0A2F7FF9D9_002Fd_003AViewModel_002Ff_003AApplicationViewModel_002Ecs/@EntryIndexedValue">ExplicitlyExcluded</s:String>
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
   &lt;Assembly Path="C:\Users\Łukasz\Desktop\ESTQuestFilling\ESTQuestFilling\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.19\lib\net45\Microsoft.Xaml.Behaviors.dll" /&gt;&#xD;
-  &lt;Assembly Path="C:\Users\Łukasz\Desktop\ESTQuestFilling\ESTQuestFilling\packages\System.Windows.Interactivity.WPF.2.0.20525\lib\net40\System.Windows.Interactivity.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String></wpf:ResourceDictionary>
