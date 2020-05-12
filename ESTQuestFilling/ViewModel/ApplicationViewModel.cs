@@ -68,9 +68,22 @@ namespace ESTQuestFilling.ViewModel
                 OnPropertyChanged(nameof(DatabaseName));
             }
         }
+
         public string CurrentInstitutionName { get; set; } = "No institution read";
 
         public ObservableCollection<string> DatabaseTableNamesList { get; set; } = new ObservableCollection<string>();
+
+        private RiskFactorsViewModel _riskFactorsViewModel;
+
+        public RiskFactorsViewModel RiskFactorsViewModel
+        {
+            get { return _riskFactorsViewModel; }
+            set
+            {
+                _riskFactorsViewModel = value;
+                OnPropertyChanged(nameof(RiskFactorsViewModel));
+            }
+        }
 
         public ApplicationViewModel()
         {
@@ -112,7 +125,10 @@ namespace ESTQuestFilling.ViewModel
             if (fileDialog.ShowDialog() == true)
             {
                 DatabasePath = fileDialog.FileName;
+                DatabaseName = fileDialog.SafeFileName;
             }
+
+            RiskFactorsViewModel = new RiskFactorsViewModel(DatabasePath);
 
             string connectionString =
                 "Provider=Microsoft.ACE.OLEDB.12.0;Data Source="
@@ -128,18 +144,6 @@ namespace ESTQuestFilling.ViewModel
                 "FROM " +
                 "[Czynniki ryzyka] " +
                 "INNER JOIN [Kategorie ryzyka] ON [Czynniki ryzyka].[Kategoria ryzyka] = [Kategorie ryzyka].[Identyfikator];";
-
-            DatabaseName = fileDialog.SafeFileName;
-
-            OleDbConnection L2QConnection = new OleDbConnection(connectionString);
-            DataContext dbContext = new DataContext(L2QConnection);
-            Table<RiskFactor> trf = dbContext.GetTable<RiskFactor>();
-            RiskFactors.Clear();
-
-            foreach (var factor in trf)
-            {
-                RiskFactors.Add(factor);
-            }
 
             using (OleDbConnection connection = new OleDbConnection(connectionString))
             {

@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="ESTQuestFilling.View.RiskFactorsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:local="clr-namespace:ESTQuestFilling.View"
+             x:Name="RiskFactorsViewUserControl"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="1024">
+    <i:Interaction.Triggers>
+        <i:EventTrigger SourceObject="{Binding ElementName=RiskFactorsViewUserControl}" EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding ReadRiskFactorsCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <DockPanel>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <GroupBox DockPanel.Dock="Top" Margin="5" Header="Risk Factors List">
+                <DataGrid Name="RiskFactorsDataGrid" ItemsSource="{Binding RiskFactors}" AutoGenerateColumns="False" ScrollViewer.CanContentScroll="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Width="50"  Header="Numer" Binding="{Binding Number, Mode=OneWay}" IsReadOnly="True" />
+                        <DataGridTextColumn Width="200" Header="Obszar ryzyka" Binding="{Binding RiskField, Mode=OneWay}" IsReadOnly="True" />
+                        <DataGridTextColumn Width="300" Header="Kategoria ryzyka" Binding="{Binding RiskCategory, Mode=OneWay}" IsReadOnly="True" />
+                        <DataGridTextColumn Width="400" Header="Czynnik ryzyka" Binding="{Binding RiskFactorName, Mode=OneWay}" IsReadOnly="True" />
+                        <DataGridTextColumn Width="50" Header="EST ID" Binding="{Binding EST_ID, Mode=OneWay}" IsReadOnly="True" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </GroupBox>
+        </ScrollViewer>
+    </DockPanel>
+</UserControl>
