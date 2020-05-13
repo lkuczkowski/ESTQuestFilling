@@ -14,18 +14,16 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
     <DockPanel>
-        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-            <GroupBox DockPanel.Dock="Top" Margin="5" Header="Risk Factors List">
-                <DataGrid Name="RiskFactorsDataGrid" ItemsSource="{Binding RiskFactors}" AutoGenerateColumns="False" ScrollViewer.CanContentScroll="False">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Width="50"  Header="Numer" Binding="{Binding Number, Mode=OneWay}" IsReadOnly="True" />
-                        <DataGridTextColumn Width="200" Header="Obszar ryzyka" Binding="{Binding RiskField, Mode=OneWay}" IsReadOnly="True" />
-                        <DataGridTextColumn Width="300" Header="Kategoria ryzyka" Binding="{Binding RiskCategory, Mode=OneWay}" IsReadOnly="True" />
-                        <DataGridTextColumn Width="400" Header="Czynnik ryzyka" Binding="{Binding RiskFactorName, Mode=OneWay}" IsReadOnly="True" />
-                        <DataGridTextColumn Width="50" Header="EST ID" Binding="{Binding EST_ID, Mode=OneWay}" IsReadOnly="True" />
-                    </DataGrid.Columns>
-                </DataGrid>
-            </GroupBox>
-        </ScrollViewer>
+        <GroupBox DockPanel.Dock="Top" Margin="5" Header="Risk Factors List">
+            <DataGrid Name="RiskFactorsDataGrid" ItemsSource="{Binding RiskFactors}" AutoGenerateColumns="False" ScrollViewer.CanContentScroll="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="50"  Header="Numer" Binding="{Binding Number, Mode=OneWay}" IsReadOnly="True" />
+                    <DataGridTextColumn Width="200" Header="Obszar ryzyka" Binding="{Binding RiskField, Mode=OneWay}" IsReadOnly="True" />
+                    <DataGridTextColumn Width="300" Header="Kategoria ryzyka" Binding="{Binding RiskCategory, Mode=OneWay}" IsReadOnly="True" />
+                    <DataGridTextColumn Width="400" Header="Czynnik ryzyka" Binding="{Binding RiskFactorName, Mode=OneWay}" IsReadOnly="True" />
+                    <DataGridTextColumn Width="50" Header="EST ID" Binding="{Binding EST_ID, Mode=OneWay}" IsReadOnly="True" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </GroupBox>
     </DockPanel>
 </UserControl>

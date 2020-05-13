@@ -27,36 +27,34 @@
             <TextBox Name="SearchTextBox" Margin="2" DockPanel.Dock="Left" Width="300" HorizontalAlignment="Left"></TextBox>
             <CheckBox Name="DetailViewCheckBox" DockPanel.Dock="Left" Margin="25,2,2,2" VerticalAlignment="Center">Detail view</CheckBox>
         </DockPanel>
-        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-            <GroupBox DockPanel.Dock="Top" Margin="5" Header="Question list">
-                <DataGrid Name="QuestionsDataGrid" RowDetailsVisibilityMode="{Binding ElementName=DetailViewCheckBox, Path=IsChecked, Converter={StaticResource BoolToDataGridRowDetailsVisibilityModeValueConverter}}" ItemsSource="{Binding SearchQuestionCollection, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" ScrollViewer.CanContentScroll="False">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn x:Name="IdDataGridTextColumn" Width="40" Header="ID" Binding="{Binding ID, Mode=OneWay}" IsReadOnly="True"/>
-                        <DataGridTextColumn x:Name="QuestionTextDataGridTextColumn" Width="800"  Header="Pytanie" Binding="{Binding QuestionText, Mode=OneWay}" IsReadOnly="True" />
-                        <DataGridTextColumn x:Name="AnswerDataGridTextColumn" Width="300" Header="Kwantyfikowanie" Binding="{Binding Answer, Mode=OneWay}" IsReadOnly="True" />
-                    </DataGrid.Columns>
-                    <DataGrid.RowDetailsTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="40"></ColumnDefinition>
-                                    <ColumnDefinition Width="{Binding ElementName=QuestionTextDataGridTextColumn, Path=ActualWidth}"></ColumnDefinition>
-                                    <ColumnDefinition Width="{Binding ElementName=AnswerDataGridTextColumn, Path=ActualWidth}"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                                <GroupBox Grid.Column="1" Header="Czynniki ryzyka">
-                                    <TextBlock Text="{Binding Evaluation}" Margin="5" />
-                                </GroupBox>
-                                <GroupBox Grid.Column="2" Header="Tag">
-                                    <GroupBox.Background>
-                                        <SolidColorBrush Color="#FFEEE8E8" Opacity="0.5"/>
-                                    </GroupBox.Background>
-                                    <TextBlock TextWrapping="Wrap" Text="{Binding Tag}" Margin="5"/>
-                                </GroupBox>
-                            </Grid>
-                        </DataTemplate>
-                    </DataGrid.RowDetailsTemplate>
-                </DataGrid>
-            </GroupBox>
-        </ScrollViewer>
+        <GroupBox DockPanel.Dock="Top" Margin="5" Header="Question list">
+            <DataGrid Name="QuestionsDataGrid" RowDetailsVisibilityMode="{Binding ElementName=DetailViewCheckBox, Path=IsChecked, Converter={StaticResource BoolToDataGridRowDetailsVisibilityModeValueConverter}}" ItemsSource="{Binding SearchQuestionCollection, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" ScrollViewer.CanContentScroll="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn x:Name="IdDataGridTextColumn" Width="40" Header="ID" Binding="{Binding ID, Mode=OneWay}" IsReadOnly="True"/>
+                    <DataGridTextColumn x:Name="QuestionTextDataGridTextColumn" Width="800"  Header="Pytanie" Binding="{Binding QuestionText, Mode=OneWay}" IsReadOnly="True" />
+                    <DataGridTextColumn x:Name="AnswerDataGridTextColumn" Width="300" Header="Kwantyfikowanie" Binding="{Binding Answer, Mode=OneWay}" IsReadOnly="True" />
+                </DataGrid.Columns>
+                <DataGrid.RowDetailsTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="40"></ColumnDefinition>
+                                <ColumnDefinition Width="{Binding ElementName=QuestionTextDataGridTextColumn, Path=ActualWidth}"></ColumnDefinition>
+                                <ColumnDefinition Width="{Binding ElementName=AnswerDataGridTextColumn, Path=ActualWidth}"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <GroupBox Grid.Column="1" Header="Czynniki ryzyka">
+                                <TextBlock Text="{Binding Evaluation}" Margin="5" />
+                            </GroupBox>
+                            <GroupBox Grid.Column="2" Header="Tag">
+                                <GroupBox.Background>
+                                    <SolidColorBrush Color="#FFEEE8E8" Opacity="0.5"/>
+                                </GroupBox.Background>
+                                <TextBlock TextWrapping="Wrap" Text="{Binding Tag}" Margin="5"/>
+                            </GroupBox>
+                        </Grid>
+                    </DataTemplate>
+                </DataGrid.RowDetailsTemplate>
+            </DataGrid>
+        </GroupBox>
     </DockPanel>
 </UserControl>
