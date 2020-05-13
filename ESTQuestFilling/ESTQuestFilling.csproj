@@ -125,9 +125,13 @@
     <Compile Include="ViewModel\BindableBase.cs" />
     <Compile Include="ViewModel\CheckpointViewModel.cs" />
     <Compile Include="ViewModel\CompanyViewModel.cs" />
+    <Compile Include="ViewModel\QuestionsDatabaseViewModel.cs" />
     <Compile Include="ViewModel\QuestionViewModel.cs" />
     <Compile Include="ViewModel\RiskFactorsViewModel.cs" />
     <Compile Include="View\BoolToDataGridRowDetailsVisibilityModeConverter.cs" />
+    <Compile Include="View\QuestionsDatabaseView.xaml.cs">
+      <DependentUpon>QuestionsDatabaseView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\RiskFactorsView.xaml.cs">
       <DependentUpon>RiskFactorsView.xaml</DependentUpon>
     </Compile>
@@ -144,6 +148,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\QuestionsDatabaseView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\RiskFactorsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

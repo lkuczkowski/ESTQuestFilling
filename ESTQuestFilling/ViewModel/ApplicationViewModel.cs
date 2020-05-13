@@ -18,22 +18,6 @@ namespace ESTQuestFilling.ViewModel
             "No database read"
         };
 
-        public ObservableCollection<RiskFactor> RiskFactors { get; set; } = new ObservableCollection<RiskFactor>();
-
-        private ObservableCollection<QuestionViewModel> _searchQuestionCollection;
-
-        public ObservableCollection<QuestionViewModel> SearchQuestionCollection
-        {
-            get { return _searchQuestionCollection; }
-            set
-            {
-                _searchQuestionCollection = value;
-                OnPropertyChanged(nameof(SearchQuestionCollection));
-            }
-        }
-
-        public static ObservableCollection<QuestionViewModel> QuestionsCollection { get; } = new ObservableCollection<QuestionViewModel>();
-
         private CompanyViewModel _currentInstitution;
         public CompanyViewModel CurrentInstitution
         {
@@ -74,7 +58,6 @@ namespace ESTQuestFilling.ViewModel
         public ObservableCollection<string> DatabaseTableNamesList { get; set; } = new ObservableCollection<string>();
 
         private RiskFactorsViewModel _riskFactorsViewModel;
-
         public RiskFactorsViewModel RiskFactorsViewModel
         {
             get { return _riskFactorsViewModel; }
@@ -85,6 +68,18 @@ namespace ESTQuestFilling.ViewModel
             }
         }
 
+        private QuestionsDatabaseViewModel _questionsDatabaseViewModel;
+
+        public QuestionsDatabaseViewModel QuestionsDatabaseViewModel
+        {
+            get { return _questionsDatabaseViewModel; }
+            set
+            {
+                _questionsDatabaseViewModel = value;
+                OnPropertyChanged(nameof(QuestionsDatabaseViewModel));
+            }
+        }
+
         public ApplicationViewModel()
         {
             ReadInstitutionCommand = new DelegateCommand((object parameter) => ReadCompany((string)parameter));
@@ -92,31 +87,17 @@ namespace ESTQuestFilling.ViewModel
             ReadDatabaseCommand = new DelegateCommand((object parameter) =>
             {
                 ReadDatebase();
-                ReadQuestionDatabase();
             });
             CloseAppCommand = new DelegateCommand((object n) => Application.Current.Shutdown());
-            GetSearchedQuestionsCommand = new DelegateCommand(GetSearchedQuestions);
+            
             DatabaseName = "Not read";
             DatabasePath = "Not read";
-            SearchQuestionCollection = QuestionsCollection;
         }
 
         public DelegateCommand ReadInstitutionCommand { get; }
         public DelegateCommand WriteInstitutionCheckpointsToFilesCommand { get; }
         public DelegateCommand ReadDatabaseCommand { get; }
         public DelegateCommand CloseAppCommand { get; }
-        public DelegateCommand GetSearchedQuestionsCommand { get; }
-
-        private void GetSearchedQuestions(object tag)
-        {
-            string tagString = tag.ToString();
-            if (tagString == " " || tagString == string.Empty)
-                SearchQuestionCollection = QuestionsCollection;
-            else
-            {
-                SearchQuestionCollection = new ObservableCollection<QuestionViewModel>(QuestionsCollection.Where( n => n.Tag.Contains(tagString)));
-            }
-        }
 
         // TODO - Repository pattern
         private void ReadDatebase()
@@ -129,7 +110,8 @@ namespace ESTQuestFilling.ViewModel
             }
 
             RiskFactorsViewModel = new RiskFactorsViewModel(DatabasePath);
-
+            QuestionsDatabaseViewModel = new QuestionsDatabaseViewModel(DatabasePath);
+            
             string connectionString =
                 "Provider=Microsoft.ACE.OLEDB.12.0;Data Source="
                 + DatabasePath
@@ -165,6 +147,7 @@ namespace ESTQuestFilling.ViewModel
                         CompanyListCollection.Add(companyName);
                     }
 
+                    // TODO - scalić z wczytywaniem RiskFactors do karty z RiskFactorsView
                     OleDbCommand command = new OleDbCommand(queryRiskFactors, connection);
                     OleDbDataReader reader = command.ExecuteReader();
                     QuestionViewModel.RiskFactors = new Dictionary<int, string>();
@@ -203,7 +186,8 @@ namespace ESTQuestFilling.ViewModel
                     $"[{name} - Pytania].Pytanie, " +
                     $"[Kwantyfikowanie].Kwantyfikator, " +
                     $"[{name} - Pytania].Ocena, " +
-                    $"[Numer punktu].[Numer punktu] " +
+                    $"[Numer punktu].[Numer punktu], " +
+                    $"[{name} - Pytania].Identyfikator " + 
                     $"FROM (((([{name} - Pytania] INNER JOIN [{name} - Punkty kontrolne] ON [{name} - Pytania].[Punkt kontrolny] = [{name} - Punkty kontrolne].[Punkt kontrolny]) " +
                     $"INNER JOIN [Kwantyfikowanie] ON [{name} - Pytania].[Kwantyfikowanie] = [Kwantyfikowanie].Identyfikator) " +
                     $"INNER JOIN [Punkty kontrolne] ON [{name} - Pytania].[Punkt kontrolny] = [Punkty kontrolne].Identyfikator) " +
@@ -221,7 +205,7 @@ namespace ESTQuestFilling.ViewModel
                         OleDbDataReader reader = command.ExecuteReader();
                         reader.Read();
                         Checkpoint chp = new Checkpoint((int)reader[0], (string)reader[1] + " - " + (string)reader[2]);
-                        chp.AddQuestion(new Question(reader[3].ToString(), reader[5].ToString(), (string)reader[4], reader[6].ToString()));
+                        chp.AddQuestion(new Question((int)reader[7], reader[3].ToString(), reader[5].ToString(), (string)reader[4], reader[6].ToString()));
                         company.AddCheckpoint(chp);
 
                         while (reader.Read())
@@ -232,7 +216,7 @@ namespace ESTQuestFilling.ViewModel
                                 company.AddCheckpoint(chp);
                             }
 
-                            chp.AddQuestion(new Question(reader[3].ToString(), reader[5].ToString(), (string)reader[4], reader[6].ToString()));
+                            chp.AddQuestion(new Question((int)reader[7], reader[3].ToString(), reader[5].ToString(), (string)reader[4], reader[6].ToString()));
                         }
 
                         reader.Close();
@@ -243,51 +227,6 @@ namespace ESTQuestFilling.ViewModel
                         MessageBox.Show("Reading DB error\n\n" + ex.Message);
                     }
 
-                }
-            }
-        }
-
-        private void ReadQuestionDatabase()
-        {
-            if (DatabasePath != null)
-            {
-                string connectionString =
-                    "Provider=Microsoft.ACE.OLEDB.12.0;Data Source="
-                    + DatabasePath
-                    + ";User Id=admin;Password=;";
-
-                string queryString =
-                    $"SELECT " +
-                    $"[Baza pytań].Pytanie, " +
-                    $"[Kwantyfikowanie].Kwantyfikator, " +
-                    $"[Baza pytań].Ocena, " +
-                    $"[Baza pytań].Tag " +
-                    $"FROM " +
-                    $"[Baza pytań] " +
-                    $"INNER JOIN [Kwantyfikowanie] ON [Baza pytań].[Kwantyfikowanie] = [Kwantyfikowanie].Identyfikator " +
-                    $"ORDER BY [Baza pytań].Identyfikator;";
-
-                using (OleDbConnection connection = new OleDbConnection(connectionString))
-                {
-                    OleDbCommand command = new OleDbCommand(queryString, connection);
-                    try
-                    {
-                        connection.Open();
-                        OleDbDataReader reader = command.ExecuteReader();
-                        QuestionsCollection.Clear();
-                        Question qu;
-                        while (reader.Read())
-                        {
-                            qu = new Question(reader[0].ToString(), reader[2].ToString(), reader[1].ToString());
-                            qu.Tag = reader[3].ToString();
-                            QuestionsCollection.Add(new QuestionViewModel(qu));
-                        }
-                        reader.Close();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Reading DB error\n\n" + ex.Message);
-                    }
                 }
             }
         }

@@ -17,6 +17,9 @@
         <DataTemplate DataType="{x:Type viewModel:RiskFactorsViewModel}">
                 <view:RiskFactorsView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:QuestionsDatabaseViewModel}">
+            <view:QuestionsDatabaseView/>
+        </DataTemplate>
     </Window.Resources>
     <Grid Margin="0,0,2,10">
         <TabControl>
@@ -111,50 +114,10 @@
                 </Grid>
             </TabItem>
             <TabItem IsEnabled="{Binding ElementName=DatabasePathTextBox, Path=Text, Converter={StaticResource StringToBoolVisibilityConverter}}" Name="QuestionDatabaseTab" Header="Questions database">
-                <DockPanel>
-                    <DockPanel DockPanel.Dock="Top" Margin="10,3,0,3">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger SourceObject="{Binding ElementName=SearchTextBox}" EventName="TextChanged">
-                                <i:InvokeCommandAction Command="{Binding GetSearchedQuestionsCommand}" CommandParameter="{Binding ElementName=SearchTextBox, Path=Text}"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                        <Label DockPanel.Dock="Left" Content="Search: "></Label>
-                        <TextBox Name="SearchTextBox" Margin="2" DockPanel.Dock="Left" Width="300" HorizontalAlignment="Left"></TextBox>
-                        <CheckBox Name="DetailViewCheckBox" DockPanel.Dock="Left" Margin="25,2,2,2" VerticalAlignment="Center">Detail view</CheckBox>
-                    </DockPanel>
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                        <GroupBox DockPanel.Dock="Top" Margin="5" Header="Question list">
-                            <DataGrid Name="QuestionsDataGrid" RowDetailsVisibilityMode="{Binding ElementName=DetailViewCheckBox, Path=IsChecked, Converter={StaticResource BoolToDataGridRowDetailsVisibilityModeValueConverter}}" ItemsSource="{Binding SearchQuestionCollection, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" ScrollViewer.CanContentScroll="False">
-                                <DataGrid.Columns>
-                                    <DataGridTextColumn x:Name="QuestionTextDataGridTextColumn" Width="800"  Header="Pytanie" Binding="{Binding QuestionText, Mode=OneWay}" IsReadOnly="True" />
-                                    <DataGridTextColumn x:Name="AnswerDataGridTextColumn" Width="300" Header="Kwantyfikowanie" Binding="{Binding Answer, Mode=OneWay}" IsReadOnly="True" />
-                                </DataGrid.Columns>
-                                <DataGrid.RowDetailsTemplate>
-                                    <DataTemplate>
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="{Binding ElementName=QuestionTextDataGridTextColumn, Path=ActualWidth}"></ColumnDefinition>
-                                                <ColumnDefinition Width="{Binding ElementName=AnswerDataGridTextColumn, Path=ActualWidth}"></ColumnDefinition>
-                                            </Grid.ColumnDefinitions>
-                                            <GroupBox Grid.Column="0" Header="Czynniki ryzyka">
-                                                <TextBlock Text="{Binding Evaluation}" Margin="5" />
-                                            </GroupBox>
-                                            <GroupBox Grid.Column="1" Header="Tag">
-                                                <GroupBox.Background>
-                                                    <SolidColorBrush Color="#FFEEE8E8" Opacity="0.5"/>
-                                                </GroupBox.Background>
-                                                <TextBlock TextWrapping="Wrap" Text="{Binding Tag}" Margin="5"/>
-                                            </GroupBox>
-                                        </Grid>
-                                    </DataTemplate>
-                                </DataGrid.RowDetailsTemplate>
-                            </DataGrid>
-                        </GroupBox>
-                    </ScrollViewer>
-                </DockPanel>
+                <ContentControl Content="{Binding QuestionsDatabaseViewModel}"/>
             </TabItem>
             <TabItem IsEnabled="{Binding ElementName=DatabasePathTextBox, Path=Text, Converter={StaticResource StringToBoolVisibilityConverter}}" Name="RiskFactorsTab" Header="Risk Factors">
-                <ContentControl Content="{Binding RiskFactorsViewModel}"></ContentControl>
+                <ContentControl Content="{Binding RiskFactorsViewModel}"/>
             </TabItem>
         </TabControl>
     </Grid>

@@ -8,6 +8,11 @@ namespace ESTQuestFilling.Model
     [Table]
     public class Question
     {
+        /// <summary>
+        /// Question ID form database
+        /// </summary>
+        public int Id { get; private set; }
+
         private string _analyticsLink = "";
         private string _evaluation;
         public string Answer { get; }
@@ -37,25 +42,26 @@ namespace ESTQuestFilling.Model
 
         public string QuestionText { get; }
 
-        public Question(string question)
+        public Question(int id, string question)
         {
+            Id = id;
             QuestionText = question;
         }
 
-        public Question(string question, string marks)
-            : this(question)
+        public Question(int id, string question, string marks)
+            : this(id, question)
         {
             SetEvaluation(marks);
         }
 
-        public Question(string question, string marks, string answer)
-        : this(question, marks)
+        public Question(int id, string question, string marks, string answer)
+        : this(id, question, marks)
         {
             Answer = answer;
         }
 
-        public Question(string question, string marks, string answer, string number)
-            : this(question, marks, answer)
+        public Question(int id, string question, string marks, string answer, string number)
+            : this(id, question, marks, answer)
         {
             Number = number;
         }

@@ -13,7 +13,7 @@ namespace ESTQuestFilling.Tests
         [Test]
         public void CreateEvaluateTable_TwoElementsTable_Create2ElementsArray()
         {
-            var question = new Question("", "27-10; 65-8;");
+            var question = new Question(0, "", "27-10; 65-8;");
 
             Assert.AreEqual(question.EvaluationTable, new int[2][] { new [] {27, 10}, new [] {65, 8}});
         }
