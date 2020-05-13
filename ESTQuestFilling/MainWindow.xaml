@@ -20,6 +20,9 @@
         <DataTemplate DataType="{x:Type viewModel:QuestionsDatabaseViewModel}">
             <view:QuestionsDatabaseView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:CompanyViewModel}">
+            <view:CompanyView/>
+        </DataTemplate>
     </Window.Resources>
     <Grid Margin="0,0,2,10">
         <TabControl>
@@ -50,7 +53,7 @@
                         </ListBox>
                         <Button DockPanel.Dock="Bottom" HorizontalAlignment="Right" Margin="10" Content="Exit" Width="75" Command="{Binding CloseAppCommand}"/>
                     </DockPanel>
-                    <DockPanel IsEnabled="{Binding ElementName=DatabasePathTextBox, Path=Text, Converter={StaticResource StringToBoolVisibilityConverter}}" Grid.Column="1">
+                    <DockPanel Grid.Column="1" IsEnabled="{Binding ElementName=DatabasePathTextBox, Path=Text, Converter={StaticResource StringToBoolVisibilityConverter}}">
                         <Label DockPanel.Dock="Top" Content="Generate XML code" FontWeight="Bold"></Label>
                         <Border Margin="5" DockPanel.Dock="Top" BorderBrush="#FFA893AE" BorderThickness="2" CornerRadius="5">
                             <Border.Background>
@@ -59,57 +62,14 @@
                             <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
                                 <i:Interaction.Triggers>
                                     <i:EventTrigger SourceObject="{Binding ElementName=CompanyNameComboBox}" EventName="SelectionChanged">
-                                        <i:InvokeCommandAction Command="{Binding ReadInstitutionCommand}" CommandParameter="{Binding ElementName=CompanyNameComboBox, Path=SelectedItem}"/>
+                                        <i:InvokeCommandAction Command="{Binding CreateCompanyViewModelFromNameCommand}" CommandParameter="{Binding ElementName=CompanyNameComboBox, Path=SelectedItem}"/>
                                     </i:EventTrigger>
                                 </i:Interaction.Triggers>
                                 <ComboBox x:Name="CompanyNameComboBox" Width="200" Height="25" DockPanel.Dock="Top" Margin="10,10,60,10" ItemsSource="{Binding CompanyListCollection}"/>
                                 <Button DockPanel.Dock="Top" Margin="10" Content="Write to files" Height="30" Width="100"  Command="{Binding WriteInstitutionCheckpointsToFilesCommand}"/>
                             </StackPanel>
                         </Border>
-                        <Label Margin="5" DockPanel.Dock="Top" MinHeight="20" Content="{Binding CurrentInstitutionName}" FontWeight="Bold" FontSize="14" BorderThickness="1" Foreground="DarkRed" HorizontalContentAlignment="Center">
-                            <Label.Background>
-                                <SolidColorBrush Color="#FFE3DFE4" Opacity="0.5"/>
-                            </Label.Background>
-                        </Label>
-                        <Label DockPanel.Dock="Top">Checkpoint list:</Label>
-                        <!--TODO - sprawdzić ja będzie wyglądał interface pytań jak wstawimy DataGrid w to miejsce-->
-                        <Border Margin="5" BorderBrush="#FF59A8A8" DockPanel.Dock="Top" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" CornerRadius="5" BorderThickness="2">
-                            <ScrollViewer>
-                                <ItemsControl Margin="2" DataContext="{Binding CurrentInstitution}" ItemsSource="{Binding CheckpointViewModelsList}" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <Border Margin="2" BorderThickness="1" BorderBrush="Black" CornerRadius="10" >
-                                                <Border.Background>
-                                                    <SolidColorBrush Color="#FFC4E8E8" Opacity="0.5"/>
-                                                </Border.Background>
-                                                <StackPanel Margin="10">
-                                                    <TextBlock TextWrapping="Wrap" Text="{Binding CheckpointName}" FontWeight="Bold" FontSize="14" TextDecorations="Underline" Margin="0,0,0,10" Foreground="DarkSlateGray"/>
-                                                    <ItemsControl ItemsSource="{Binding QuestionListViewModel}">
-                                                        <ItemsControl.ItemTemplate>
-                                                            <DataTemplate>
-                                                                <StackPanel>
-                                                                    <DockPanel Margin="0,10,0,0">
-                                                                        <TextBlock DockPanel.Dock="Left" FontSize="13" Text="{Binding Number}" FontWeight="Bold" Margin="0,0,5,0"/>
-                                                                        <TextBlock DockPanel.Dock="Left" FontSize="13" TextWrapping="Wrap" Text="{Binding QuestionText}" TextDecorations="Underline" Margin="0,0,0,5"/>
-                                                                    </DockPanel>
-                                                                    <StackPanel Orientation="Horizontal" Margin="30,5,0,5">
-                                                                        <TextBlock Text="Kwantyfikowanie:   "/>
-                                                                        <TextBlock TextWrapping="Wrap" Text="{Binding Answer}" Foreground="#FF1811A2"/>
-                                                                    </StackPanel>
-                                                                    <GroupBox Header="Czynniki ryzyka">
-                                                                        <TextBlock TextWrapping="Wrap" Text="{Binding Evaluation}" Margin="3"/>
-                                                                    </GroupBox>
-                                                                </StackPanel>
-                                                            </DataTemplate>
-                                                        </ItemsControl.ItemTemplate>
-                                                    </ItemsControl>
-                                                </StackPanel>
-                                            </Border>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </ScrollViewer>
-                        </Border>
+                        <ContentControl Content="{Binding CurrentCompanyViewModel, UpdateSourceTrigger=PropertyChanged}"/>
                     </DockPanel>
                 </Grid>
             </TabItem>

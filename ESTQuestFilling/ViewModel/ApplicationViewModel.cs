@@ -18,15 +18,17 @@ namespace ESTQuestFilling.ViewModel
             "No database read"
         };
 
-        private CompanyViewModel _currentInstitution;
-        public CompanyViewModel CurrentInstitution
+        public string CurrentInstitutionName { get; set; } = "No institution read";
+
+        private CompanyViewModel _currentCompanyViewModel;
+        public CompanyViewModel CurrentCompanyViewModel
         {
-            get => _currentInstitution;
+            get => _currentCompanyViewModel;
             set
             {
-                _currentInstitution = value;
+                _currentCompanyViewModel = value;
                 CurrentInstitutionName = value.Name;
-                OnPropertyChanged(nameof(CurrentInstitution));
+                OnPropertyChanged(nameof(CurrentCompanyViewModel));
                 OnPropertyChanged(nameof(CurrentInstitutionName));
             }
         }
@@ -52,8 +54,6 @@ namespace ESTQuestFilling.ViewModel
                 OnPropertyChanged(nameof(DatabaseName));
             }
         }
-
-        public string CurrentInstitutionName { get; set; } = "No institution read";
 
         public ObservableCollection<string> DatabaseTableNamesList { get; set; } = new ObservableCollection<string>();
 
@@ -82,8 +82,8 @@ namespace ESTQuestFilling.ViewModel
 
         public ApplicationViewModel()
         {
-            ReadInstitutionCommand = new DelegateCommand((object parameter) => ReadCompany((string)parameter));
-            WriteInstitutionCheckpointsToFilesCommand = new DelegateCommand((object parameter) => CurrentInstitution.WriteCheckpointsToFiles());
+            CreateCompanyViewModelFromNameCommand = new DelegateCommand(CreateCompanyViewModelFromName);
+            WriteInstitutionCheckpointsToFilesCommand = new DelegateCommand((object parameter) => CurrentCompanyViewModel.WriteCheckpointsToFiles());
             ReadDatabaseCommand = new DelegateCommand((object parameter) =>
             {
                 ReadDatebase();
@@ -94,10 +94,15 @@ namespace ESTQuestFilling.ViewModel
             DatabasePath = "Not read";
         }
 
-        public DelegateCommand ReadInstitutionCommand { get; }
+        public DelegateCommand CreateCompanyViewModelFromNameCommand { get; }
         public DelegateCommand WriteInstitutionCheckpointsToFilesCommand { get; }
         public DelegateCommand ReadDatabaseCommand { get; }
         public DelegateCommand CloseAppCommand { get; }
+
+        private void CreateCompanyViewModelFromName(object parameter)
+        {
+            CurrentCompanyViewModel = new CompanyViewModel(parameter.ToString(), DatabasePath);
+        }
 
         // TODO - Repository pattern
         private void ReadDatebase()
@@ -160,73 +165,6 @@ namespace ESTQuestFilling.ViewModel
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Cannot read database from {DatabasePath}\nException message:\n" + ex.Message);
-                }
-            }
-        }
-
-        private void ReadCompany(string name)
-        {
-            if (name == String.Empty || name == null)
-            {
-                MessageBox.Show("ReadCompany command error");
-            }
-
-            if (DatabasePath != null)
-            {
-                string connectionString =
-                    "Provider=Microsoft.ACE.OLEDB.12.0;Data Source="
-                    + DatabasePath
-                    + ";User Id=admin;Password=;";
-
-                string queryString =
-                    $"SELECT " +
-                    $"[{name} - Pytania].[Punkt kontrolny], " +
-                    $"[Punkty kontrolne].[Punkt kontrolny], " +
-                    $"[{name} - Punkty kontrolne].Nazwa, " +
-                    $"[{name} - Pytania].Pytanie, " +
-                    $"[Kwantyfikowanie].Kwantyfikator, " +
-                    $"[{name} - Pytania].Ocena, " +
-                    $"[Numer punktu].[Numer punktu], " +
-                    $"[{name} - Pytania].Identyfikator " + 
-                    $"FROM (((([{name} - Pytania] INNER JOIN [{name} - Punkty kontrolne] ON [{name} - Pytania].[Punkt kontrolny] = [{name} - Punkty kontrolne].[Punkt kontrolny]) " +
-                    $"INNER JOIN [Kwantyfikowanie] ON [{name} - Pytania].[Kwantyfikowanie] = [Kwantyfikowanie].Identyfikator) " +
-                    $"INNER JOIN [Punkty kontrolne] ON [{name} - Pytania].[Punkt kontrolny] = [Punkty kontrolne].Identyfikator) " +
-                    $"INNER JOIN [Numer punktu] ON [{name} - Pytania].[Numer] = [Numer punktu].Identyfikator) " +
-                    $"ORDER BY [{name} - Pytania].Numer;";
-
-
-                Company company = new Company(name);
-                using (OleDbConnection connection = new OleDbConnection(connectionString))
-                {
-                    OleDbCommand command = new OleDbCommand(queryString, connection);
-                    try
-                    {
-                        connection.Open();
-                        OleDbDataReader reader = command.ExecuteReader();
-                        reader.Read();
-                        Checkpoint chp = new Checkpoint((int)reader[0], (string)reader[1] + " - " + (string)reader[2]);
-                        chp.AddQuestion(new Question((int)reader[7], reader[3].ToString(), reader[5].ToString(), (string)reader[4], reader[6].ToString()));
-                        company.AddCheckpoint(chp);
-
-                        while (reader.Read())
-                        {
-                            if ((int)reader[0] != company.CheckpointsList.Last().Id)
-                            {
-                                chp = new Checkpoint((int)reader[0], (string)reader[1] + " - " + (string)reader[2]);
-                                company.AddCheckpoint(chp);
-                            }
-
-                            chp.AddQuestion(new Question((int)reader[7], reader[3].ToString(), reader[5].ToString(), (string)reader[4], reader[6].ToString()));
-                        }
-
-                        reader.Close();
-                        CurrentInstitution = new CompanyViewModel(company);
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Reading DB error\n\n" + ex.Message);
-                    }
-
                 }
             }
         }
