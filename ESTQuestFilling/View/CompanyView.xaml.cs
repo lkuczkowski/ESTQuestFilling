@@ -24,5 +24,17 @@ namespace ESTQuestFilling.View
         {
             InitializeComponent();
         }
+
+        private void UIElement_OnPreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            var eventArg = new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta)
+            {
+                RoutedEvent = UIElement.MouseWheelEvent, Source = e.Source
+            };
+
+            ScrollViewer scv = (ScrollViewer)sender;
+            scv.RaiseEvent(eventArg);
+            e.Handled = true;
+        }
     }
 }

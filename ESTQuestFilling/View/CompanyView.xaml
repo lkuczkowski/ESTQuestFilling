@@ -6,50 +6,77 @@
              xmlns:local="clr-namespace:ESTQuestFilling.View"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <local:BoolToDataGridRowDetailsVisibilityModeConverter x:Key="BoolToDataGridRowDetailsVisibilityModeValueConverter"/>
+    </UserControl.Resources>
     <DockPanel>
-        <Label Margin="5" DockPanel.Dock="Top" MinHeight="20" Content="{Binding Name}" FontWeight="Bold" FontSize="14" BorderThickness="1" Foreground="DarkRed" HorizontalContentAlignment="Center">
-        <Label.Background>
-            <SolidColorBrush Color="#FFE3DFE4" Opacity="0.5"/>
-        </Label.Background>
-    </Label>
-    <Label DockPanel.Dock="Top">Checkpoint list:</Label>
-    <!--TODO - sprawdzić ja będzie wyglądał interface pytań jak wstawimy DataGrid w to miejsce-->
-    <Border Margin="5" BorderBrush="#FF59A8A8" DockPanel.Dock="Top" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" CornerRadius="5" BorderThickness="2">
-        <ScrollViewer>
-            <ItemsControl Margin="2" ItemsSource="{Binding CheckpointViewModelsList}" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border Margin="2" BorderThickness="1" BorderBrush="Black" CornerRadius="10" >
-                            <Border.Background>
-                                <SolidColorBrush Color="#FFC4E8E8" Opacity="0.5"/>
-                            </Border.Background>
-                            <StackPanel Margin="10">
-                                <TextBlock TextWrapping="Wrap" Text="{Binding CheckpointName}" FontWeight="Bold" FontSize="14" TextDecorations="Underline" Margin="0,0,0,10" Foreground="DarkSlateGray"/>
-                                <ItemsControl ItemsSource="{Binding QuestionListViewModel}">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <StackPanel>
-                                                <DockPanel Margin="0,10,0,0">
-                                                    <TextBlock DockPanel.Dock="Left" FontSize="13" Text="{Binding Number}" FontWeight="Bold" Margin="0,0,5,0"/>
-                                                    <TextBlock DockPanel.Dock="Left" FontSize="13" TextWrapping="Wrap" Text="{Binding QuestionText}" TextDecorations="Underline" Margin="0,0,0,5"/>
-                                                </DockPanel>
-                                                <StackPanel Orientation="Horizontal" Margin="30,5,0,5">
-                                                    <TextBlock Text="Kwantyfikowanie:   "/>
-                                                    <TextBlock TextWrapping="Wrap" Text="{Binding Answer}" Foreground="#FF1811A2"/>
-                                                </StackPanel>
-                                                <GroupBox Header="Czynniki ryzyka">
-                                                    <TextBlock TextWrapping="Wrap" Text="{Binding Evaluation}" Margin="3"/>
-                                                </GroupBox>
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </StackPanel>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
-    </Border>
+        <Grid DockPanel.Dock="Top" Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="20"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.Background>
+                <SolidColorBrush Color="#FFE3DFE4" Opacity="0.5"/>
+            </Grid.Background>
+            <TextBlock Margin="5,5,5,10" Grid.Column="1" MinHeight="20" Text="{Binding Name, Mode=OneWay, StringFormat='        {0}'}" FontWeight="Bold" FontSize="16" Foreground="DarkRed">
+                <TextBlock.Effect>
+                    <DropShadowEffect/>
+                </TextBlock.Effect>
+                <TextBlock.Background>
+                    <SolidColorBrush Color="#FFE3DFE4" Opacity="0.5"></SolidColorBrush>
+                </TextBlock.Background>
+            </TextBlock>
+        </Grid>
+        <DockPanel DockPanel.Dock="Top">
+            <Label DockPanel.Dock="Left" Content="Checkpoint list:"/>
+            <CheckBox Name="DetailViewCheckBox" DockPanel.Dock="Left" Margin="25,2,2,2" VerticalAlignment="Center">Detail view</CheckBox>
+        </DockPanel>
+        <Border Margin="5" BorderBrush="#FF59A8A8" DockPanel.Dock="Top" CornerRadius="5" BorderThickness="2">
+            <DockPanel>
+                <DataGrid Margin="18,10,14,0" DockPanel.Dock="Top" AutoGenerateColumns="False" >
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Width="40" Header="Nr" IsReadOnly="True"/>
+                        <DataGridTextColumn Width="800"  Header="Pytanie" IsReadOnly="True" />
+                        <DataGridTextColumn Width="250" Header="Kwantyfikowanie" IsReadOnly="True" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                <ScrollViewer PreviewMouseWheel="UIElement_OnPreviewMouseWheel">
+                    <ItemsControl Margin="2" ItemsSource="{Binding CheckpointViewModelsList}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <DockPanel Margin="10,0,10,10">
+                                    <DockPanel.Background>
+                                        <SolidColorBrush Color="#FFC4E8E8" Opacity="0.5"/>
+                                    </DockPanel.Background>
+                                    <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" Text="{Binding CheckpointName}" FontWeight="Bold" FontSize="14" TextDecorations="Underline" Margin="0,0,0,5" Foreground="DarkSlateGray"/>
+                                    <DataGrid DockPanel.Dock="Top" Name="QuestionsDataGrid" RowDetailsVisibilityMode="{Binding ElementName=DetailViewCheckBox, Path=IsChecked, Converter={StaticResource BoolToDataGridRowDetailsVisibilityModeValueConverter}}" ItemsSource="{Binding QuestionListViewModel, UpdateSourceTrigger=PropertyChanged}" AutoGenerateColumns="False" ScrollViewer.CanContentScroll="False" Margin="0,0,0,5">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Width="40" Binding="{Binding Number, Mode=OneWay}" IsReadOnly="True"></DataGridTextColumn>
+                                            <DataGridTextColumn Width="800" x:Name="QuestionTextDataGridTextColumn" Binding="{Binding QuestionText, Mode=OneWay}" IsReadOnly="True" />
+                                            <DataGridTextColumn Width="250" x:Name="AnswerDataGridTextColumn" Binding="{Binding Answer, Mode=OneWay}" IsReadOnly="True" />
+                                        </DataGrid.Columns>
+                                        <DataGrid.RowDetailsTemplate>
+                                            <DataTemplate>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="40"></ColumnDefinition>
+                                                        <ColumnDefinition Width="{Binding ElementName=QuestionTextDataGridTextColumn, Path=ActualWidth}"></ColumnDefinition>
+                                                        <ColumnDefinition Width="{Binding ElementName=AnswerDataGridTextColumn, Path=ActualWidth}"></ColumnDefinition>
+                                                    </Grid.ColumnDefinitions>
+                                                    <GroupBox Grid.Column="1" Header="Czynniki ryzyka">
+                                                        <TextBlock Text="{Binding Evaluation}" Margin="5" />
+                                                    </GroupBox>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </DataGrid.RowDetailsTemplate>
+                                    </DataGrid>
+                                </DockPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </DockPanel>
+        </Border>
     </DockPanel>
 </UserControl>

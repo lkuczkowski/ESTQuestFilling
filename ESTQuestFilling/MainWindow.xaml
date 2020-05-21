@@ -10,7 +10,7 @@
         xmlns:viewModel="clr-namespace:ESTQuestFilling.ViewModel"
         Name="MainWin"
         d:DesignHeight="524"
-        d:DesignWidth="1055">
+        Width="1477">
     <Window.Resources>
         <view:BoolToDataGridRowDetailsVisibilityModeConverter x:Key="BoolToDataGridRowDetailsVisibilityModeValueConverter"></view:BoolToDataGridRowDetailsVisibilityModeConverter>
         <view:StringToBoolVisibilityConverter x:Key="StringToBoolVisibilityConverter"></view:StringToBoolVisibilityConverter>

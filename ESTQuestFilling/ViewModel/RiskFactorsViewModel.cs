@@ -47,6 +47,19 @@ namespace ESTQuestFilling.ViewModel
             RiskFactors = new ObservableCollection<RiskFactor>(trf);
         }
 
+        //private Task<ObservableCollection<RiskFactor>> GetRiskFactorsAsync()
+        //{
+        //    string connectionString =
+        //        "Provider=Microsoft.ACE.OLEDB.12.0;Data Source="
+        //        + _databasePath
+        //        + ";User Id=admin;Password=;";
+
+        //    OleDbConnection L2QConnection = new OleDbConnection(connectionString);
+        //    DataContext dbContext = new DataContext(L2QConnection);
+        //    //Table<RiskFactor> trf = dbContext.GetTable<RiskFactor>();
+        //    return Task.Run(() => new ObservableCollection<RiskFactor>(dbContext.GetTable<RiskFactor>()));
+        //}
+
 
     }
 }

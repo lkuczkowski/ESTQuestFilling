@@ -9,7 +9,7 @@
              d:DesignHeight="450" d:DesignWidth="1200"
              x:Name="QuestionDatabaseViewUserControl">
     <UserControl.Resources>
-        <local:BoolToDataGridRowDetailsVisibilityModeConverter x:Key="BoolToDataGridRowDetailsVisibilityModeValueConverter"></local:BoolToDataGridRowDetailsVisibilityModeConverter>
+        <local:BoolToDataGridRowDetailsVisibilityModeConverter x:Key="BoolToDataGridRowDetailsVisibilityModeValueConverter"/>
     </UserControl.Resources>
     <DockPanel>
         <b:Interaction.Triggers>
@@ -23,7 +23,7 @@
                     <b:InvokeCommandAction Command="{Binding GetSearchedQuestionsCommand}" CommandParameter="{Binding ElementName=SearchTextBox, Path=Text}"/>
                 </b:EventTrigger>
             </b:Interaction.Triggers>
-            <Label DockPanel.Dock="Left" Content="Search: "></Label>
+            <Label DockPanel.Dock="Left" Content="Search (by tag): "></Label>
             <TextBox Name="SearchTextBox" Margin="2" DockPanel.Dock="Left" Width="300" HorizontalAlignment="Left"></TextBox>
             <CheckBox Name="DetailViewCheckBox" DockPanel.Dock="Left" Margin="25,2,2,2" VerticalAlignment="Center">Detail view</CheckBox>
         </DockPanel>

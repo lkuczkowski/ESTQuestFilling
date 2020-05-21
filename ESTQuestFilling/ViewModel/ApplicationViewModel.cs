@@ -83,6 +83,7 @@ namespace ESTQuestFilling.ViewModel
         public ApplicationViewModel()
         {
             CreateCompanyViewModelFromNameCommand = new DelegateCommand(CreateCompanyViewModelFromName);
+            // TODO - Fix null CurrentCompanyViewModel bug
             WriteInstitutionCheckpointsToFilesCommand = new DelegateCommand((object parameter) => CurrentCompanyViewModel.WriteCheckpointsToFiles());
             ReadDatabaseCommand = new DelegateCommand((object parameter) =>
             {
