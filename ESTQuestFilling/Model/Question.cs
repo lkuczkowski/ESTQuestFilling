@@ -406,6 +406,53 @@ namespace ESTQuestFilling.Model
                    "</InputCombo>";
         }
 
+        private string GetTAKZdjecie_nie()
+        {
+            return "<InputRadio required=\"true\">\n" +
+                        $"\t<Title>{QuestionText}</Title>\n" +
+                        "\t<SelectionList>\n" +
+                            "\t\t<Selection>TAK</Selection>\n" +
+                            "\t\t<Selection>NIE</Selection>\n" +
+                        "\t</SelectionList>\n" +
+                        "\t<Inner>\n" +
+                            "\t\t<OnValue>TAK</OnValue>\n" +
+                            "\t\t<InnerInputs>\n" +
+                                "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\" required = \"true\">\n" +
+                                "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA________________-->\n" +
+                                "\t\t\t<Title></Title>\n" +
+                                "\t\t\t<NotEdited/>\n" +
+                            "\t\t</InputImage>\n" +
+                            "\t\t</InnerInputs>\n" +
+                        "\t</Inner>\n" +
+                        "\t<Mark>\n" +
+                            _analyticsLink +
+                            "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                                "\t\t\t<MarkDef mark = \"normal\">TAK</MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"alarm\">NIE</MarkDef>\n" +
+                            "\t\t</Definition>\n" +
+                        "\t</Mark>\n" +
+                        "\t<NotEdited/>\n" +
+                   "</InputRadio>";
+        }
+
+        private string GetLiczbaCalkowita()
+        {
+            return "<!--___________________WPROWADŹ WARTOŚCI: MIN, MAX, DEFAULT________________-->\n" +
+                    "<InputInteger defaultValue=\"0\" required=\"true\">\n" +
+                            $"\t<Title>{QuestionText}</Title>\n" +
+                            "\t<Mark>\n" +
+                                _analyticsLink +
+                                "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                                    "\t\t\t<!--___________________UZUPEŁNIJ PRZEDZIAŁY________________-->\n" +
+                                    "\t\t\t<MarkDef rangeMin = \"\" rangeMax = \"\" mark = \"alarm\"/>\n" +
+                                    "\t\t\t<MarkDef rangeMin = \"\" rangeMax = \"\" mark = \"warning\"/>\n" +
+                                    "\t\t\t<MarkDef rangeMin = \"\" rangeMax = \"\" mark = \"normal\"/>\n" +
+                                "\t\t</Definition>\n" +
+                            "\t</Mark>\n" +
+                            "\t<NotEdited/>\n" +
+                       "</InputInteger>";
+        }
+
         private string GetCode(string answerType)
         {
             switch (answerType)
@@ -438,6 +485,10 @@ namespace ESTQuestFilling.Model
                     return GetTekstCode();
                 case "[Lista rozwijana]":
                     return GetListaRozwijanaCode();
+                case "[TAK --> Zdjęcie / nie]":
+                    return GetTAKZdjecie_nie();
+                case "[Liczba całkowita]":
+                    return GetLiczbaCalkowita();
                 default:
                     throw new InvalidOperationException("Switch statement error: no match expression");
             }
