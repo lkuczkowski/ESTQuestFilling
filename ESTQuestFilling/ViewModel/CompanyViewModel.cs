@@ -56,17 +56,53 @@ namespace ESTQuestFilling.ViewModel
                     $"INNER JOIN [Numer punktu] ON [{name} - Pytania].[Numer] = [Numer punktu].Identyfikator) " +
                     $"ORDER BY [{name} - Pytania].Numer, [{name} - Pytania].Identyfikator;";
 
+                string queryStringWithPage =
+                    $"SELECT " +
+                    $"[{name} - Pytania].[Punkt kontrolny], " +
+                    $"[Punkty kontrolne].[Punkt kontrolny], " +
+                    $"[{name} - Punkty kontrolne].Nazwa, " +
+                    $"[{name} - Pytania].Pytanie, " +
+                    $"[Kwantyfikowanie].Kwantyfikator, " +
+                    $"[{name} - Pytania].Ocena, " +
+                    $"[Numer punktu].[Numer punktu], " +
+                    $"[{name} - Pytania].Identyfikator, " +
+                    $"[{name} - Pytania].Strona " + 
+                    $"FROM (((([{name} - Pytania] INNER JOIN [{name} - Punkty kontrolne] ON [{name} - Pytania].[Punkt kontrolny] = [{name} - Punkty kontrolne].[Punkt kontrolny]) " +
+                    $"INNER JOIN [Kwantyfikowanie] ON [{name} - Pytania].[Kwantyfikowanie] = [Kwantyfikowanie].Identyfikator) " +
+                    $"INNER JOIN [Punkty kontrolne] ON [{name} - Pytania].[Punkt kontrolny] = [Punkty kontrolne].Identyfikator) " +
+                    $"INNER JOIN [Numer punktu] ON [{name} - Pytania].[Numer] = [Numer punktu].Identyfikator) " +
+                    $"ORDER BY [{name} - Pytania].Numer;";
+
                 _company = new Company(name);
                 using (OleDbConnection connection = new OleDbConnection(connectionString))
                 {
-                    OleDbCommand command = new OleDbCommand(queryString, connection);
                     try
                     {
+                        OleDbCommand command;
                         connection.Open();
+                        var schema = connection.GetSchema("COLUMNS");
+                        string expr = "TABLE_NAME = " + $"'{name} - Pytania'" + " AND COLUMN_NAME = 'Strona'";
+                        var col = schema.Select(expr);
+
+                        if (col.Length > 0)
+                        {
+                            command = new OleDbCommand(queryStringWithPage, connection);
+                        }
+                        else
+                        {
+                            command = new OleDbCommand(queryString, connection);
+                        }
+
                         OleDbDataReader reader = command.ExecuteReader();
                         reader.Read();
                         Checkpoint chp = new Checkpoint((int)reader[0], (string)reader[1] + " - " + (string)reader[2]);
-                        chp.AddQuestion(new Question((int)reader[7], reader[3].ToString(), reader[5].ToString(), (string)reader[4], reader[6].ToString()));
+
+                        if (col.Length > 0)
+                            chp.AddQuestion(new Question((int)reader[7], reader[3].ToString(), reader[5].ToString(), (string)reader[4], reader[6].ToString(), reader[8].ToString()));
+                        else
+                        {
+                            chp.AddQuestion(new Question((int)reader[7], reader[3].ToString(), reader[5].ToString(), (string)reader[4], reader[6].ToString()));
+                        }
                         _company.AddCheckpoint(chp);
 
                         while (reader.Read())
@@ -77,7 +113,12 @@ namespace ESTQuestFilling.ViewModel
                                 _company.AddCheckpoint(chp);
                             }
 
-                            chp.AddQuestion(new Question((int)reader[7], reader[3].ToString(), reader[5].ToString(), (string)reader[4], reader[6].ToString()));
+                            if (col.Length > 0)
+                                chp.AddQuestion(new Question((int)reader[7], reader[3].ToString(), reader[5].ToString(), (string)reader[4], reader[6].ToString(), reader[8].ToString()));
+                            else
+                            {
+                                chp.AddQuestion(new Question((int)reader[7], reader[3].ToString(), reader[5].ToString(), (string)reader[4], reader[6].ToString()));
+                            }
                         }
 
                         reader.Close();
@@ -86,7 +127,6 @@ namespace ESTQuestFilling.ViewModel
                     {
                         MessageBox.Show("Reading DB error\n\n" + ex.Message);
                     }
-
                 }
             }
         }

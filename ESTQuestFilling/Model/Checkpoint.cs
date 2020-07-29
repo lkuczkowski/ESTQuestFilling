@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Windows;
 
@@ -27,30 +28,56 @@ namespace ESTQuestFilling.Model
 
         public string GetCheckpointCode()
         {
-            string firstPart = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-                               "<Form xmlns = \"http://tempuri.org/FormSchema.1.5.xsd\" creationDate = \"2019-09-23T10:00:00.178Z\" creationUser = \"lkuczkowski\">\n" +
-                               "<Page>\n" +
-                               $"<Title>{Name}</Title>\n\n";
-            string lastPart = "</Page>\n" +
-                              "</Form>";
-
             StringBuilder sb = new StringBuilder();
 
-            sb.Append(firstPart);
+            if (QuestionsList[0].Page == "")
+            {
+                string firstPart = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                                   "<Form xmlns = \"http://tempuri.org/FormSchema.1.5.xsd\" creationDate = \"2019-09-23T10:00:00.178Z\" creationUser = \"lkuczkowski\">\n" +
+                                   "<Page>\n" +
+                                   $"<Title>{Name}</Title>\n\n";
+                string lastPart = "</Page>\n" +
+                                  "</Form>";
 
-            try
-            {
-                foreach (var question in QuestionsList)
+                sb.Append(firstPart);
+
+                try
                 {
-                    sb.Append(question.GetQuestionCode());
-                    sb.AppendLine("\n");
+                    foreach (var question in QuestionsList)
+                    {
+                        sb.Append(question.GetQuestionCode());
+                        sb.AppendLine("\n");
+                    }
                 }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.ToString());
+                }
+                sb.Append(lastPart);
+
             }
-            catch (Exception e)
+            else
             {
-                MessageBox.Show(e.ToString());
+                var questionsGropedByPage = QuestionsList.GroupBy(n => n.Page);
+                string firstPart = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
+                                   "<Form xmlns = \"http://tempuri.org/FormSchema.1.5.xsd\" creationDate = \"2019-09-23T10:00:00.178Z\" creationUser = \"lkuczkowski\">\n";
+
+                sb.Append(firstPart);
+
+                foreach (var questionGroup in questionsGropedByPage)
+                {
+                    sb.Append("<Page>\n" + $"<Title>{questionGroup.Key}</Title>\n\n");
+                    foreach (var question in questionGroup)
+                    {
+                        sb.Append(question.GetQuestionCode());
+                        sb.AppendLine("\n");
+                    }
+
+                    sb.AppendLine("\n</Page>\n");
+                }
+
+                sb.AppendLine("</Form>");
             }
-            sb.Append(lastPart);
             return sb.ToString();
         }
     }

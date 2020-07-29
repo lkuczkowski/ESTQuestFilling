@@ -113,6 +113,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\CheckpointWithPages.cs" />
+    <Compile Include="Model\ICheckpointable.cs" />
+    <Compile Include="Model\QuestionWithPage.cs" />
     <Compile Include="Model\RiskCategory.cs" />
     <Compile Include="Model\RiskFactor.cs" />
     <Compile Include="Model\RiskField.cs" />
