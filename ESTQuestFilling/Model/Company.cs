@@ -21,6 +21,7 @@ namespace ESTQuestFilling.Model
         }
 
         // TODO - sprawdzać czy istnieją już pliki i pytać czy nadpisać
+        // TODO - do rozwiązania problem z nazwą pliki ze "/" i "\"
         public void WriteInstitutionCodeFiles()
         {
             System.Windows.Forms.FolderBrowserDialog f = new System.Windows.Forms.FolderBrowserDialog();
