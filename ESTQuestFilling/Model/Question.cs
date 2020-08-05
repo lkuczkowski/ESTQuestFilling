@@ -18,7 +18,8 @@ namespace ESTQuestFilling.Model
         public string Answer { get; }
         public string Number { get; }
         public string Tag { get; set; }
-        public string Page { get; set; } = "";
+        public string Page { get; } = "";
+        public string Comment { get; }
 
         public int[][] EvaluationTable { get; private set; }
 
@@ -71,6 +72,13 @@ namespace ESTQuestFilling.Model
             : this(id, question, marks, answer, number)
         {
             Page = page;
+        }
+
+        public Question(int id, string question, string marks, string answer, string number, string page,
+            string comment)
+            : this(id, question, marks, answer, number, page)
+        {
+            Comment = comment;
         }
 
         private void CreateEvaluateTable()

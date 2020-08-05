@@ -16,6 +16,8 @@ namespace ESTQuestFilling.ViewModel
         public string Number => _question.Number;
         public string Tag => _question.Tag;
         public string ID => _question.Id.ToString();
+        public string Page => _question.Page;
+        public string Comment => _question.Comment.Replace(";", "\n").Trim();
 
         public static Dictionary<int, string> RiskFactors { get; set; }
 
