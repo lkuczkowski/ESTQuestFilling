@@ -22,7 +22,7 @@ namespace ESTQuestFilling.Model
         public string Comment { get; }
 
         public int[][] EvaluationTable { get; private set; }
-
+        
         private void SetEvaluation(string marks)
         {
             string[] noAnalyticsIndicataors = {"", "brak", "brak;", "brak; "};
@@ -124,6 +124,8 @@ namespace ESTQuestFilling.Model
 
         private string GetBRAKUWAG_UwagiTekstCode()
         {
+            string inputText = Comment == "" ? "Podaj uwagi" : Comment.Substring(Comment.IndexOf(']') + 2);
+
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
                         "\t<SelectionList>\n" +
@@ -134,7 +136,7 @@ namespace ESTQuestFilling.Model
                             "\t\t<OnValue>UWAGI</OnValue>\n" +
                             "\t\t<InnerInputs>\n" +
                                 "\t\t\t<InputText required = \"true\">\n" +
-                                    "\t\t\t\t<Title>Podaj uwagi</Title>\n" +
+                                    $"\t\t\t\t<Title>{inputText}</Title>\n" +
                                     "\t\t\t\t<NotEdited/>\n" +
                                 "\t\t\t</InputText>\n" +
                             "\t\t</InnerInputs>\n" +
@@ -180,6 +182,11 @@ namespace ESTQuestFilling.Model
 
         private string Get_takZdjecieNIECode()
         {
+            string inputText = Comment == "" ? "" : Comment.Substring(Comment.IndexOf(']') + 2);
+            string remainderComment = Comment == ""
+                ? "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA________________-->\n"
+                : "";
+
             return "<InputRadio required=\"true\">\n" +
                             $"\t<Title>{QuestionText}</Title>\n" +
                             "\t<SelectionList>\n" +
@@ -190,8 +197,8 @@ namespace ESTQuestFilling.Model
                                 "\t\t<OnValue>TAK</OnValue>\n" +
                                 "\t\t<InnerInputs>\n" +
                                     "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\" required = \"true\">\n" +
-                                    "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA________________-->\n" +
-                                    "\t\t\t<Title></Title>\n" +
+                                    remainderComment +
+                                    $"\t\t\t<Title>{inputText}</Title>\n" +
                                     "\t\t\t<NotEdited/>\n" +
                                 "\t\t</InputImage>\n" +
                                 "\t\t</InnerInputs>\n" +
@@ -207,6 +214,7 @@ namespace ESTQuestFilling.Model
                           "</InputRadio>";
         }
 
+        // TODO - komeentarze do uzupełnienia
         private string GetBRAKUWAGuwagiTekstZdjecieCode()
         {
             return "<InputRadio required=\"true\">\n" +
@@ -259,6 +267,11 @@ namespace ESTQuestFilling.Model
         }
         private string GetTAKnieZdjecieCode()
         {
+            string inputText = Comment == "" ? "" : Comment.Substring(Comment.IndexOf(']') + 2);
+            string remainderComment = Comment == ""
+                ? "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA________________-->\n"
+                : "";
+
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
                         "\t<SelectionList>\n" +
@@ -269,8 +282,8 @@ namespace ESTQuestFilling.Model
                             "\t\t<OnValue>NIE</OnValue>\n" +
                             "\t\t<InnerInputs>\n" +
                                 "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\" required = \"true\">\n" +
-                                "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA________________-->\n" +
-                                "\t\t\t<Title></Title>\n" +
+                                remainderComment +
+                                $"\t\t\t<Title>{inputText}</Title>\n" +
                                 "\t\t\t<NotEdited/>\n" +
                             "\t\t</InputImage>\n" +
                             "\t\t</InnerInputs>\n" +
@@ -288,6 +301,11 @@ namespace ESTQuestFilling.Model
 
         private string Get_takTekstNIECode()
         {
+            string inputText = Comment == "" ? "" : Comment.Substring(Comment.IndexOf(']') + 2);
+            string remainderComment = Comment == ""
+                ? "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA________________-->\n"
+                : "";
+
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
                         "\t<SelectionList>\n" +
@@ -298,8 +316,8 @@ namespace ESTQuestFilling.Model
                             "\t\t<OnValue>TAK</OnValue>\n" +
                             "\t\t<InnerInputs>\n" +
                                 "\t\t\t<InputText required = \"true\">\n" +
-                                    "\t\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA________________-->\n" +
-                                    "\t\t\t\t<Title></Title>\n" +
+                                    remainderComment +
+                                    $"\t\t\t\t<Title>{inputText}</Title>\n" +
                                     "\t\t\t\t<NotEdited/>\n" +
                                 "\t\t\t</InputText>\n" +
                             "\t\t</InnerInputs>\n" +
@@ -315,6 +333,7 @@ namespace ESTQuestFilling.Model
                    "</InputRadio>";
         }
 
+        // TODO - komentarze
         private string GetSuwak_odczytWartosciCode()
         {
             return "<!--___________________WPROWADŹ WARTOŚCI: MIN, MAX, DEFAULT________________-->\n" +
@@ -335,6 +354,11 @@ namespace ESTQuestFilling.Model
 
         private string GetTAKnieTekstCode()
         {
+            string inputText = Comment == "" ? "" : Comment.Substring(Comment.IndexOf(']') + 2);
+            string remainderComment = Comment == ""
+                ? "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA________________-->\n"
+                : "";
+
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
                         "\t<SelectionList>\n" +
@@ -345,8 +369,8 @@ namespace ESTQuestFilling.Model
                             "\t\t<OnValue>NIE</OnValue>\n" +
                             "\t\t<InnerInputs>\n" +
                                 "\t\t\t<InputText required = \"true\">\n" +
-                                    "\t\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA________________-->\n" +
-                                    "\t\t\t\t<Title></Title>\n" +
+                                    remainderComment +
+                                    $"\t\t\t\t<Title>{inputText}</Title>\n" +
                                     "\t\t\t\t<NotEdited/>\n" +
                                 "\t\t\t</InputText>\n" +
                             "\t\t</InnerInputs>\n" +
@@ -398,6 +422,7 @@ namespace ESTQuestFilling.Model
                    "</InputText>";
         }
 
+        // TODO - komentarze
         private string GetListaRozwijanaCode()
         {
             return "<InputCombo required=\"true\">\n" +
@@ -423,6 +448,11 @@ namespace ESTQuestFilling.Model
 
         private string GetTAKZdjecie_nie()
         {
+            string inputText = Comment == "" ? "" : Comment.Substring(Comment.IndexOf(']') + 2);
+            string remainderComment = Comment == ""
+                ? "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA________________-->\n"
+                : "";
+
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
                         "\t<SelectionList>\n" +
@@ -433,8 +463,8 @@ namespace ESTQuestFilling.Model
                             "\t\t<OnValue>TAK</OnValue>\n" +
                             "\t\t<InnerInputs>\n" +
                                 "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\" required = \"true\">\n" +
-                                "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA________________-->\n" +
-                                "\t\t\t<Title></Title>\n" +
+                                remainderComment +
+                                $"\t\t\t<Title>{inputText}</Title>\n" +
                                 "\t\t\t<NotEdited/>\n" +
                             "\t\t</InputImage>\n" +
                             "\t\t</InnerInputs>\n" +
@@ -450,6 +480,7 @@ namespace ESTQuestFilling.Model
                    "</InputRadio>";
         }
 
+        //TODO - komentarze
         private string GetLiczbaCalkowita()
         {
             return "<!--___________________WPROWADŹ WARTOŚCI: MIN, MAX, DEFAULT________________-->\n" +
