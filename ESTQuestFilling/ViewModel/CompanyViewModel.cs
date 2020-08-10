@@ -40,17 +40,19 @@ namespace ESTQuestFilling.ViewModel
                     + _databasePath
                     + ";User Id=admin;Password=;";
 
+                string companyNameForCheckpointReading = name.Split('-').First().Trim();
+
                 string queryString =
                     $"SELECT " +
                     $"[{name} - Pytania].[Punkt kontrolny], " +
                     $"[Punkty kontrolne].[Punkt kontrolny], " +
-                    $"[{name} - Punkty kontrolne].Nazwa, " +
+                    $"[{companyNameForCheckpointReading} - Punkty kontrolne].Nazwa, " +
                     $"[{name} - Pytania].Pytanie, " +
                     $"[Kwantyfikowanie].Kwantyfikator, " +
                     $"[{name} - Pytania].Ocena, " +
                     $"[Numer punktu].[Numer punktu], " +
                     $"[{name} - Pytania].Identyfikator " +
-                    $"FROM (((([{name} - Pytania] INNER JOIN [{name} - Punkty kontrolne] ON [{name} - Pytania].[Punkt kontrolny] = [{name} - Punkty kontrolne].[Punkt kontrolny]) " +
+                    $"FROM (((([{name} - Pytania] INNER JOIN [{companyNameForCheckpointReading} - Punkty kontrolne] ON [{name} - Pytania].[Punkt kontrolny] = [{companyNameForCheckpointReading} - Punkty kontrolne].[Punkt kontrolny]) " +
                     $"INNER JOIN [Kwantyfikowanie] ON [{name} - Pytania].[Kwantyfikowanie] = [Kwantyfikowanie].Identyfikator) " +
                     $"INNER JOIN [Punkty kontrolne] ON [{name} - Pytania].[Punkt kontrolny] = [Punkty kontrolne].Identyfikator) " +
                     $"INNER JOIN [Numer punktu] ON [{name} - Pytania].[Numer] = [Numer punktu].Identyfikator) " +
@@ -60,14 +62,14 @@ namespace ESTQuestFilling.ViewModel
                     $"SELECT " +
                     $"[{name} - Pytania].[Punkt kontrolny], " +
                     $"[Punkty kontrolne].[Punkt kontrolny], " +
-                    $"[{name} - Punkty kontrolne].Nazwa, " +
+                    $"[{companyNameForCheckpointReading} - Punkty kontrolne].Nazwa, " +
                     $"[{name} - Pytania].Pytanie, " +
                     $"[Kwantyfikowanie].Kwantyfikator, " +
                     $"[{name} - Pytania].Ocena, " +
                     $"[Numer punktu].[Numer punktu], " +
                     $"[{name} - Pytania].Identyfikator, " +
                     $"[{name} - Pytania].Strona " + 
-                    $"FROM (((([{name} - Pytania] INNER JOIN [{name} - Punkty kontrolne] ON [{name} - Pytania].[Punkt kontrolny] = [{name} - Punkty kontrolne].[Punkt kontrolny]) " +
+                    $"FROM (((([{name} - Pytania] INNER JOIN [{companyNameForCheckpointReading} - Punkty kontrolne] ON [{name} - Pytania].[Punkt kontrolny] = [{companyNameForCheckpointReading} - Punkty kontrolne].[Punkt kontrolny]) " +
                     $"INNER JOIN [Kwantyfikowanie] ON [{name} - Pytania].[Kwantyfikowanie] = [Kwantyfikowanie].Identyfikator) " +
                     $"INNER JOIN [Punkty kontrolne] ON [{name} - Pytania].[Punkt kontrolny] = [Punkty kontrolne].Identyfikator) " +
                     $"INNER JOIN [Numer punktu] ON [{name} - Pytania].[Numer] = [Numer punktu].Identyfikator) " +
