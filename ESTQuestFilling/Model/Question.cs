@@ -83,7 +83,7 @@ namespace ESTQuestFilling.Model
 
         // TODO - zastosować wzorzec lub dziedziczenie???
         // TODO - dodać obsługę pola z komentarzem z bazy danych
-        private string GetTAKnieCode()
+        private string GetTAK_nieXmlCode()
         {
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
@@ -102,7 +102,7 @@ namespace ESTQuestFilling.Model
                    "</InputRadio>";
         }
 
-        private string GetOcenaEksperckaCode()
+        private string GetOcenaEksperckaXmlCode()
         {
             return "<InputImage allowCamera=\"true\" allowFile=\"false\" required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
@@ -114,7 +114,7 @@ namespace ESTQuestFilling.Model
                    "</InputImage>";
         }
 
-        private string GetBRAKUWAG_UwagiTekstCode()
+        private string GetBRAKUWAG_uwagiTekstXmlCode()
         {
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
@@ -142,7 +142,7 @@ namespace ESTQuestFilling.Model
                    "</InputRadio>";
         }
 
-        private string GetCiagloscZachowanaUszkodzenieOknoZUwagamiCode()
+        private string GetCiagloscZachowanaUszkodzenieTekstXmlCode()
         {
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
@@ -170,7 +170,7 @@ namespace ESTQuestFilling.Model
                    "</InputRadio>";
         }
 
-        private string Get_takZdjecieNIECode()
+        private string Get_takZdjecieNIE_XmlCode()
         {
             return "<InputRadio required=\"true\">\n" +
                             $"\t<Title>{QuestionText}</Title>\n" +
@@ -199,7 +199,7 @@ namespace ESTQuestFilling.Model
                           "</InputRadio>";
         }
 
-        private string GetBRAKUWAGuwagiTekstZdjecieCode()
+        private string GetBRAKUWAG_uwagiTekstZdjecieXmlCode()
         {
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
@@ -231,7 +231,7 @@ namespace ESTQuestFilling.Model
                    "</InputRadio>";
         }
 
-        private string Get_takNIECode()
+        private string Get_takNIE_XmlCode()
         {
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
@@ -249,7 +249,7 @@ namespace ESTQuestFilling.Model
                         "\t<NotEdited/>\n" +
                    "</InputRadio>";
         }
-        private string GetTAKnieZdjecieCode()
+        private string GetTAK_nieZdjecieXmlCode()
         {
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
@@ -278,7 +278,7 @@ namespace ESTQuestFilling.Model
                    "</InputRadio>";
         }
 
-        private string Get_takTekstNIECode()
+        private string Get_takTekstNIE_XmlCode()
         {
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
@@ -307,7 +307,7 @@ namespace ESTQuestFilling.Model
                    "</InputRadio>";
         }
 
-        private string GetSuwak_odczytWartosciCode()
+        private string GetSuwak_odczytWartosciXmlCode()
         {
             return "<!--___________________WPROWADŹ WARTOŚCI: MIN, MAX, DEFAULT________________-->\n" +
                     "<InputSliderInt minValue=\"\" maxValue=\"\" defaultValue=\"\" required=\"true\">\n" +
@@ -325,7 +325,7 @@ namespace ESTQuestFilling.Model
                        "</InputSliderInt>";
         }
 
-        private string GetTAKnieTekstCode()
+        private string GetTAK_nieTekstXmlCode()
         {
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
@@ -354,7 +354,7 @@ namespace ESTQuestFilling.Model
                    "</InputRadio>";
         }
 
-        private string GetFakultatywneTekstZdjecieCode()
+        private string GetFakultatywneTekstZdjecieXmlCode()
         {
             return "<InputText required=\"false\">\n" +
                          $"\t<Title>{QuestionText}</Title>\n" +
@@ -378,7 +378,7 @@ namespace ESTQuestFilling.Model
                  "</InputText>";
         }
 
-        private string GetTekstOcenaEksperckaCode()
+        private string GetTekstOcenaEksperckaXmlCode()
         {
             return "<InputText required = \"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
@@ -390,7 +390,7 @@ namespace ESTQuestFilling.Model
                    "</InputText>";
         }
 
-        private string GetListaRozwijanaCode()
+        private string GetListaRozwijanaXmlCode()
         {
             return "<InputCombo required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
@@ -413,7 +413,7 @@ namespace ESTQuestFilling.Model
                    "</InputCombo>";
         }
 
-        private string GetTAKZdjecie_nie()
+        private string GetTAK_Zdjecie_nieXmlCode()
         {
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
@@ -442,7 +442,7 @@ namespace ESTQuestFilling.Model
                    "</InputRadio>";
         }
 
-        private string GetLiczbaCalkowita()
+        private string GetLiczbaCalkowitaXmlCode()
         {
             return "<!--___________________WPROWADŹ WARTOŚCI: MIN, MAX, DEFAULT________________-->\n" +
                     "<InputInteger defaultValue=\"0\" required=\"true\">\n" +
@@ -549,37 +549,37 @@ namespace ESTQuestFilling.Model
             switch (answerType)
             {
                 case "[TAK / nie]":
-                    return GetTAKnieCode();
+                    return GetTAK_nieXmlCode();
                 case "[Ocena ekspercka]":
-                    return GetOcenaEksperckaCode();
+                    return GetOcenaEksperckaXmlCode();
                 case "[BRAK UWAG / uwagi --> Tekst]":
-                    return GetBRAKUWAG_UwagiTekstCode();
+                    return GetBRAKUWAG_uwagiTekstXmlCode();
                 case "[Ciągłość zachowana / Uszkodzenie --> Tekst]":
-                    return GetCiagloscZachowanaUszkodzenieOknoZUwagamiCode();
+                    return GetCiagloscZachowanaUszkodzenieTekstXmlCode();
                 case "[tak --> Zdjęcie / NIE]":
-                    return Get_takZdjecieNIECode();
+                    return Get_takZdjecieNIE_XmlCode();
                 case "[BRAK UWAG / uwagi --> Tekst + zdjęcie]":
-                    return GetBRAKUWAGuwagiTekstZdjecieCode();
+                    return GetBRAKUWAG_uwagiTekstZdjecieXmlCode();
                 case "[tak / NIE]":
-                    return Get_takNIECode();
+                    return Get_takNIE_XmlCode();
                 case "[TAK / nie --> Zdjęcie]":
-                    return GetTAKnieZdjecieCode();
+                    return GetTAK_nieZdjecieXmlCode();
                 case "[tak --> Tekst / NIE]":
-                    return Get_takTekstNIECode();
+                    return Get_takTekstNIE_XmlCode();
                 case "[Suwak (odczyt wartości)]":
-                    return GetSuwak_odczytWartosciCode();
+                    return GetSuwak_odczytWartosciXmlCode();
                 case "[TAK / nie --> Tekst]":
-                    return GetTAKnieTekstCode();
+                    return GetTAK_nieTekstXmlCode();
                 case "[Fakultatywne --> Tekst + zdjęcie]":
-                    return GetFakultatywneTekstZdjecieCode();
+                    return GetFakultatywneTekstZdjecieXmlCode();
                 case "[Tekst (ocena ekspercka)]":
-                    return GetTekstOcenaEksperckaCode();
+                    return GetTekstOcenaEksperckaXmlCode();
                 case "[Lista rozwijana]":
-                    return GetListaRozwijanaCode();
+                    return GetListaRozwijanaXmlCode();
                 case "[TAK --> Zdjęcie / nie]":
-                    return GetTAKZdjecie_nie();
+                    return GetTAK_Zdjecie_nieXmlCode();
                 case "[Liczba całkowita]":
-                    return GetLiczbaCalkowita();
+                    return GetLiczbaCalkowitaXmlCode();
                 case "[TAK / nie / ND / --> Tekst]":
                     return GetTAK_nieND_TekstXmlCode();
                 case "[tak / NIE / ND / --> Tekst]":
@@ -591,7 +591,7 @@ namespace ESTQuestFilling.Model
                 case "[Zdjęcie]":
                     return GetZdjecieXmlCode();
                 default:
-                    throw new InvalidOperationException("Switch statement error: no match expression");
+                    throw new InvalidOperationException("Unable to get XML code for used answer type.\nSwitch statement error: no match expression");
             }
         }
 
