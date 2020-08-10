@@ -378,7 +378,7 @@ namespace ESTQuestFilling.Model
                  "</InputText>";
         }
 
-        private string GetTekstCode()
+        private string GetTekstOcenaEksperckaCode()
         {
             return "<InputText required = \"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
@@ -460,6 +460,90 @@ namespace ESTQuestFilling.Model
                        "</InputInteger>";
         }
 
+        private string GetTAK_nieND_TekstXmlCode()
+        {
+            return "<InputRadio required=\"true\">\n" +
+                        $"\t<Title>{QuestionText}</Title>\n" +
+                        "\t<SelectionList>\n" +
+                            "\t\t<Selection>TAK</Selection>\n" +
+                            "\t\t<Selection>NIE</Selection>\n" +
+                            "\t\t<Selection>N/D</Selection>\n" +
+                        "\t</SelectionList>\n" +
+                        "\t<Inner>\n" +
+                            "\t\t<OnValue operand=\"exists\"/>\n" +
+                            "\t\t<InnerInputs>\n" +
+                                "\t\t\t<InputText required = \"false\">\n" +
+                                    "\t\t\t\t<Title>Podaj uwagi (fakultatywne).</Title>\n" +
+                                    "\t\t\t\t<NotEdited/>\n" +
+                                "\t\t\t</InputText>\n" +
+                            "\t\t</InnerInputs>\n" +
+                        "\t</Inner>\n" +
+                        "\t<Mark>\n" +
+                            _analyticsLink +
+                            "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                                "\t\t\t<MarkDef mark = \"normal\">TAK</MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"alarm\">NIE</MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"normal\">N/D</MarkDef>\n" +
+                            "\t\t</Definition>\n" +
+                        "\t</Mark>\n" +
+                        "\t<NotEdited/>\n" +
+                   "</InputRadio>";
+        }
+
+        private string Get_takNIE_ND_TekstXmlCode()
+        {
+            return "<InputRadio required=\"true\">\n" +
+                        $"\t<Title>{QuestionText}</Title>\n" +
+                        "\t<SelectionList>\n" +
+                            "\t\t<Selection>TAK</Selection>\n" +
+                            "\t\t<Selection>NIE</Selection>\n" +
+                            "\t\t<Selection>N/D</Selection>\n" +
+                        "\t</SelectionList>\n" +
+                        "\t<Inner>\n" +
+                            "\t\t<OnValue operand=\"exists\"/>\n" +
+                            "\t\t<InnerInputs>\n" +
+                                "\t\t\t<InputText required = \"false\">\n" +
+                                    "\t\t\t\t<Title>Podaj uwagi (fakultatywne).</Title>\n" +
+                                    "\t\t\t\t<NotEdited/>\n" +
+                                "\t\t\t</InputText>\n" +
+                            "\t\t</InnerInputs>\n" +
+                        "\t</Inner>\n" +
+                        "\t<Mark>\n" +
+                            _analyticsLink +
+                            "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                                "\t\t\t<MarkDef mark = \"alarm\">TAK</MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"normal\">NIE</MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"normal\">N/D</MarkDef>\n" +
+                            "\t\t</Definition>\n" +
+                        "\t</Mark>\n" +
+                        "\t<NotEdited/>\n" +
+                   "</InputRadio>";
+        }
+
+        private string GetData_bez_ocenyXmlCode()
+        {
+            return "<InputDate required = \"true\">\n" +
+                        $"\t<Title>{QuestionText}</Title>\n" +
+                        "\t<NotEdited/>\n" +
+                   "</InputDate>";
+        }
+
+        private string GetTekstXmlCode()
+        {
+            return "<InputText required = \"true\">\n" +
+                        $"\t<Title>{QuestionText}</Title>\n" +
+                        "\t<NotEdited/>\n" +
+                   "</InputText>";
+        }
+
+        private string GetZdjecieXmlCode()
+        {
+            return "<InputImage allowCamera=\"true\" allowFile=\"false\" required=\"true\">\n" +
+                        $"\t<Title>{QuestionText}</Title>\n" +
+                        "\t<NotEdited/>\n" +
+                   "</InputImage>";
+        }
+
         private string GetCode(string answerType)
         {
             switch (answerType)
@@ -488,14 +572,24 @@ namespace ESTQuestFilling.Model
                     return GetTAKnieTekstCode();
                 case "[Fakultatywne --> Tekst + zdjęcie]":
                     return GetFakultatywneTekstZdjecieCode();
-                case "[Tekst]":
-                    return GetTekstCode();
+                case "[Tekst (ocena ekspercka)]":
+                    return GetTekstOcenaEksperckaCode();
                 case "[Lista rozwijana]":
                     return GetListaRozwijanaCode();
                 case "[TAK --> Zdjęcie / nie]":
                     return GetTAKZdjecie_nie();
                 case "[Liczba całkowita]":
                     return GetLiczbaCalkowita();
+                case "[TAK / nie / ND / --> Tekst]":
+                    return GetTAK_nieND_TekstXmlCode();
+                case "[tak / NIE / ND / --> Tekst]":
+                    return Get_takNIE_ND_TekstXmlCode();
+                case "[Data (bez oceny)]":
+                    return GetData_bez_ocenyXmlCode();
+                case "[Tekst]":
+                    return GetTekstXmlCode();
+                case "[Zdjęcie]":
+                    return GetZdjecieXmlCode();
                 default:
                     throw new InvalidOperationException("Switch statement error: no match expression");
             }
