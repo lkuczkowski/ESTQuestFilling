@@ -151,6 +151,9 @@ namespace ESTQuestFilling.Tests
         }
 
         [TestCase(" ")]
+        [TestCase("                            ")]
+        [TestCase(" \t\n")]
+        [TestCase(" ,./<>?;:''\"[]{}\\\'=+-_)(*&^%$#@!!~`")]
         [TestCase("[ZAKRES]")]
         [TestCase("<,>")]
         [TestCase("[ZAKRES] <,> A")]
