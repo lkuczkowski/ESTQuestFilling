@@ -626,6 +626,722 @@ namespace ESTQuestFilling.Tests
 
             Assert.AreEqual(answer, question.GetQuestionCode());
         }
+
+        [Test]
+        public void ReturnStringFromGetBRAKUWAG_UwagiTekstCode_EmptyComment_DefaultXmlCode()
+        {
+            string comment = String.Empty;
+            var question = new Question(0, "", "", "[BRAK UWAG / uwagi --> Tekst]", "", "", comment);
+            string answer = "<InputRadio required=\"true\">\n" +
+                        $"\t<Title></Title>\n" +
+                        "\t<SelectionList>\n" +
+                            "\t\t<Selection>BRAK UWAG</Selection>\n" +
+                            "\t\t<Selection>UWAGI</Selection>\n" +
+                        "\t</SelectionList>\n" +
+                        "\t<Inner>\n" +
+                            "\t\t<OnValue>UWAGI</OnValue>\n" +
+                            "\t\t<InnerInputs>\n" +
+                                "\t\t\t<InputText required = \"true\">\n" +
+                                    $"\t\t\t\t<Title>Podaj uwagi</Title>\n" +
+                                    "\t\t\t\t<NotEdited/>\n" +
+                                "\t\t\t</InputText>\n" +
+                            "\t\t</InnerInputs>\n" +
+                        "\t</Inner>\n" +
+                        "\t<Mark>\n" +
+                        "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                                "\t\t\t<MarkDef mark = \"normal\">BRAK UWAG</MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"alarm\">UWAGI</MarkDef>\n" +
+                            "\t\t</Definition>\n" +
+                        "\t</Mark>\n" +
+                        "\t<NotEdited/>\n" +
+                   "</InputRadio>";
+
+            Assert.AreEqual(answer, question.GetQuestionCode());
+        }
+
+        [Test]
+        public void ReturnStringFromGetBRAKUWAG_UwagiTekstCode_InvalidPrefix_DefaultXmlCode()
+        {
+            string comment = "[ZDJĘCIE] Niepoprawny komentarz";
+            var question = new Question(0, "", "", "[BRAK UWAG / uwagi --> Tekst]", "", "", comment);
+            string answer = "<InputRadio required=\"true\">\n" +
+                        $"\t<Title></Title>\n" +
+                        "\t<SelectionList>\n" +
+                            "\t\t<Selection>BRAK UWAG</Selection>\n" +
+                            "\t\t<Selection>UWAGI</Selection>\n" +
+                        "\t</SelectionList>\n" +
+                        "\t<Inner>\n" +
+                            "\t\t<OnValue>UWAGI</OnValue>\n" +
+                            "\t\t<InnerInputs>\n" +
+                                "\t\t\t<InputText required = \"true\">\n" +
+                                    $"\t\t\t\t<Title>Podaj uwagi</Title>\n" +
+                                    "\t\t\t\t<NotEdited/>\n" +
+                                "\t\t\t</InputText>\n" +
+                            "\t\t</InnerInputs>\n" +
+                        "\t</Inner>\n" +
+                        "\t<Mark>\n" +
+                        "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                                "\t\t\t<MarkDef mark = \"normal\">BRAK UWAG</MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"alarm\">UWAGI</MarkDef>\n" +
+                            "\t\t</Definition>\n" +
+                        "\t</Mark>\n" +
+                        "\t<NotEdited/>\n" +
+                   "</InputRadio>";
+
+            Assert.AreEqual(answer, question.GetQuestionCode());
+        }
+
+        [Test]
+        public void ReturnStringFromGetBRAKUWAG_UwagiTekstCode_ValidComment_ReturnProperXmlCode()
+        {
+            string comment = "[TEKST] Poprawny komentarz";
+            var question = new Question(0, "", "", "[BRAK UWAG / uwagi --> Tekst]", "", "", comment);
+            string answer = "<InputRadio required=\"true\">\n" +
+                        $"\t<Title></Title>\n" +
+                        "\t<SelectionList>\n" +
+                            "\t\t<Selection>BRAK UWAG</Selection>\n" +
+                            "\t\t<Selection>UWAGI</Selection>\n" +
+                        "\t</SelectionList>\n" +
+                        "\t<Inner>\n" +
+                            "\t\t<OnValue>UWAGI</OnValue>\n" +
+                            "\t\t<InnerInputs>\n" +
+                                "\t\t\t<InputText required = \"true\">\n" +
+                                    $"\t\t\t\t<Title>Poprawny komentarz</Title>\n" +
+                                    "\t\t\t\t<NotEdited/>\n" +
+                                "\t\t\t</InputText>\n" +
+                            "\t\t</InnerInputs>\n" +
+                        "\t</Inner>\n" +
+                        "\t<Mark>\n" +
+                        "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                                "\t\t\t<MarkDef mark = \"normal\">BRAK UWAG</MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"alarm\">UWAGI</MarkDef>\n" +
+                            "\t\t</Definition>\n" +
+                        "\t</Mark>\n" +
+                        "\t<NotEdited/>\n" +
+                   "</InputRadio>";
+
+            Assert.AreEqual(answer, question.GetQuestionCode());
+        }
+
+        [Test]
+        public void ReturnStringFromGet_takZdjecieNIECode_EmptyComment_DefaultXmlCode()
+        {
+            string comment = String.Empty;
+            var question = new Question(0, "", "", "[tak --> Zdjęcie / NIE]", "", "", comment);
+
+            string answer = "<InputRadio required=\"true\">\n" +
+                            $"\t<Title></Title>\n" +
+                            "\t<SelectionList>\n" +
+                                "\t\t<Selection>TAK</Selection>\n" +
+                                "\t\t<Selection>NIE</Selection>\n" +
+                            "\t</SelectionList>\n" +
+                            "\t<Inner>\n" +
+                                "\t\t<OnValue>TAK</OnValue>\n" +
+                                "\t\t<InnerInputs>\n" +
+                                    "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\" required = \"true\">\n" +
+                                    "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA INNY NIŻ DOMYŚLNY________________-->\n" +
+                                    $"\t\t\t<Title>Zrób zdjęcie</Title>\n" +
+                                    "\t\t\t<NotEdited/>\n" +
+                                "\t\t</InputImage>\n" +
+                                "\t\t</InnerInputs>\n" +
+                            "\t</Inner>\n" +
+                            "\t<Mark>\n" +
+                            "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                                    "\t\t\t<MarkDef mark = \"alarm\">TAK</MarkDef>\n" +
+                                    "\t\t\t<MarkDef mark = \"normal\">NIE</MarkDef>\n" +
+                                "\t\t</Definition>\n" +
+                            "\t</Mark>\n" +
+                            "\t<NotEdited/>\n" +
+                          "</InputRadio>";
+
+            Assert.AreEqual(answer, question.GetQuestionCode());
+        }
+
+        [Test]
+        public void ReturnStringFromGet_takZdjecieNIECode_InvalidPrefix_DefaultXmlCode()
+        {
+            string comment = "[TEKST] Niepoprawny komentarz";
+            var question = new Question(0, "", "", "[tak --> Zdjęcie / NIE]", "", "", comment);
+            string answer = "<InputRadio required=\"true\">\n" +
+                            $"\t<Title></Title>\n" +
+                            "\t<SelectionList>\n" +
+                                "\t\t<Selection>TAK</Selection>\n" +
+                                "\t\t<Selection>NIE</Selection>\n" +
+                            "\t</SelectionList>\n" +
+                            "\t<Inner>\n" +
+                                "\t\t<OnValue>TAK</OnValue>\n" +
+                                "\t\t<InnerInputs>\n" +
+                                    "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\" required = \"true\">\n" +
+                                    "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA INNY NIŻ DOMYŚLNY________________-->\n" +
+                                    $"\t\t\t<Title>Zrób zdjęcie</Title>\n" +
+                                    "\t\t\t<NotEdited/>\n" +
+                                "\t\t</InputImage>\n" +
+                                "\t\t</InnerInputs>\n" +
+                            "\t</Inner>\n" +
+                            "\t<Mark>\n" +
+                            "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                                    "\t\t\t<MarkDef mark = \"alarm\">TAK</MarkDef>\n" +
+                                    "\t\t\t<MarkDef mark = \"normal\">NIE</MarkDef>\n" +
+                                "\t\t</Definition>\n" +
+                            "\t</Mark>\n" +
+                            "\t<NotEdited/>\n" +
+                          "</InputRadio>";
+
+            Assert.AreEqual(answer, question.GetQuestionCode());
+        }
+
+        [Test]
+        public void ReturnStringFromGet_takZdjecieNIECode_ValidComment_ReturnProperXmlCode()
+        {
+            string comment = "[ZDJĘCIE] Poprawny komentarz";
+            var question = new Question(0, "", "", "[tak --> Zdjęcie / NIE]", "", "", comment);
+            string answer = "<InputRadio required=\"true\">\n" +
+                            $"\t<Title></Title>\n" +
+                            "\t<SelectionList>\n" +
+                                "\t\t<Selection>TAK</Selection>\n" +
+                                "\t\t<Selection>NIE</Selection>\n" +
+                            "\t</SelectionList>\n" +
+                            "\t<Inner>\n" +
+                                "\t\t<OnValue>TAK</OnValue>\n" +
+                                "\t\t<InnerInputs>\n" +
+                                    "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\" required = \"true\">\n" +
+                            $"\t\t\t<Title>Poprawny komentarz</Title>\n" +
+                                    "\t\t\t<NotEdited/>\n" +
+                                "\t\t</InputImage>\n" +
+                                "\t\t</InnerInputs>\n" +
+                            "\t</Inner>\n" +
+                            "\t<Mark>\n" +
+                            "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                                    "\t\t\t<MarkDef mark = \"alarm\">TAK</MarkDef>\n" +
+                                    "\t\t\t<MarkDef mark = \"normal\">NIE</MarkDef>\n" +
+                                "\t\t</Definition>\n" +
+                            "\t</Mark>\n" +
+                            "\t<NotEdited/>\n" +
+                          "</InputRadio>";
+
+            Assert.AreEqual(answer, question.GetQuestionCode());
+        }
+
+        [Test]
+        public void ReturnStringFromGetBRAKUWAGuwagiTekstZdjecieCode_EmptyComment_DefaultXmlCode()
+        {
+            string comment = String.Empty;
+            var question = new Question(0, "", "", "[BRAK UWAG / uwagi --> Tekst + zdjęcie]", "", "", comment);
+
+            string answer = "<InputRadio required=\"true\">\n" +
+                        $"\t<Title></Title>\n" +
+                        "\t<SelectionList>\n" +
+                            "\t\t<Selection>BRAK UWAG</Selection>\n" +
+                            "\t\t<Selection>UWAGI</Selection>\n" +
+                        "\t</SelectionList>\n" +
+                        "\t<Inner>\n" +
+                            "\t\t<OnValue>UWAGI</OnValue>\n" +
+                            "\t\t<InnerInputs>\n" +
+                                "\t\t\t<InputText required = \"true\">\n" +
+                                    "\t\t\t\t<Title>Podaj uwagi</Title>\n" +
+                                    "\t\t\t\t<NotEdited/>\n" +
+                                "\t\t\t</InputText>\n" +
+                                "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\" required = \"true\">\n" +
+                                    "\t\t\t\t<Title>Zrób zdjęcie</Title>\n" +
+                                    "\t\t\t\t<NotEdited/>\n" +
+                                "\t\t\t</InputImage>\n" +
+                            "\t\t</InnerInputs>\n" +
+                        "\t</Inner>\n" +
+                        "\t<Mark>\n" +
+                        "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                                "\t\t\t<MarkDef mark = \"normal\">BRAK UWAG</MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"alarm\">UWAGI</MarkDef>\n" +
+                            "\t\t</Definition>\n" +
+                        "\t</Mark>\n" +
+                        "\t<NotEdited/>\n" +
+                   "</InputRadio>";
+
+
+            Assert.AreEqual(answer, question.GetQuestionCode());
+        }
+
+        [Test]
+        public void ReturnStringFromGetBRAKUWAGuwagiTekstZdjecieCode_InvalidPrefix_DefaultXmlCode()
+        {
+            string comment = "[ZDJĘCIE] Niepoprawny komentarz";
+            var question = new Question(0, "", "", "[BRAK UWAG / uwagi --> Tekst + zdjęcie]", "", "", comment);
+
+            string answer = "<InputRadio required=\"true\">\n" +
+                        $"\t<Title></Title>\n" +
+                        "\t<SelectionList>\n" +
+                            "\t\t<Selection>BRAK UWAG</Selection>\n" +
+                            "\t\t<Selection>UWAGI</Selection>\n" +
+                        "\t</SelectionList>\n" +
+                        "\t<Inner>\n" +
+                            "\t\t<OnValue>UWAGI</OnValue>\n" +
+                            "\t\t<InnerInputs>\n" +
+                                "\t\t\t<InputText required = \"true\">\n" +
+                                    "\t\t\t\t<Title>Podaj uwagi</Title>\n" +
+                                    "\t\t\t\t<NotEdited/>\n" +
+                                "\t\t\t</InputText>\n" +
+                                "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\" required = \"true\">\n" +
+                                    "\t\t\t\t<Title>Zrób zdjęcie</Title>\n" +
+                                    "\t\t\t\t<NotEdited/>\n" +
+                                "\t\t\t</InputImage>\n" +
+                            "\t\t</InnerInputs>\n" +
+                        "\t</Inner>\n" +
+                        "\t<Mark>\n" +
+                        "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                                "\t\t\t<MarkDef mark = \"normal\">BRAK UWAG</MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"alarm\">UWAGI</MarkDef>\n" +
+                            "\t\t</Definition>\n" +
+                        "\t</Mark>\n" +
+                        "\t<NotEdited/>\n" +
+                   "</InputRadio>";
+
+            Assert.AreEqual(answer, question.GetQuestionCode());
+        }
+
+        [Test]
+        public void ReturnStringFromGetBRAKUWAGuwagiTekstZdjecieCode_ValidComment_ReturnProperXmlCode()
+        {
+            string comment = "[TEKST] Poprawny komentarz.; [ZDJĘCIE] Druga część poprawnego komentarza.;";
+            var question = new Question(0, "", "", "[BRAK UWAG / uwagi --> Tekst + zdjęcie]", "", "", comment);
+
+            string answer = "<InputRadio required=\"true\">\n" +
+                        $"\t<Title></Title>\n" +
+                        "\t<SelectionList>\n" +
+                            "\t\t<Selection>BRAK UWAG</Selection>\n" +
+                            "\t\t<Selection>UWAGI</Selection>\n" +
+                        "\t</SelectionList>\n" +
+                        "\t<Inner>\n" +
+                            "\t\t<OnValue>UWAGI</OnValue>\n" +
+                            "\t\t<InnerInputs>\n" +
+                                "\t\t\t<InputText required = \"true\">\n" +
+                                    "\t\t\t\t<Title>Poprawny komentarz.</Title>\n" +
+                                    "\t\t\t\t<NotEdited/>\n" +
+                                "\t\t\t</InputText>\n" +
+                                "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\" required = \"true\">\n" +
+                                    "\t\t\t\t<Title>Druga część poprawnego komentarza.</Title>\n" +
+                                    "\t\t\t\t<NotEdited/>\n" +
+                                "\t\t\t</InputImage>\n" +
+                            "\t\t</InnerInputs>\n" +
+                        "\t</Inner>\n" +
+                        "\t<Mark>\n" +
+                        "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                                "\t\t\t<MarkDef mark = \"normal\">BRAK UWAG</MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"alarm\">UWAGI</MarkDef>\n" +
+                            "\t\t</Definition>\n" +
+                        "\t</Mark>\n" +
+                        "\t<NotEdited/>\n" +
+                   "</InputRadio>";
+
+            Assert.AreEqual(answer, question.GetQuestionCode());
+        }
+
+        [Test]
+        public void ReturnStringFromGetTAKnieZdjecieCode_EmptyComment_DefaultXmlCode()
+        {
+            string comment = String.Empty;
+            var question = new Question(0, "", "", "[TAK / nie --> Zdjęcie]", "", "", comment);
+
+            string answer = "<InputRadio required=\"true\">\n" +
+                        "\t<Title></Title>\n" +
+                        "\t<SelectionList>\n" +
+                            "\t\t<Selection>TAK</Selection>\n" +
+                            "\t\t<Selection>NIE</Selection>\n" +
+                        "\t</SelectionList>\n" +
+                        "\t<Inner>\n" +
+                            "\t\t<OnValue>NIE</OnValue>\n" +
+                            "\t\t<InnerInputs>\n" +
+                                "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\" required = \"true\">\n" +
+                                "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA INNY NIŻ DOMYŚLNY________________-->\n" +
+                                "\t\t\t<Title>Zrób zdjęcie</Title>\n" +
+                                "\t\t\t<NotEdited/>\n" +
+                            "\t\t</InputImage>\n" +
+                            "\t\t</InnerInputs>\n" +
+                        "\t</Inner>\n" +
+                        "\t<Mark>\n" +
+                        "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                                "\t\t\t<MarkDef mark = \"normal\">TAK</MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"alarm\">NIE</MarkDef>\n" +
+                            "\t\t</Definition>\n" +
+                        "\t</Mark>\n" +
+                        "\t<NotEdited/>\n" +
+                   "</InputRadio>";
+
+            Assert.AreEqual(answer, question.GetQuestionCode());
+        }
+
+        [Test]
+        public void ReturnStringFromGetTAKnieZdjecieCode_InvalidPrefix_DefaultXmlCode()
+        {
+            string comment = "[TEKST] Niepoprawny komentarz";
+            var question = new Question(0, "", "", "[TAK / nie --> Zdjęcie]", "", "", comment);
+            string answer = "<InputRadio required=\"true\">\n" +
+                        "\t<Title></Title>\n" +
+                        "\t<SelectionList>\n" +
+                            "\t\t<Selection>TAK</Selection>\n" +
+                            "\t\t<Selection>NIE</Selection>\n" +
+                        "\t</SelectionList>\n" +
+                        "\t<Inner>\n" +
+                            "\t\t<OnValue>NIE</OnValue>\n" +
+                            "\t\t<InnerInputs>\n" +
+                                "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\" required = \"true\">\n" +
+                                "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA INNY NIŻ DOMYŚLNY________________-->\n" +
+                                "\t\t\t<Title>Zrób zdjęcie</Title>\n" +
+                                "\t\t\t<NotEdited/>\n" +
+                            "\t\t</InputImage>\n" +
+                            "\t\t</InnerInputs>\n" +
+                        "\t</Inner>\n" +
+                        "\t<Mark>\n" +
+                        "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                                "\t\t\t<MarkDef mark = \"normal\">TAK</MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"alarm\">NIE</MarkDef>\n" +
+                            "\t\t</Definition>\n" +
+                        "\t</Mark>\n" +
+                        "\t<NotEdited/>\n" +
+                   "</InputRadio>";
+
+            Assert.AreEqual(answer, question.GetQuestionCode());
+        }
+
+        [Test]
+        public void ReturnStringFromGetTAKnieZdjecieCode_ValidComment_ReturnProperXmlCode()
+        {
+            string comment = "[ZDJĘCIE] Poprawny komentarz";
+            var question = new Question(0, "", "", "[TAK / nie --> Zdjęcie]", "", "", comment);
+
+            string answer = "<InputRadio required=\"true\">\n" +
+                        "\t<Title></Title>\n" +
+                        "\t<SelectionList>\n" +
+                            "\t\t<Selection>TAK</Selection>\n" +
+                            "\t\t<Selection>NIE</Selection>\n" +
+                        "\t</SelectionList>\n" +
+                        "\t<Inner>\n" +
+                            "\t\t<OnValue>NIE</OnValue>\n" +
+                            "\t\t<InnerInputs>\n" +
+                                "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\" required = \"true\">\n" +
+                                "\t\t\t<Title>Poprawny komentarz</Title>\n" +
+                                "\t\t\t<NotEdited/>\n" +
+                            "\t\t</InputImage>\n" +
+                            "\t\t</InnerInputs>\n" +
+                        "\t</Inner>\n" +
+                        "\t<Mark>\n" +
+                        "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                                "\t\t\t<MarkDef mark = \"normal\">TAK</MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"alarm\">NIE</MarkDef>\n" +
+                            "\t\t</Definition>\n" +
+                        "\t</Mark>\n" +
+                        "\t<NotEdited/>\n" +
+                   "</InputRadio>";
+
+            Assert.AreEqual(answer, question.GetQuestionCode());
+        }
+
+        [Test]
+        public void ReturnStringFromGet_takTekstNIECode_EmptyComment_DefaultXmlCode()
+        {
+            string comment = String.Empty;
+            var question = new Question(0, "", "", "[tak --> Tekst / NIE]", "", "", comment);
+
+            string answer = "<InputRadio required=\"true\">\n" +
+                        "\t<Title></Title>\n" +
+                        "\t<SelectionList>\n" +
+                            "\t\t<Selection>TAK</Selection>\n" +
+                            "\t\t<Selection>NIE</Selection>\n" +
+                        "\t</SelectionList>\n" +
+                        "\t<Inner>\n" +
+                            "\t\t<OnValue>TAK</OnValue>\n" +
+                            "\t\t<InnerInputs>\n" +
+                                "\t\t\t<InputText required = \"true\">\n" +
+                                "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA INNY NIŻ DOMYŚLNY________________-->\n" +
+                                    "\t\t\t\t<Title>Wprowadź tekst</Title>\n" +
+                                    "\t\t\t\t<NotEdited/>\n" +
+                                "\t\t\t</InputText>\n" +
+                            "\t\t</InnerInputs>\n" +
+                        "\t</Inner>\n" +
+                        "\t<Mark>\n" +
+                            "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                                "\t\t\t<MarkDef mark = \"alarm\">TAK</MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"normal\">NIE</MarkDef>\n" +
+                            "\t\t</Definition>\n" +
+                        "\t</Mark>\n" +
+                        "\t<NotEdited/>\n" +
+                   "</InputRadio>";
+
+            Assert.AreEqual(answer, question.GetQuestionCode());
+        }
+
+        [Test]
+        public void ReturnStringFromGet_takTekstNIECode_InvalidPrefix_DefaultXmlCode()
+        {
+            string comment = "[ZDJĘCIE] Niepoprawny komentarz";
+            var question = new Question(0, "", "", "[tak --> Tekst / NIE]", "", "", comment);
+            string answer = "<InputRadio required=\"true\">\n" +
+                        "\t<Title></Title>\n" +
+                        "\t<SelectionList>\n" +
+                            "\t\t<Selection>TAK</Selection>\n" +
+                            "\t\t<Selection>NIE</Selection>\n" +
+                        "\t</SelectionList>\n" +
+                        "\t<Inner>\n" +
+                            "\t\t<OnValue>TAK</OnValue>\n" +
+                            "\t\t<InnerInputs>\n" +
+                                "\t\t\t<InputText required = \"true\">\n" +
+                                "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA INNY NIŻ DOMYŚLNY________________-->\n" +
+                                    "\t\t\t\t<Title>Wprowadź tekst</Title>\n" +
+                                    "\t\t\t\t<NotEdited/>\n" +
+                                "\t\t\t</InputText>\n" +
+                            "\t\t</InnerInputs>\n" +
+                        "\t</Inner>\n" +
+                        "\t<Mark>\n" +
+                            "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                                "\t\t\t<MarkDef mark = \"alarm\">TAK</MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"normal\">NIE</MarkDef>\n" +
+                            "\t\t</Definition>\n" +
+                        "\t</Mark>\n" +
+                        "\t<NotEdited/>\n" +
+                   "</InputRadio>";
+
+            Assert.AreEqual(answer, question.GetQuestionCode());
+        }
+
+        [Test]
+        public void ReturnStringFromGet_takTekstNIECode_ValidComment_ReturnProperXmlCode()
+        {
+            string comment = "[TEKST] Poprawny komentarz.";
+            var question = new Question(0, "", "", "[tak --> Tekst / NIE]", "", "", comment);
+            string answer = "<InputRadio required=\"true\">\n" +
+                        "\t<Title></Title>\n" +
+                        "\t<SelectionList>\n" +
+                            "\t\t<Selection>TAK</Selection>\n" +
+                            "\t\t<Selection>NIE</Selection>\n" +
+                        "\t</SelectionList>\n" +
+                        "\t<Inner>\n" +
+                            "\t\t<OnValue>TAK</OnValue>\n" +
+                            "\t\t<InnerInputs>\n" +
+                                "\t\t\t<InputText required = \"true\">\n" +
+                                    "\t\t\t\t<Title>Poprawny komentarz.</Title>\n" +
+                                    "\t\t\t\t<NotEdited/>\n" +
+                                "\t\t\t</InputText>\n" +
+                            "\t\t</InnerInputs>\n" +
+                        "\t</Inner>\n" +
+                        "\t<Mark>\n" +
+                            "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                                "\t\t\t<MarkDef mark = \"alarm\">TAK</MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"normal\">NIE</MarkDef>\n" +
+                            "\t\t</Definition>\n" +
+                        "\t</Mark>\n" +
+                        "\t<NotEdited/>\n" +
+                   "</InputRadio>";
+
+            Assert.AreEqual(answer, question.GetQuestionCode());
+        }
+
+
+
+
+
+
+
+        [Test]
+        public void ReturnStringFromGetTAKnieTekstCode_EmptyComment_DefaultXmlCode()
+        {
+            string comment = String.Empty;
+            var question = new Question(0, "", "", "[TAK / nie --> Tekst]", "", "", comment);
+
+            string answer = "<InputRadio required=\"true\">\n" +
+                        $"\t<Title></Title>\n" +
+                        "\t<SelectionList>\n" +
+                            "\t\t<Selection>TAK</Selection>\n" +
+                            "\t\t<Selection>NIE</Selection>\n" +
+                        "\t</SelectionList>\n" +
+                        "\t<Inner>\n" +
+                            "\t\t<OnValue>NIE</OnValue>\n" +
+                            "\t\t<InnerInputs>\n" +
+                                "\t\t\t<InputText required = \"true\">\n" +
+                                "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA INNY NIŻ DOMYŚLNY________________-->\n" +
+                                    $"\t\t\t\t<Title>Wprowadź tekst</Title>\n" +
+                                    "\t\t\t\t<NotEdited/>\n" +
+                                "\t\t\t</InputText>\n" +
+                            "\t\t</InnerInputs>\n" +
+                        "\t</Inner>\n" +
+                        "\t<Mark>\n" +
+                            "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                                "\t\t\t<MarkDef mark = \"normal\">TAK</MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"alarm\">NIE</MarkDef>\n" +
+                            "\t\t</Definition>\n" +
+                        "\t</Mark>\n" +
+                        "\t<NotEdited/>\n" +
+                   "</InputRadio>";
+
+            Assert.AreEqual(answer, question.GetQuestionCode());
+        }
+
+        [Test]
+        public void ReturnStringFromGetTAKnieTekstCode_InvalidPrefix_DefaultXmlCode()
+        {
+            string comment = "[ZDJĘCIE] Niepoprawny komentarz";
+            var question = new Question(0, "", "", "[TAK / nie --> Tekst]", "", "", comment);
+            string answer = "<InputRadio required=\"true\">\n" +
+                        $"\t<Title></Title>\n" +
+                        "\t<SelectionList>\n" +
+                            "\t\t<Selection>TAK</Selection>\n" +
+                            "\t\t<Selection>NIE</Selection>\n" +
+                        "\t</SelectionList>\n" +
+                        "\t<Inner>\n" +
+                            "\t\t<OnValue>NIE</OnValue>\n" +
+                            "\t\t<InnerInputs>\n" +
+                                "\t\t\t<InputText required = \"true\">\n" +
+                                "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA INNY NIŻ DOMYŚLNY________________-->\n" +
+                                    $"\t\t\t\t<Title>Wprowadź tekst</Title>\n" +
+                                    "\t\t\t\t<NotEdited/>\n" +
+                                "\t\t\t</InputText>\n" +
+                            "\t\t</InnerInputs>\n" +
+                        "\t</Inner>\n" +
+                        "\t<Mark>\n" +
+                            "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                                "\t\t\t<MarkDef mark = \"normal\">TAK</MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"alarm\">NIE</MarkDef>\n" +
+                            "\t\t</Definition>\n" +
+                        "\t</Mark>\n" +
+                        "\t<NotEdited/>\n" +
+                   "</InputRadio>";
+
+            Assert.AreEqual(answer, question.GetQuestionCode());
+        }
+
+        [Test]
+        public void ReturnStringFromGetTAKnieTekstCode_ValidComment_ReturnProperXmlCode()
+        {
+            string comment = "[TEKST] Poprawny komentarz";
+            var question = new Question(0, "", "", "[TAK / nie --> Tekst]", "", "", comment);
+            string answer = "<InputRadio required=\"true\">\n" +
+                        $"\t<Title></Title>\n" +
+                        "\t<SelectionList>\n" +
+                            "\t\t<Selection>TAK</Selection>\n" +
+                            "\t\t<Selection>NIE</Selection>\n" +
+                        "\t</SelectionList>\n" +
+                        "\t<Inner>\n" +
+                            "\t\t<OnValue>NIE</OnValue>\n" +
+                            "\t\t<InnerInputs>\n" +
+                                "\t\t\t<InputText required = \"true\">\n" +
+                                $"\t\t\t\t<Title>Poprawny komentarz</Title>\n" +
+                                    "\t\t\t\t<NotEdited/>\n" +
+                                "\t\t\t</InputText>\n" +
+                            "\t\t</InnerInputs>\n" +
+                        "\t</Inner>\n" +
+                        "\t<Mark>\n" +
+                            "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                                "\t\t\t<MarkDef mark = \"normal\">TAK</MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"alarm\">NIE</MarkDef>\n" +
+                            "\t\t</Definition>\n" +
+                        "\t</Mark>\n" +
+                        "\t<NotEdited/>\n" +
+                   "</InputRadio>";
+
+            Assert.AreEqual(answer, question.GetQuestionCode());
+        }
+
+
+
+
+
+
+
+        [Test]
+        public void ReturnStringFromGetTAKZdjecie_nie_EmptyComment_DefaultXmlCode()
+        {
+            string comment = String.Empty;
+            var question = new Question(0, "", "", "[TAK --> Zdjęcie / nie]", "", "", comment);
+
+            string answer = "<InputRadio required=\"true\">\n" +
+                        $"\t<Title></Title>\n" +
+                        "\t<SelectionList>\n" +
+                            "\t\t<Selection>TAK</Selection>\n" +
+                            "\t\t<Selection>NIE</Selection>\n" +
+                        "\t</SelectionList>\n" +
+                        "\t<Inner>\n" +
+                            "\t\t<OnValue>TAK</OnValue>\n" +
+                            "\t\t<InnerInputs>\n" +
+                                "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\" required = \"true\">\n" +
+                                "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA INNY NIŻ DOMYŚLNY________________-->\n" +
+                                "\t\t\t<Title>Zrób zdjęcie</Title>\n" +
+                                "\t\t\t<NotEdited/>\n" +
+                            "\t\t</InputImage>\n" +
+                            "\t\t</InnerInputs>\n" +
+                        "\t</Inner>\n" +
+                        "\t<Mark>\n" +
+                        "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                                "\t\t\t<MarkDef mark = \"normal\">TAK</MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"alarm\">NIE</MarkDef>\n" +
+                            "\t\t</Definition>\n" +
+                        "\t</Mark>\n" +
+                        "\t<NotEdited/>\n" +
+                   "</InputRadio>";
+
+            Assert.AreEqual(answer, question.GetQuestionCode());
+        }
+
+        [Test]
+        public void ReturnStringFromGetTAKZdjecie_nie_InvalidPrefix_DefaultXmlCode()
+        {
+            string comment = "[TEKST] Niepoprawny komentarz";
+            var question = new Question(0, "", "", "[TAK --> Zdjęcie / nie]", "", "", comment);
+            string answer = "<InputRadio required=\"true\">\n" +
+                        $"\t<Title></Title>\n" +
+                        "\t<SelectionList>\n" +
+                            "\t\t<Selection>TAK</Selection>\n" +
+                            "\t\t<Selection>NIE</Selection>\n" +
+                        "\t</SelectionList>\n" +
+                        "\t<Inner>\n" +
+                            "\t\t<OnValue>TAK</OnValue>\n" +
+                            "\t\t<InnerInputs>\n" +
+                                "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\" required = \"true\">\n" +
+                                "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA INNY NIŻ DOMYŚLNY________________-->\n" +
+                                "\t\t\t<Title>Zrób zdjęcie</Title>\n" +
+                                "\t\t\t<NotEdited/>\n" +
+                            "\t\t</InputImage>\n" +
+                            "\t\t</InnerInputs>\n" +
+                        "\t</Inner>\n" +
+                        "\t<Mark>\n" +
+                        "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                                "\t\t\t<MarkDef mark = \"normal\">TAK</MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"alarm\">NIE</MarkDef>\n" +
+                            "\t\t</Definition>\n" +
+                        "\t</Mark>\n" +
+                        "\t<NotEdited/>\n" +
+                   "</InputRadio>";
+
+            Assert.AreEqual(answer, question.GetQuestionCode());
+        }
+
+        [Test]
+        public void ReturnStringFromGetTAKZdjecie_nie_ValidComment_ReturnProperXmlCode()
+        {
+            string comment = "[ZDJĘCIE] Poprawny komentarz";
+            var question = new Question(0, "", "", "[TAK --> Zdjęcie / nie]", "", "", comment);
+            string answer = "<InputRadio required=\"true\">\n" +
+                        $"\t<Title></Title>\n" +
+                        "\t<SelectionList>\n" +
+                            "\t\t<Selection>TAK</Selection>\n" +
+                            "\t\t<Selection>NIE</Selection>\n" +
+                        "\t</SelectionList>\n" +
+                        "\t<Inner>\n" +
+                            "\t\t<OnValue>TAK</OnValue>\n" +
+                            "\t\t<InnerInputs>\n" +
+                                "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\" required = \"true\">\n" +
+                                "\t\t\t<Title>Poprawny komentarz</Title>\n" +
+                                "\t\t\t<NotEdited/>\n" +
+                            "\t\t</InputImage>\n" +
+                            "\t\t</InnerInputs>\n" +
+                        "\t</Inner>\n" +
+                        "\t<Mark>\n" +
+                        "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                                "\t\t\t<MarkDef mark = \"normal\">TAK</MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"alarm\">NIE</MarkDef>\n" +
+                            "\t\t</Definition>\n" +
+                        "\t</Mark>\n" +
+                        "\t<NotEdited/>\n" +
+                   "</InputRadio>";
+
+            Assert.AreEqual(answer, question.GetQuestionCode());
+        }
     }
 }
 
