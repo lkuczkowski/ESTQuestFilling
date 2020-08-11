@@ -215,9 +215,7 @@ namespace ESTQuestFilling.Tests
         }
 
         [TestCase("[ZAKRES] <10, 20>; A;")]
-        [TestCase("[ZAKRES] <10, 20> A;")]
         [TestCase("[ZAKRES] ;<10, 20> A <;20, 30> W")]
-        [TestCase("[ZAKRES]; <10, 20> A")]
         [TestCase("[ZAK;RES] <10, 20>; A;")]
         [TestCase("[ZAKRES] <10, 20>; A;;;;;")]
         [TestCase("[ZAKRES] <10; 20>; A;")]

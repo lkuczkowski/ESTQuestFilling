@@ -562,30 +562,26 @@ namespace ESTQuestFilling.Model
                 "\t\t\t<MarkDef rangeMin = \"\" rangeMax = \"\" mark = \"warning\"/>\n" +
                 "\t\t\t<MarkDef rangeMin = \"\" rangeMax = \"\" mark = \"normal\"/>\n";
 
-            if (Comment != "")
+            if (Comment.StartsWith("[ZAKRES]"))
             {
                 try
                 {
-                    var removedCommentTypeAndSplitToRanges = Comment.Substring(Comment.IndexOf(']') + 2)
+                    var removedCommentTypeAndSplitToRanges = Comment.Substring(Comment.IndexOf(']') + 1)
                         .Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(n => n.Trim()).ToArray();
                     if (!removedCommentTypeAndSplitToRanges.Any())
                         throw new ArgumentException("No values to convert after [...] prefix.");
                     foreach (var rangeAndMark in removedCommentTypeAndSplitToRanges)
                     {
                         var rangeAndMarkArray = rangeAndMark
-                            .Split(new char[] { '<', '>' }, StringSplitOptions.RemoveEmptyEntries).Select(n => n.Trim())
-                            .ToArray();
-                        var rangeMinRangeMaxArray = rangeAndMarkArray[0]
-                            .Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(n => n.Trim())
-                            .ToArray();
-                        if (!rangeMinRangeMaxArray.All(n => int.TryParse(n, out _)))
+                            .Split(new char[] { '<', '>', ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                        if (!rangeAndMarkArray.Take(2).All(n => int.TryParse(n, out _)))
                         {
                             throw new ArgumentException("Range value is NaN\n");
                         }
 
                         marksDefinitionXmlCode +=
-                            $"\t\t\t<MarkDef rangeMin = \"{rangeMinRangeMaxArray[0]}\" rangeMax = \"{rangeMinRangeMaxArray[1]}\" " +
-                            $"mark = \"{_marksAbbreviationsToXmlNamesDictionary[rangeAndMarkArray[1]]}\"/>\n";
+                            $"\t\t\t<MarkDef rangeMin = \"{rangeAndMarkArray[0]}\" rangeMax = \"{rangeAndMarkArray[1]}\" " +
+                            $"mark = \"{_marksAbbreviationsToXmlNamesDictionary[rangeAndMarkArray[2]]}\"/>\n";
                     }
                 }
                 catch (KeyNotFoundException e)
