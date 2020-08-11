@@ -51,7 +51,8 @@ namespace ESTQuestFilling.ViewModel
                     $"[Kwantyfikowanie].Kwantyfikator, " +
                     $"[{name} - Pytania].Ocena, " +
                     $"[Numer punktu].[Numer punktu], " +
-                    $"[{name} - Pytania].Identyfikator " +
+                    $"[{name} - Pytania].Identyfikator, " +
+                    $"[{name} - Pytania].Komentarz " + 
                     $"FROM (((([{name} - Pytania] INNER JOIN [{companyNameForCheckpointReading} - Punkty kontrolne] ON [{name} - Pytania].[Punkt kontrolny] = [{companyNameForCheckpointReading} - Punkty kontrolne].[Punkt kontrolny]) " +
                     $"INNER JOIN [Kwantyfikowanie] ON [{name} - Pytania].[Kwantyfikowanie] = [Kwantyfikowanie].Identyfikator) " +
                     $"INNER JOIN [Punkty kontrolne] ON [{name} - Pytania].[Punkt kontrolny] = [Punkty kontrolne].Identyfikator) " +
@@ -68,7 +69,8 @@ namespace ESTQuestFilling.ViewModel
                     $"[{name} - Pytania].Ocena, " +
                     $"[Numer punktu].[Numer punktu], " +
                     $"[{name} - Pytania].Identyfikator, " +
-                    $"[{name} - Pytania].Strona " + 
+                    $"[{name} - Pytania].Strona, " +
+                    $"[{name} - Pytania].Komentarz " +
                     $"FROM (((([{name} - Pytania] INNER JOIN [{companyNameForCheckpointReading} - Punkty kontrolne] ON [{name} - Pytania].[Punkt kontrolny] = [{companyNameForCheckpointReading} - Punkty kontrolne].[Punkt kontrolny]) " +
                     $"INNER JOIN [Kwantyfikowanie] ON [{name} - Pytania].[Kwantyfikowanie] = [Kwantyfikowanie].Identyfikator) " +
                     $"INNER JOIN [Punkty kontrolne] ON [{name} - Pytania].[Punkt kontrolny] = [Punkty kontrolne].Identyfikator) " +
@@ -100,10 +102,10 @@ namespace ESTQuestFilling.ViewModel
                         Checkpoint chp = new Checkpoint((int)reader[0], (string)reader[1] + " - " + (string)reader[2]);
 
                         if (col.Length > 0)
-                            chp.AddQuestion(new Question((int)reader[7], reader[3].ToString(), reader[5].ToString(), (string)reader[4], reader[6].ToString(), reader[8].ToString()));
+                            chp.AddQuestion(new Question((int)reader[7], reader[3].ToString(), reader[5].ToString(), (string)reader[4], reader[6].ToString(), reader[8].ToString(), reader[9].ToString()));
                         else
                         {
-                            chp.AddQuestion(new Question((int)reader[7], reader[3].ToString(), reader[5].ToString(), (string)reader[4], reader[6].ToString()));
+                            chp.AddQuestion(new Question((int)reader[7], reader[3].ToString(), reader[5].ToString(), (string)reader[4], reader[6].ToString(), "", reader[8].ToString()));
                         }
                         _company.AddCheckpoint(chp);
 
@@ -116,10 +118,10 @@ namespace ESTQuestFilling.ViewModel
                             }
 
                             if (col.Length > 0)
-                                chp.AddQuestion(new Question((int)reader[7], reader[3].ToString(), reader[5].ToString(), (string)reader[4], reader[6].ToString(), reader[8].ToString()));
+                                chp.AddQuestion(new Question((int)reader[7], reader[3].ToString(), reader[5].ToString(), (string)reader[4], reader[6].ToString(), reader[8].ToString(), reader[9].ToString()));
                             else
                             {
-                                chp.AddQuestion(new Question((int)reader[7], reader[3].ToString(), reader[5].ToString(), (string)reader[4], reader[6].ToString()));
+                                chp.AddQuestion(new Question((int)reader[7], reader[3].ToString(), reader[5].ToString(), (string)reader[4], reader[6].ToString(), "", reader[8].ToString()));
                             }
                         }
 

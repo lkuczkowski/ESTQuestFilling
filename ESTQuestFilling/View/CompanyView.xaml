@@ -64,9 +64,16 @@
                                                         <ColumnDefinition Width="{Binding ElementName=QuestionTextDataGridTextColumn, Path=ActualWidth}"></ColumnDefinition>
                                                         <ColumnDefinition Width="{Binding ElementName=AnswerDataGridTextColumn, Path=ActualWidth}"></ColumnDefinition>
                                                     </Grid.ColumnDefinitions>
-                                                    <GroupBox Grid.Column="1" Header="Czynniki ryzyka">
-                                                        <TextBlock Text="{Binding Evaluation}" Margin="5" />
-                                                    </GroupBox>
+                                                    <DockPanel Grid.Column="1">
+                                                        <GroupBox DockPanel.Dock="Top" Header="Czynniki ryzyka">
+                                                            <TextBlock Text="{Binding Evaluation}" Margin="5">
+                                                            </TextBlock>
+                                                        </GroupBox>
+                                                        <GroupBox DockPanel.Dock="Top" Header="Komentarz">
+                                                            <TextBlock Text="{Binding Comment}" Margin="5"></TextBlock>
+                                                        </GroupBox>
+                                                    </DockPanel>
+                                                    <TextBlock Grid.Column="2" Text="{Binding Page, Mode=OneWay, StringFormat='Strona: {0}'}" Margin="5"></TextBlock>
                                                 </Grid>
                                             </DataTemplate>
                                         </DataGrid.RowDetailsTemplate>

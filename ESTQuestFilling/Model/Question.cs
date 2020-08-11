@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Linq.Mapping;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Windows;
 
@@ -18,11 +20,12 @@ namespace ESTQuestFilling.Model
         public string Answer { get; }
         public string Number { get; }
         public string Tag { get; set; }
-        public string Page { get; set; } = "";
+        public string Page { get; } = "";
+        public string Comment { get; }
 
         public int[][] EvaluationTable { get; private set; }
-
-        private void SetEvaluation(string marks)
+        
+        private void SetEvaluationTableAndAnalyticsLinkString(string marks)
         {
             string[] noAnalyticsIndicataors = {"", "brak", "brak;", "brak; "};
             _evaluation = marks;
@@ -49,10 +52,11 @@ namespace ESTQuestFilling.Model
             QuestionText = question;
         }
 
+        // zmienić marks na coś w styli analytics
         public Question(int id, string question, string marks)
             : this(id, question)
         {
-            SetEvaluation(marks);
+            SetEvaluationTableAndAnalyticsLinkString(marks);
         }
 
         public Question(int id, string question, string marks, string answer)
@@ -73,6 +77,13 @@ namespace ESTQuestFilling.Model
             Page = page;
         }
 
+        public Question(int id, string question, string marks, string answer, string number, string page,
+            string comment)
+            : this(id, question, marks, answer, number, page)
+        {
+            Comment = comment;
+        }
+
         private void CreateEvaluateTable()
         {
             var splitMarksStrings = _evaluation.Split(new char[] { ' ', })
@@ -82,7 +93,7 @@ namespace ESTQuestFilling.Model
         }
 
         // TODO - zastosować wzorzec lub dziedziczenie???
-        // TODO - dodać obsługę pola z komentarzem z bazy danych
+        // TODO - zrobić coś z tym bałaganem
         private string GetTAK_nieXmlCode()
         {
             return "<InputRadio required=\"true\">\n" +
@@ -116,6 +127,11 @@ namespace ESTQuestFilling.Model
 
         private string GetBRAKUWAG_uwagiTekstXmlCode()
         {
+            string inputText = Comment.StartsWith("[TEKST]")
+                ? Comment.Substring(Comment.IndexOf(']') + 1).Trim()
+                : "Podaj uwagi";
+
+
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
                         "\t<SelectionList>\n" +
@@ -126,7 +142,7 @@ namespace ESTQuestFilling.Model
                             "\t\t<OnValue>UWAGI</OnValue>\n" +
                             "\t\t<InnerInputs>\n" +
                                 "\t\t\t<InputText required = \"true\">\n" +
-                                    "\t\t\t\t<Title>Podaj uwagi</Title>\n" +
+                                    $"\t\t\t\t<Title>{inputText}</Title>\n" +
                                     "\t\t\t\t<NotEdited/>\n" +
                                 "\t\t\t</InputText>\n" +
                             "\t\t</InnerInputs>\n" +
@@ -172,6 +188,14 @@ namespace ESTQuestFilling.Model
 
         private string Get_takZdjecieNIE_XmlCode()
         {
+            string inputText = Comment.StartsWith("[ZDJĘCIE]")
+                ? Comment.Substring(Comment.IndexOf(']') + 1).Trim()
+                : "Zrób zdjęcie";
+
+            string remainderComment = Comment.StartsWith("[ZDJĘCIE]")
+                ? ""
+                : "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA INNY NIŻ DOMYŚLNY________________-->\n";
+
             return "<InputRadio required=\"true\">\n" +
                             $"\t<Title>{QuestionText}</Title>\n" +
                             "\t<SelectionList>\n" +
@@ -182,8 +206,8 @@ namespace ESTQuestFilling.Model
                                 "\t\t<OnValue>TAK</OnValue>\n" +
                                 "\t\t<InnerInputs>\n" +
                                     "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\" required = \"true\">\n" +
-                                    "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA________________-->\n" +
-                                    "\t\t\t<Title></Title>\n" +
+                                    remainderComment +
+                                    $"\t\t\t<Title>{inputText}</Title>\n" +
                                     "\t\t\t<NotEdited/>\n" +
                                 "\t\t</InputImage>\n" +
                                 "\t\t</InnerInputs>\n" +
@@ -201,6 +225,21 @@ namespace ESTQuestFilling.Model
 
         private string GetBRAKUWAG_uwagiTekstZdjecieXmlCode()
         {
+            string textInput = "Podaj uwagi";
+            string photoInput = "Zrób zdjęcie";
+
+
+            if (Comment.StartsWith("[TEKST]"))
+            {
+                var commentsArray = Comment.Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries);
+                if (commentsArray.Length == 2 && commentsArray[1].Trim().StartsWith("[ZDJĘCIE]"))
+                {
+                    textInput = commentsArray[0].Substring(commentsArray[0].IndexOf(']') + 1).Trim();
+                    photoInput = commentsArray[1].Substring(commentsArray[1].IndexOf(']') + 1).Trim();
+                }
+
+            }
+
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
                         "\t<SelectionList>\n" +
@@ -211,11 +250,11 @@ namespace ESTQuestFilling.Model
                             "\t\t<OnValue>UWAGI</OnValue>\n" +
                             "\t\t<InnerInputs>\n" +
                                 "\t\t\t<InputText required = \"true\">\n" +
-                                    "\t\t\t\t<Title>Podaj uwagi</Title>\n" +
+                                    $"\t\t\t\t<Title>{textInput}</Title>\n" +
                                     "\t\t\t\t<NotEdited/>\n" +
                                 "\t\t\t</InputText>\n" +
                                 "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\" required = \"true\">\n" +
-                                    "\t\t\t\t<Title>Zrób zdjęcie</Title>\n" +
+                                    $"\t\t\t\t<Title>{photoInput}</Title>\n" +
                                     "\t\t\t\t<NotEdited/>\n" +
                                 "\t\t\t</InputImage>\n" +
                             "\t\t</InnerInputs>\n" +
@@ -249,8 +288,17 @@ namespace ESTQuestFilling.Model
                         "\t<NotEdited/>\n" +
                    "</InputRadio>";
         }
+
         private string GetTAK_nieZdjecieXmlCode()
         {
+            string inputText = Comment.StartsWith("[ZDJĘCIE]")
+                ? Comment.Substring(Comment.IndexOf(']') + 1).Trim()
+                : "Zrób zdjęcie";
+
+            string remainderComment = Comment.StartsWith("[ZDJĘCIE]")
+                ? ""
+                : "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA INNY NIŻ DOMYŚLNY________________-->\n";
+
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
                         "\t<SelectionList>\n" +
@@ -261,8 +309,8 @@ namespace ESTQuestFilling.Model
                             "\t\t<OnValue>NIE</OnValue>\n" +
                             "\t\t<InnerInputs>\n" +
                                 "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\" required = \"true\">\n" +
-                                "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA________________-->\n" +
-                                "\t\t\t<Title></Title>\n" +
+                                remainderComment +
+                                $"\t\t\t<Title>{inputText}</Title>\n" +
                                 "\t\t\t<NotEdited/>\n" +
                             "\t\t</InputImage>\n" +
                             "\t\t</InnerInputs>\n" +
@@ -280,6 +328,14 @@ namespace ESTQuestFilling.Model
 
         private string Get_takTekstNIE_XmlCode()
         {
+            string inputText = Comment.StartsWith("[TEKST]")
+                ? Comment.Substring(Comment.IndexOf(']') + 1).Trim()
+                : "Wprowadź tekst";
+
+            string remainderComment = Comment.StartsWith("[TEKST]")
+                ? ""
+                : "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA INNY NIŻ DOMYŚLNY________________-->\n";
+
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
                         "\t<SelectionList>\n" +
@@ -290,8 +346,8 @@ namespace ESTQuestFilling.Model
                             "\t\t<OnValue>TAK</OnValue>\n" +
                             "\t\t<InnerInputs>\n" +
                                 "\t\t\t<InputText required = \"true\">\n" +
-                                    "\t\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA________________-->\n" +
-                                    "\t\t\t\t<Title></Title>\n" +
+                                    remainderComment +
+                                    $"\t\t\t\t<Title>{inputText}</Title>\n" +
                                     "\t\t\t\t<NotEdited/>\n" +
                                 "\t\t\t</InputText>\n" +
                             "\t\t</InnerInputs>\n" +
@@ -309,24 +365,98 @@ namespace ESTQuestFilling.Model
 
         private string GetSuwak_odczytWartosciXmlCode()
         {
-            return "<!--___________________WPROWADŹ WARTOŚCI: MIN, MAX, DEFAULT________________-->\n" +
-                    "<InputSliderInt minValue=\"\" maxValue=\"\" defaultValue=\"\" required=\"true\">\n" +
-                            $"\t<Title>{QuestionText}</Title>\n" +
-                            "\t<Mark>\n" +
-                                _analyticsLink +
-                                "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
-                                    "\t\t\t<!--___________________UZUPEŁNIJ PRZEDZIAŁY________________-->\n" +
-                                    "\t\t\t<MarkDef rangeMin = \"\" rangeMax = \"\" mark = \"alarm\"/>\n" +
-                                    "\t\t\t<MarkDef rangeMin = \"\" rangeMax = \"\" mark = \"warning\"/>\n" +
-                                    "\t\t\t<MarkDef rangeMin = \"\" rangeMax = \"\" mark = \"normal\"/>\n" +
-                                "\t\t</Definition>\n" +
-                            "\t</Mark>\n" +
-                            "\t<NotEdited/>\n" +
-                       "</InputSliderInt>";
+            string marksDefinitionXmlCode = "";
+            string defaultMarksDefinitionXmlCode =
+                "\t\t\t<!--___________________UZUPEŁNIJ PRZEDZIAŁY________________-->\n" +
+                "\t\t\t<MarkDef rangeMin = \"\" rangeMax = \"\" mark = \"alarm\"/>\n" +
+                "\t\t\t<MarkDef rangeMin = \"\" rangeMax = \"\" mark = \"warning\"/>\n" +
+                "\t\t\t<MarkDef rangeMin = \"\" rangeMax = \"\" mark = \"normal\"/>\n";
+            string firstTwolinesOfXmlCode = "";
+            string defaultFirstTwoLinesOfXmlCode =
+                "<!--___________________WPROWADŹ WARTOŚCI: MIN, MAX, DEFAULT________________-->\n" +
+                "<InputSliderInt minValue=\"\" maxValue=\"\" defaultValue=\"\" required=\"true\">\n";
+
+            if (Comment.StartsWith("[ZAKRES]"))
+            {
+                try
+                {
+                    var removedCommentTypeAndSplitToRanges = Comment.Substring(Comment.IndexOf(']') + 1).Trim()
+                        .Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(n => n.Trim()).ToArray();
+                    if (removedCommentTypeAndSplitToRanges.Length < 2)
+                        throw new ArgumentException("No values to convert after [...] prefix.");
+
+                    var interval = removedCommentTypeAndSplitToRanges.First().Split(new char[] {'<', '>', ',', ' '},
+                        StringSplitOptions.RemoveEmptyEntries);
+                    if (!interval.All(n => int.TryParse(n, out _)) || interval.Length !=2)
+                        throw new ArgumentException("Interval value is NaN or not a interval definition\n");
+
+                    firstTwolinesOfXmlCode =
+                        $"<InputSliderInt minValue=\"{interval[0]}\" maxValue=\"{interval[1]}\" defaultValue=\"{interval[0]}\" required=\"true\">\n";
+
+                    foreach (var rangeAndMark in removedCommentTypeAndSplitToRanges.Skip(1))
+                    {
+                        var rangeAndMarkArray = rangeAndMark
+                            .Split(new char[] {'<', '>', ',', ' '}, StringSplitOptions.RemoveEmptyEntries);
+                        if (rangeAndMarkArray.Length != 3)
+                            throw new ArgumentException("Comment separators error.");
+
+                        if (!rangeAndMarkArray.Take(2).All(n => int.TryParse(n, out _)))
+                        {
+                            throw new ArgumentException("Range value is NaN\n");
+                        }
+
+                        marksDefinitionXmlCode +=
+                            $"\t\t\t<MarkDef rangeMin = \"{rangeAndMarkArray[0]}\" rangeMax = \"{rangeAndMarkArray[1]}\" " +
+                            $"mark = \"{_marksAbbreviationsToXmlNamesDictionary[rangeAndMarkArray[2]]}\"/>\n";
+                    }
+                }
+                catch (KeyNotFoundException e)
+                {
+                    firstTwolinesOfXmlCode = defaultMarksDefinitionXmlCode;
+                    marksDefinitionXmlCode = defaultMarksDefinitionXmlCode;
+
+                    MessageBox.Show(e.Message + "\n\n" +
+                                    "Unable to convert comment due to mark abbreviation error.\n" +
+                                    $"Default marks and remainder assigned to question ID: {this.Id}");
+                }
+                catch (Exception e)
+                {
+                    firstTwolinesOfXmlCode = defaultFirstTwoLinesOfXmlCode;
+                    marksDefinitionXmlCode = defaultMarksDefinitionXmlCode;
+
+                    MessageBox.Show(e.Message + "\n\n" +
+                                    $"Unable to convert comment. Default marks and remainder assigned to question ID: {this.Id}");
+                }
+            }
+            else
+            {
+                firstTwolinesOfXmlCode = defaultFirstTwoLinesOfXmlCode;
+                marksDefinitionXmlCode = defaultMarksDefinitionXmlCode;
+            }
+
+
+            return firstTwolinesOfXmlCode +
+                    $"\t<Title>{QuestionText}</Title>\n" +
+                    "\t<Mark>\n" +
+                        _analyticsLink +
+                        "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                            marksDefinitionXmlCode +
+                        "\t\t</Definition>\n" +
+                    "\t</Mark>\n" +
+                    "\t<NotEdited/>\n" +
+                "</InputSliderInt>";
         }
 
         private string GetTAK_nieTekstXmlCode()
         {
+            string inputText = Comment.StartsWith("[TEKST]")
+                ? Comment.Substring(Comment.IndexOf(']') + 1).Trim()
+                : "Wprowadź tekst";
+
+            string remainderComment = Comment.StartsWith("[TEKST]")
+                ? ""
+                : "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA INNY NIŻ DOMYŚLNY________________-->\n";
+
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
                         "\t<SelectionList>\n" +
@@ -337,8 +467,8 @@ namespace ESTQuestFilling.Model
                             "\t\t<OnValue>NIE</OnValue>\n" +
                             "\t\t<InnerInputs>\n" +
                                 "\t\t\t<InputText required = \"true\">\n" +
-                                    "\t\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA________________-->\n" +
-                                    "\t\t\t\t<Title></Title>\n" +
+                                    remainderComment +
+                                    $"\t\t\t\t<Title>{inputText}</Title>\n" +
                                     "\t\t\t\t<NotEdited/>\n" +
                                 "\t\t\t</InputText>\n" +
                             "\t\t</InnerInputs>\n" +
@@ -415,6 +545,14 @@ namespace ESTQuestFilling.Model
 
         private string GetTAK_Zdjecie_nieXmlCode()
         {
+            string inputText = Comment.StartsWith("[ZDJĘCIE]")
+                ? Comment.Substring(Comment.IndexOf(']') + 1).Trim()
+                : "Zrób zdjęcie";
+
+            string remainderComment = Comment.StartsWith("[ZDJĘCIE]") 
+                ? "" 
+                : "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA INNY NIŻ DOMYŚLNY________________-->\n";
+
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
                         "\t<SelectionList>\n" +
@@ -425,8 +563,8 @@ namespace ESTQuestFilling.Model
                             "\t\t<OnValue>TAK</OnValue>\n" +
                             "\t\t<InnerInputs>\n" +
                                 "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\" required = \"true\">\n" +
-                                "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA________________-->\n" +
-                                "\t\t\t<Title></Title>\n" +
+                                remainderComment +
+                                $"\t\t\t<Title>{inputText}</Title>\n" +
                                 "\t\t\t<NotEdited/>\n" +
                             "\t\t</InputImage>\n" +
                             "\t\t</InnerInputs>\n" +
@@ -444,20 +582,66 @@ namespace ESTQuestFilling.Model
 
         private string GetLiczbaCalkowitaXmlCode()
         {
-            return "<!--___________________WPROWADŹ WARTOŚCI: MIN, MAX, DEFAULT________________-->\n" +
-                    "<InputInteger defaultValue=\"0\" required=\"true\">\n" +
-                            $"\t<Title>{QuestionText}</Title>\n" +
-                            "\t<Mark>\n" +
-                                _analyticsLink +
-                                "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
-                                    "\t\t\t<!--___________________UZUPEŁNIJ PRZEDZIAŁY________________-->\n" +
-                                    "\t\t\t<MarkDef rangeMin = \"\" rangeMax = \"\" mark = \"alarm\"/>\n" +
-                                    "\t\t\t<MarkDef rangeMin = \"\" rangeMax = \"\" mark = \"warning\"/>\n" +
-                                    "\t\t\t<MarkDef rangeMin = \"\" rangeMax = \"\" mark = \"normal\"/>\n" +
-                                "\t\t</Definition>\n" +
-                            "\t</Mark>\n" +
-                            "\t<NotEdited/>\n" +
-                       "</InputInteger>";
+            string marksDefinitionXmlCode = "";
+            string defaultMarksDefinitionXmlCode =
+                "\t\t\t<!--___________________UZUPEŁNIJ PRZEDZIAŁY________________-->\n" +
+                "\t\t\t<MarkDef rangeMin = \"\" rangeMax = \"\" mark = \"alarm\"/>\n" +
+                "\t\t\t<MarkDef rangeMin = \"\" rangeMax = \"\" mark = \"warning\"/>\n" +
+                "\t\t\t<MarkDef rangeMin = \"\" rangeMax = \"\" mark = \"normal\"/>\n";
+
+            if (Comment.StartsWith("[ZAKRES]"))
+            {
+                try
+                {
+                    var removedCommentTypeAndSplitToRanges = Comment.Substring(Comment.IndexOf(']') + 1)
+                        .Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries).Select(n => n.Trim()).ToArray();
+                    if (!removedCommentTypeAndSplitToRanges.Any())
+                        throw new ArgumentException("No values to convert after [...] prefix.");
+                    foreach (var rangeAndMark in removedCommentTypeAndSplitToRanges)
+                    {
+                        var rangeAndMarkArray = rangeAndMark
+                            .Split(new char[] { '<', '>', ',', ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                        if (!rangeAndMarkArray.Take(2).All(n => int.TryParse(n, out _)))
+                        {
+                            throw new ArgumentException("Range value is NaN\n");
+                        }
+
+                        marksDefinitionXmlCode +=
+                            $"\t\t\t<MarkDef rangeMin = \"{rangeAndMarkArray[0]}\" rangeMax = \"{rangeAndMarkArray[1]}\" " +
+                            $"mark = \"{_marksAbbreviationsToXmlNamesDictionary[rangeAndMarkArray[2]]}\"/>\n";
+                    }
+                }
+                catch (KeyNotFoundException e)
+                {
+                    marksDefinitionXmlCode = defaultMarksDefinitionXmlCode;
+                        
+                    MessageBox.Show(e.Message + "\n\n" +
+                                    "Unable to convert comment due to mark abbreviation error.\n" +
+                                    $"Default marks and remainder assigned to question ID: {this.Id}");
+                }
+                catch (Exception e)
+                {
+                    marksDefinitionXmlCode = defaultMarksDefinitionXmlCode;
+
+                    MessageBox.Show(e.Message + "\n\n" +
+                                    $"Unable to convert comment. Default marks and remainder assigned to question ID: {this.Id}");
+                }
+            }
+            else
+            {
+                marksDefinitionXmlCode = defaultMarksDefinitionXmlCode;
+            }
+
+            return "<InputInteger defaultValue=\"0\" required=\"true\">\n" +
+                        $"\t<Title>{QuestionText}</Title>\n" +
+                        "\t<Mark>\n" +
+                            _analyticsLink +
+                            "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                                marksDefinitionXmlCode +
+                            "\t\t</Definition>\n" +
+                        "\t</Mark>\n" +
+                        "\t<NotEdited/>\n" +
+                   "</InputInteger>";
         }
 
         private string GetTAK_nieND_TekstXmlCode()
@@ -543,6 +727,13 @@ namespace ESTQuestFilling.Model
                         "\t<NotEdited/>\n" +
                    "</InputImage>";
         }
+
+        private readonly Dictionary<string, string> _marksAbbreviationsToXmlNamesDictionary = new Dictionary<string, string>()
+        {
+            { "N", "normal"},
+            { "W", "warning"},
+            { "A", "alarm"}
+        };
 
         private string GetCode(string answerType)
         {
