@@ -92,7 +92,7 @@ namespace ESTQuestFilling.Model
             EvaluationTable = splitMarksStrings.Select(n => n.Select(Int32.Parse).ToArray()).ToArray();
         }
 
-        // TODO - zastosować wzorzec lub dziedziczenie???
+        // TODO - zrobić coś z tym bałaganem
         private string GetTAKnieCode()
         {
             return "<InputRadio required=\"true\">\n" +
@@ -124,10 +124,12 @@ namespace ESTQuestFilling.Model
                    "</InputImage>";
         }
 
-        //TODO - dodać obsługę nieprawidłowego komentarza
         private string GetBRAKUWAG_UwagiTekstCode()
         {
-            string inputText = Comment == "" ? "Podaj uwagi" : Comment.Substring(Comment.IndexOf(']') + 2);
+            string inputText = Comment.StartsWith("[TEKST]")
+                ? Comment.Substring(Comment.IndexOf(']') + 1).Trim()
+                : "Podaj uwagi";
+
 
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
@@ -183,13 +185,15 @@ namespace ESTQuestFilling.Model
                    "</InputRadio>";
         }
 
-        // TODO - dodać obsługę nieprawidłowego komentarza
         private string Get_takZdjecieNIECode()
         {
-            string inputText = Comment == "" ? "" : Comment.Substring(Comment.IndexOf(']') + 2);
-            string remainderComment = Comment == ""
-                ? "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA________________-->\n"
-                : "";
+            string inputText = Comment.StartsWith("[ZDJĘCIE]")
+                ? Comment.Substring(Comment.IndexOf(']') + 1).Trim()
+                : "Zrób zdjęcie";
+
+            string remainderComment = Comment.StartsWith("[ZDJĘCIE]")
+                ? ""
+                : "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA INNY NIŻ DOMYŚLNY________________-->\n";
 
             return "<InputRadio required=\"true\">\n" +
                             $"\t<Title>{QuestionText}</Title>\n" +
@@ -221,6 +225,21 @@ namespace ESTQuestFilling.Model
         // TODO - komentarze do uzupełnienia
         private string GetBRAKUWAGuwagiTekstZdjecieCode()
         {
+            string textInput = "Podaj uwagi";
+            string photoInput = "Zrób zdjęcie";
+
+
+            if (Comment.StartsWith("[TEKST]"))
+            {
+                var commentsArray = Comment.Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries);
+                if (commentsArray.Length == 2 && commentsArray[1].Trim().StartsWith("[ZDJĘCIE]"))
+                {
+                    textInput = commentsArray[0].Substring(commentsArray[0].IndexOf(']') + 1).Trim();
+                    photoInput = commentsArray[1].Substring(commentsArray[1].IndexOf(']') + 1).Trim();
+                }
+
+            }
+
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
                         "\t<SelectionList>\n" +
@@ -231,11 +250,11 @@ namespace ESTQuestFilling.Model
                             "\t\t<OnValue>UWAGI</OnValue>\n" +
                             "\t\t<InnerInputs>\n" +
                                 "\t\t\t<InputText required = \"true\">\n" +
-                                    "\t\t\t\t<Title>Podaj uwagi</Title>\n" +
+                                    $"\t\t\t\t<Title>{textInput}</Title>\n" +
                                     "\t\t\t\t<NotEdited/>\n" +
                                 "\t\t\t</InputText>\n" +
                                 "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\" required = \"true\">\n" +
-                                    "\t\t\t\t<Title>Zrób zdjęcie</Title>\n" +
+                                    $"\t\t\t\t<Title>{photoInput}</Title>\n" +
                                     "\t\t\t\t<NotEdited/>\n" +
                                 "\t\t\t</InputImage>\n" +
                             "\t\t</InnerInputs>\n" +
@@ -270,13 +289,15 @@ namespace ESTQuestFilling.Model
                    "</InputRadio>";
         }
 
-        // TODO - dodać obsługę nieprawidłowego komantarza
         private string GetTAKnieZdjecieCode()
         {
-            string inputText = Comment == "" ? "" : Comment.Substring(Comment.IndexOf(']') + 2);
-            string remainderComment = Comment == ""
-                ? "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA________________-->\n"
-                : "";
+            string inputText = Comment.StartsWith("[ZDJĘCIE]")
+                ? Comment.Substring(Comment.IndexOf(']') + 1).Trim()
+                : "Zrób zdjęcie";
+
+            string remainderComment = Comment.StartsWith("[ZDJĘCIE]")
+                ? ""
+                : "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA INNY NIŻ DOMYŚLNY________________-->\n";
 
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
@@ -305,13 +326,15 @@ namespace ESTQuestFilling.Model
                    "</InputRadio>";
         }
 
-        //TODO - dodać obsługę nieprawidłowego komentarza
         private string Get_takTekstNIECode()
         {
-            string inputText = Comment == "" ? "" : Comment.Substring(Comment.IndexOf(']') + 2);
-            string remainderComment = Comment == ""
-                ? "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA________________-->\n"
-                : "";
+            string inputText = Comment.StartsWith("[TEKST]")
+                ? Comment.Substring(Comment.IndexOf(']') + 1).Trim()
+                : "Wprowadź tekst";
+
+            string remainderComment = Comment.StartsWith("[TEKST]")
+                ? ""
+                : "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA INNY NIŻ DOMYŚLNY________________-->\n";
 
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
@@ -340,7 +363,6 @@ namespace ESTQuestFilling.Model
                    "</InputRadio>";
         }
 
-        // TODO - komentarze
         private string GetSuwak_odczytWartosciCode()
         {
             string marksDefinitionXmlCode = "";
@@ -427,10 +449,13 @@ namespace ESTQuestFilling.Model
 
         private string GetTAKnieTekstCode()
         {
-            string inputText = Comment == "" ? "" : Comment.Substring(Comment.IndexOf(']') + 2);
-            string remainderComment = Comment == ""
-                ? "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA________________-->\n"
-                : "";
+            string inputText = Comment.StartsWith("[TEKST]")
+                ? Comment.Substring(Comment.IndexOf(']') + 1).Trim()
+                : "Wprowadź tekst";
+
+            string remainderComment = Comment.StartsWith("[TEKST]")
+                ? ""
+                : "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA INNY NIŻ DOMYŚLNY________________-->\n";
 
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
@@ -518,13 +543,16 @@ namespace ESTQuestFilling.Model
                         "\t<NotEdited/>\n" +
                    "</InputCombo>";
         }
-        //TODO - do poprawy obsługa niepoprawnego komentarza
+
         private string GetTAKZdjecie_nie()
         {
-            string inputText = Comment == "" ? "" : Comment.Substring(Comment.IndexOf(']') + 2);
-            string remainderComment = Comment == ""
-                ? "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA________________-->\n"
-                : "";
+            string inputText = Comment.StartsWith("[ZDJĘCIE]")
+                ? Comment.Substring(Comment.IndexOf(']') + 1).Trim()
+                : "Zrób zdjęcie";
+
+            string remainderComment = Comment.StartsWith("[ZDJĘCIE]") 
+                ? "" 
+                : "\t\t\t<!--___________________WPROWADŹ TYTUŁ POLA INNY NIŻ DOMYŚLNY________________-->\n";
 
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
