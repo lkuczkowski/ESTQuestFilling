@@ -489,7 +489,7 @@ namespace ESTQuestFilling.Model
             return "<InputText required=\"false\">\n" +
                          $"\t<Title>{QuestionText}</Title>\n" +
                          "\t<Inner>\n" +
-                             "\t\t<OnValue/>\n" +
+                             "\t\t<OnValue operand=\"exists\"/>\n" +
                              "\t\t<InnerInputs>\n" +
                                  "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\">\n" +
                                      "\t\t\t\t<Title>Wykonaj zdjęcie dotyczące uwag (fakultatywne).</Title>\n" +

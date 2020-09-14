@@ -75,7 +75,7 @@ namespace ESTQuestFilling.ViewModel
                     $"INNER JOIN [Kwantyfikowanie] ON [{name} - Pytania].[Kwantyfikowanie] = [Kwantyfikowanie].Identyfikator) " +
                     $"INNER JOIN [Punkty kontrolne] ON [{name} - Pytania].[Punkt kontrolny] = [Punkty kontrolne].Identyfikator) " +
                     $"INNER JOIN [Numer punktu] ON [{name} - Pytania].[Numer] = [Numer punktu].Identyfikator) " +
-                    $"ORDER BY [{name} - Pytania].Numer;";
+                    $"ORDER BY [{name} - Pytania].Numer, [{name} - Pytania].Identyfikator;";
 
                 _company = new Company(name);
                 using (OleDbConnection connection = new OleDbConnection(connectionString))
