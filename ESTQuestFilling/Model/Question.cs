@@ -225,8 +225,8 @@ namespace ESTQuestFilling.Model
 
         private string GetBRAKUWAG_uwagiTekstZdjecieXmlCode()
         {
-            string textInput = "Podaj uwagi";
-            string photoInput = "Zrób zdjęcie";
+            string textInputTitle = "Podaj uwagi";
+            string photoInputTitle = "Zrób zdjęcie";
 
 
             if (Comment.StartsWith("[TEKST]"))
@@ -234,8 +234,8 @@ namespace ESTQuestFilling.Model
                 var commentsArray = Comment.Split(new[] {';'}, StringSplitOptions.RemoveEmptyEntries);
                 if (commentsArray.Length == 2 && commentsArray[1].Trim().StartsWith("[ZDJĘCIE]"))
                 {
-                    textInput = commentsArray[0].Substring(commentsArray[0].IndexOf(']') + 1).Trim();
-                    photoInput = commentsArray[1].Substring(commentsArray[1].IndexOf(']') + 1).Trim();
+                    textInputTitle = commentsArray[0].Substring(commentsArray[0].IndexOf(']') + 1).Trim();
+                    photoInputTitle = commentsArray[1].Substring(commentsArray[1].IndexOf(']') + 1).Trim();
                 }
 
             }
@@ -250,11 +250,11 @@ namespace ESTQuestFilling.Model
                             "\t\t<OnValue>UWAGI</OnValue>\n" +
                             "\t\t<InnerInputs>\n" +
                                 "\t\t\t<InputText required = \"true\">\n" +
-                                    $"\t\t\t\t<Title>{textInput}</Title>\n" +
+                                    $"\t\t\t\t<Title>{textInputTitle}</Title>\n" +
                                     "\t\t\t\t<NotEdited/>\n" +
                                 "\t\t\t</InputText>\n" +
                                 "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\" required = \"true\">\n" +
-                                    $"\t\t\t\t<Title>{photoInput}</Title>\n" +
+                                    $"\t\t\t\t<Title>{photoInputTitle}</Title>\n" +
                                     "\t\t\t\t<NotEdited/>\n" +
                                 "\t\t\t</InputImage>\n" +
                             "\t\t</InnerInputs>\n" +
@@ -371,7 +371,7 @@ namespace ESTQuestFilling.Model
                 "\t\t\t<MarkDef rangeMin = \"\" rangeMax = \"\" mark = \"alarm\"/>\n" +
                 "\t\t\t<MarkDef rangeMin = \"\" rangeMax = \"\" mark = \"warning\"/>\n" +
                 "\t\t\t<MarkDef rangeMin = \"\" rangeMax = \"\" mark = \"normal\"/>\n";
-            string firstTwolinesOfXmlCode = "";
+            string firstTwoLinesOfXmlCode = "";
             string defaultFirstTwoLinesOfXmlCode =
                 "<!--___________________WPROWADŹ WARTOŚCI: MIN, MAX, DEFAULT________________-->\n" +
                 "<InputSliderInt minValue=\"\" maxValue=\"\" defaultValue=\"\" required=\"true\">\n";
@@ -390,7 +390,7 @@ namespace ESTQuestFilling.Model
                     if (!interval.All(n => int.TryParse(n, out _)) || interval.Length !=2)
                         throw new ArgumentException("Interval value is NaN or not a interval definition\n");
 
-                    firstTwolinesOfXmlCode =
+                    firstTwoLinesOfXmlCode =
                         $"<InputSliderInt minValue=\"{interval[0]}\" maxValue=\"{interval[1]}\" defaultValue=\"{interval[0]}\" required=\"true\">\n";
 
                     foreach (var rangeAndMark in removedCommentTypeAndSplitToRanges.Skip(1))
@@ -412,7 +412,7 @@ namespace ESTQuestFilling.Model
                 }
                 catch (KeyNotFoundException e)
                 {
-                    firstTwolinesOfXmlCode = defaultMarksDefinitionXmlCode;
+                    firstTwoLinesOfXmlCode = defaultMarksDefinitionXmlCode;
                     marksDefinitionXmlCode = defaultMarksDefinitionXmlCode;
 
                     MessageBox.Show(e.Message + "\n\n" +
@@ -421,7 +421,7 @@ namespace ESTQuestFilling.Model
                 }
                 catch (Exception e)
                 {
-                    firstTwolinesOfXmlCode = defaultFirstTwoLinesOfXmlCode;
+                    firstTwoLinesOfXmlCode = defaultFirstTwoLinesOfXmlCode;
                     marksDefinitionXmlCode = defaultMarksDefinitionXmlCode;
 
                     MessageBox.Show(e.Message + "\n\n" +
@@ -430,12 +430,12 @@ namespace ESTQuestFilling.Model
             }
             else
             {
-                firstTwolinesOfXmlCode = defaultFirstTwoLinesOfXmlCode;
+                firstTwoLinesOfXmlCode = defaultFirstTwoLinesOfXmlCode;
                 marksDefinitionXmlCode = defaultMarksDefinitionXmlCode;
             }
 
 
-            return firstTwolinesOfXmlCode +
+            return firstTwoLinesOfXmlCode +
                     $"\t<Title>{QuestionText}</Title>\n" +
                     "\t<Mark>\n" +
                         _analyticsLink +
@@ -646,6 +646,10 @@ namespace ESTQuestFilling.Model
 
         private string GetTAK_nieND_TekstXmlCode()
         {
+            string inputTextTitle = Comment.StartsWith("[TEKST]")
+                ? Comment.Substring(Comment.IndexOf(']') + 1).Trim() + " (fakultatywne)"
+                : "Podaj uwagi (fakultatywne).";
+
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
                         "\t<SelectionList>\n" +
@@ -657,7 +661,7 @@ namespace ESTQuestFilling.Model
                             "\t\t<OnValue operand=\"exists\"/>\n" +
                             "\t\t<InnerInputs>\n" +
                                 "\t\t\t<InputText required = \"false\">\n" +
-                                    "\t\t\t\t<Title>Podaj uwagi (fakultatywne).</Title>\n" +
+                                    $"\t\t\t\t<Title>{inputTextTitle}</Title>\n" +
                                     "\t\t\t\t<NotEdited/>\n" +
                                 "\t\t\t</InputText>\n" +
                             "\t\t</InnerInputs>\n" +
@@ -676,6 +680,10 @@ namespace ESTQuestFilling.Model
 
         private string Get_takNIE_ND_TekstXmlCode()
         {
+            string inputTextTitle = Comment.StartsWith("[TEKST]")
+                ? Comment.Substring(Comment.IndexOf(']') + 1).Trim() + " (fakultatywne)"
+                : "Podaj uwagi (fakultatywne).";
+
             return "<InputRadio required=\"true\">\n" +
                         $"\t<Title>{QuestionText}</Title>\n" +
                         "\t<SelectionList>\n" +
@@ -687,7 +695,7 @@ namespace ESTQuestFilling.Model
                             "\t\t<OnValue operand=\"exists\"/>\n" +
                             "\t\t<InnerInputs>\n" +
                                 "\t\t\t<InputText required = \"false\">\n" +
-                                    "\t\t\t\t<Title>Podaj uwagi (fakultatywne).</Title>\n" +
+                                    $"\t\t\t\t<Title>{inputTextTitle}</Title>\n" +
                                     "\t\t\t\t<NotEdited/>\n" +
                                 "\t\t\t</InputText>\n" +
                             "\t\t</InnerInputs>\n" +
@@ -726,6 +734,104 @@ namespace ESTQuestFilling.Model
                         $"\t<Title>{QuestionText}</Title>\n" +
                         "\t<NotEdited/>\n" +
                    "</InputImage>";
+        }
+
+        private string GetTAK_nieND_TekstZdjecieXmlCode()
+        {
+            string textInputTitle = "Podaj uwagi (fakultatywne).";
+            string photoInputTitle = "Zrób zdjęcie (fakultatywne).";
+
+
+            if (Comment.StartsWith("[TEKST]"))
+            {
+                var commentsArray = Comment.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                if (commentsArray.Length == 2 && commentsArray[1].Trim().StartsWith("[ZDJĘCIE]"))
+                {
+                    textInputTitle = commentsArray[0].Substring(commentsArray[0].IndexOf(']') + 1).Trim() + " (fakultatywne)";
+                    photoInputTitle = commentsArray[1].Substring(commentsArray[1].IndexOf(']') + 1).Trim() + " (fakultatywne)";
+                }
+
+            }
+
+            return "<InputRadio required=\"true\">\n" +
+                        $"\t<Title>{QuestionText}</Title>\n" +
+                        "\t<SelectionList>\n" +
+                            "\t\t<Selection>TAK</Selection>\n" +
+                            "\t\t<Selection>NIE</Selection>\n" +
+                            "\t\t<Selection>N/D</Selection>\n" +
+                        "\t</SelectionList>\n" +
+                        "\t<Inner>\n" +
+                            "\t\t<OnValue operand=\"exists\"/>\n" +
+                            "\t\t<InnerInputs>\n" +
+                                "\t\t\t<InputText required = \"false\">\n" +
+                                    $"\t\t\t\t<Title>{textInputTitle}</Title>\n" +
+                                    "\t\t\t\t<NotEdited/>\n" +
+                                "\t\t\t</InputText>\n" +
+                                "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\" required = \"false\">\n" +
+                                $"\t\t\t\t<Title>{photoInputTitle}</Title>\n" +
+                                "\t\t\t\t<NotEdited/>\n" +
+                                "\t\t\t</InputImage>\n" +
+                            "\t\t</InnerInputs>\n" +
+                        "\t</Inner>\n" +
+                        "\t<Mark>\n" +
+                            _analyticsLink +
+                            "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                                "\t\t\t<MarkDef mark = \"normal\">TAK</MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"alarm\">NIE</MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"normal\">N/D</MarkDef>\n" +
+                            "\t\t</Definition>\n" +
+                        "\t</Mark>\n" +
+                        "\t<NotEdited/>\n" +
+                   "</InputRadio>";
+        }
+
+        private string Get_takNIE_ND_TekstZdjecieXmlCode()
+        {
+            string textInputTitle = "Podaj uwagi (fakultatywne).";
+            string photoInputTitle = "Zrób zdjęcie (fakultatywne).";
+
+
+            if (Comment.StartsWith("[TEKST]"))
+            {
+                var commentsArray = Comment.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                if (commentsArray.Length == 2 && commentsArray[1].Trim().StartsWith("[ZDJĘCIE]"))
+                {
+                    textInputTitle = commentsArray[0].Substring(commentsArray[0].IndexOf(']') + 1).Trim() + " (fakultatywne)";
+                    photoInputTitle = commentsArray[1].Substring(commentsArray[1].IndexOf(']') + 1).Trim() + " (fakultatywne)";
+                }
+
+            }
+
+            return "<InputRadio required=\"true\">\n" +
+                        $"\t<Title>{QuestionText}</Title>\n" +
+                        "\t<SelectionList>\n" +
+                            "\t\t<Selection>TAK</Selection>\n" +
+                            "\t\t<Selection>NIE</Selection>\n" +
+                            "\t\t<Selection>N/D</Selection>\n" +
+                        "\t</SelectionList>\n" +
+                        "\t<Inner>\n" +
+                            "\t\t<OnValue operand=\"exists\"/>\n" +
+                            "\t\t<InnerInputs>\n" +
+                                "\t\t\t<InputText required = \"false\">\n" +
+                                    $"\t\t\t\t<Title>{textInputTitle}</Title>\n" +
+                                    "\t\t\t\t<NotEdited/>\n" +
+                                "\t\t\t</InputText>\n" + 
+                                "\t\t\t<InputImage allowCamera = \"true\" allowFile = \"false\" required = \"false\">\n" +
+                                $"\t\t\t\t<Title>{photoInputTitle}</Title>\n" +
+                                "\t\t\t\t<NotEdited/>\n" +
+                                "\t\t\t</InputImage>\n" +
+                            "\t\t</InnerInputs>\n" +
+                        "\t</Inner>\n" +
+                        "\t<Mark>\n" +
+                            _analyticsLink +
+                            "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                                "\t\t\t<MarkDef mark = \"alarm\">TAK</MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"normal\">NIE</MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"normal\">N/D</MarkDef>\n" +
+                            "\t\t</Definition>\n" +
+                        "\t</Mark>\n" +
+                        "\t<NotEdited/>\n" +
+                   "</InputRadio>";
         }
 
         private readonly Dictionary<string, string> _marksAbbreviationsToXmlNamesDictionary = new Dictionary<string, string>()
@@ -781,6 +887,10 @@ namespace ESTQuestFilling.Model
                     return GetTekstXmlCode();
                 case "[Zdjęcie]":
                     return GetZdjecieXmlCode();
+                case "[TAK / nie / ND / --> Tekst + zdjęcie]":
+                    return GetTAK_nieND_TekstZdjecieXmlCode();
+                case "[tak / NIE / ND / --> Tekst + zdjęcie]":
+                    return Get_takNIE_ND_TekstZdjecieXmlCode();
                 default:
                     throw new InvalidOperationException("Unable to get XML code for used answer type.\nSwitch statement error: no match expression");
             }
