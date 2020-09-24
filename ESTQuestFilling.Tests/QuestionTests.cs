@@ -20,6 +20,93 @@ namespace ESTQuestFilling.Tests
             Assert.AreEqual(answer, question.EvaluationTable);
         }
 
+        //*************************************GetListaRozwijanaXmlCode() Tests************************************
+
+        //*************************************GetListaRozwijanaXmlCode() Tests************************************
+
+        [TestCase("[ZAKRES] <4,4> N; <3,3> W; <2,2> A;")]
+        [TestCase(" ")]
+        [TestCase("[lista] <><><>")]
+        [TestCase("[LISTA ] <Tekst> W;")]
+        [TestCase("[] <>;")]
+        [TestCase("[LISTA] A")]
+        [TestCase("[LISTA] <> A;")]
+        [TestCase("[LISTA] <<>> A;")]
+        [TestCase("[LISTA] ;;;;<>;")]
+        public void ReturnStringFromGetListaRozwijanaXmlCode_InvalidComment_CreateDefaultXmlCode( string comment)
+        {
+            var question = new Question(0, "", "", "[Lista rozwijana]", "", "", comment);
+
+            string answer = "<InputCombo required=\"true\">\n" +
+                        $"\t<Title></Title>\n" +
+                        "\t<SelectionList>\n" +
+                        "\t<!--___________________WPROWADŹ POLA WYBORU________________-->\n" +
+                            "\t\t<Selection></Selection>\n" +
+                            "\t\t<Selection></Selection>\n" +
+                            "\t\t<Selection></Selection>\n" +
+                        "\t</SelectionList>\n" +
+                        "\t<Mark>\n" +
+                            "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                            "\t\t<!--___________________WPROWADŹ OCENY DLA PÓL WYBORU________________-->\n" +
+                                "\t\t\t<MarkDef mark = \"normal\"></MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"warning\"></MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"alarm\"></MarkDef>\n" +
+                            "\t\t</Definition>\n" +
+                        "\t</Mark>\n" +
+                        "\t<NotEdited/>\n" +
+                   "</InputCombo>";
+            Assert.AreEqual(answer, question.GetQuestionCode());
+        }
+
+        [Test]
+        public void ReturnStringFromGetListaRozwijanaXmlCode_EmptyComment_CreateDefaultXmlCode()
+        {
+            var question = new Question(0, "", "", "[Lista rozwijana]", "", "", "");
+
+            string answer = "<InputCombo required=\"true\">\n" +
+                        $"\t<Title></Title>\n" +
+                        "\t<SelectionList>\n" +
+                        "\t<!--___________________WPROWADŹ POLA WYBORU________________-->\n" +
+                            "\t\t<Selection></Selection>\n" +
+                            "\t\t<Selection></Selection>\n" +
+                            "\t\t<Selection></Selection>\n" +
+                        "\t</SelectionList>\n" +
+                        "\t<Mark>\n" +
+                            "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                            "\t\t<!--___________________WPROWADŹ OCENY DLA PÓL WYBORU________________-->\n" +
+                                "\t\t\t<MarkDef mark = \"normal\"></MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"warning\"></MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"alarm\"></MarkDef>\n" +
+                            "\t\t</Definition>\n" +
+                        "\t</Mark>\n" +
+                        "\t<NotEdited/>\n" +
+                   "</InputCombo>";
+            Assert.AreEqual(answer, question.GetQuestionCode());
+        }
+
+        [Test]
+        public void ReturnStringFromGetListaRozwijanaXmlCode_ValidCommentWithPossibleMarkValues_CreateProperXmlCode()
+        {
+            var question = new Question(0, "", "", "[Lista rozwijana]", "", "", "[LISTA] <Test normal> N; <Test warning> W; <Test alarm> A;");
+
+            string answer = "<InputCombo required=\"true\">\n" +
+                        $"\t<Title></Title>\n" +
+                        "\t<SelectionList>\n" +
+                            "\t\t<Selection>Test normal</Selection>\n" +
+                            "\t\t<Selection>Test warning</Selection>\n" +
+                            "\t\t<Selection>Test alarm</Selection>\n" +
+                        "\t</SelectionList>\n" +
+                        "\t<Mark>\n" +
+                            "\t\t<Definition initialMark = \"warning\" refusalMark = \"alarm\">\n" +
+                                "\t\t\t<MarkDef mark = \"normal\">Test normal</MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"warning\">Test warning</MarkDef>\n" +
+                                "\t\t\t<MarkDef mark = \"alarm\">Test alarm</MarkDef>\n" +
+                            "\t\t</Definition>\n" +
+                        "\t</Mark>\n" +
+                        "\t<NotEdited/>\n" +
+                   "</InputCombo>";
+            Assert.AreEqual(answer, question.GetQuestionCode());
+        }
 
         //*************************************GetLiczbaCalkowitaXmlCode() Tests************************************
 

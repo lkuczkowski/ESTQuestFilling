@@ -2,4 +2,18 @@
 	<s:String x:Key="/Default/CodeInspection/ExcludedFiles/FilesAndFoldersToSkip2/=E8C4B4C5_002DCF89_002D4DED_002DB9AE_002DFD0A2F7FF9D9_002Fd_003AViewModel_002Ff_003AApplicationViewModel_002Ecs/@EntryIndexedValue">ExplicitlyExcluded</s:String>
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
   &lt;Assembly Path="C:\Users\Łukasz\Desktop\ESTQuestFilling\ESTQuestFilling\packages\Microsoft.Xaml.Behaviors.Wpf.1.1.19\lib\net45\Microsoft.Xaml.Behaviors.dll" /&gt;&#xD;
-&lt;/AssemblyExplorer&gt;</s:String></wpf:ResourceDictionary>
+&lt;/AssemblyExplorer&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=056918d2_002Df607_002D4482_002D9f06_002Dd0abf44c2e64/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="ReturnStringFromGetListaRozwijanaXmlCode_InvalidComment_CreateDefaultXmlCode" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Or&gt;&#xD;
+    &lt;TestAncestor&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::ADF46DE4-E80C-4509-A025-A79D331F450C::.NETFramework,Version=v4.7.2::ESTQuestFilling.Tests.QuestionTests.ReturnStringFromGetListaRozwijanaXmlCode_InvalidComment_CreateDefaultXmlCode&lt;/TestId&gt;&#xD;
+    &lt;/TestAncestor&gt;&#xD;
+    &lt;ProjectFile&gt;ADF46DE4-E80C-4509-A025-A79D331F450C/f:QuestionTests.cs&lt;/ProjectFile&gt;&#xD;
+  &lt;/Or&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	
+	
+	
+	
+	
+	</wpf:ResourceDictionary>
