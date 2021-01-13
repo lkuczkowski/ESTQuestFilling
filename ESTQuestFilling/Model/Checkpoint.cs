@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Windows;
@@ -60,20 +61,20 @@ namespace ESTQuestFilling.Model
             {
                 var questionsGropedByPage = QuestionsList.GroupBy(n => n.Page);
                 string firstPart = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n" +
-                                   "<Form xmlns = \"http://tempuri.org/FormSchema.1.5.xsd\" creationDate = \"2019-09-23T10:00:00.178Z\" creationUser = \"lkuczkowski\">\n";
+                                   $"<Form xmlns = \"http://tempuri.org/FormSchema.1.5.xsd\" creationDate = \"{DateTime.Now:u}\" creationUser = \"lkuczkowski\">\n\n";
 
                 sb.Append(firstPart);
 
                 foreach (var questionGroup in questionsGropedByPage)
                 {
-                    sb.Append("<Page>\n" + $"<Title>{questionGroup.Key}</Title>\n\n");
+                    sb.Append("\t<Page>\n" + $"\t\t<Title>{questionGroup.Key}</Title>\n\n");
                     foreach (var question in questionGroup)
                     {
                         sb.Append(question.GetQuestionCode());
-                        sb.AppendLine("\n");
+                        sb.AppendLine(Environment.NewLine);
                     }
 
-                    sb.AppendLine("\n</Page>\n");
+                    sb.AppendLine("\t</Page>\n");
                 }
 
                 sb.AppendLine("</Form>");
