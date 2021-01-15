@@ -11,6 +11,12 @@
     &lt;ProjectFile&gt;ADF46DE4-E80C-4509-A025-A79D331F450C/f:QuestionTests.cs&lt;/ProjectFile&gt;&#xD;
   &lt;/Or&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=a40ec6fe_002D32d4_002D41a1_002Db8b0_002Dd6ef249b1660/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from TAK_nieQuestionTests.cs #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;ProjectFile&gt;ADF46DE4-E80C-4509-A025-A79D331F450C/f:TAK_nieQuestionTests.cs&lt;/ProjectFile&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d872ffe4_002D5afe_002D4141_002D8a70_002Db1c1f3dcad92/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from TAK_nieQuestionTests.cs" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;ProjectFile&gt;ADF46DE4-E80C-4509-A025-A79D331F450C/f:TAK_nieQuestionTests.cs&lt;/ProjectFile&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
 	
 	
 	

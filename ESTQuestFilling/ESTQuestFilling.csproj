@@ -116,6 +116,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Model\CommentHandler.cs" />
+    <Compile Include="Model\IXmlCodeProducer.cs" />
+    <Compile Include="Model\Questions\BRAKUWAG_uwagiTekstQuestion.cs" />
+    <Compile Include="Model\Questions\Data_BezOcenyQuestion.cs" />
+    <Compile Include="Model\Questions\FakultatywneTekstZdjecieQuestion.cs" />
+    <Compile Include="Model\Questions\LiczbaCalkowitaQuestion.cs" />
+    <Compile Include="Model\Questions\ListaRozwijanaQuestion.cs" />
+    <Compile Include="Model\Questions\ListaWyboruQuestion.cs" />
+    <Compile Include="Model\Questions\OcenaEkspercka_TekstQuestion.cs" />
+    <Compile Include="Model\Questions\OcenaEkspercka_ZdjecieQuestion.cs" />
+    <Compile Include="Model\Questions\QuestionBase.cs" />
+    <Compile Include="Model\Questions\Suwak_odczytWartosciQuestion.cs" />
+    <Compile Include="Model\Questions\tak_NIE_Question.cs" />
+    <Compile Include="Model\Questions\TAK_nieQuestion.cs" />
+    <Compile Include="Model\Questions\TekstQuestion.cs" />
+    <Compile Include="Model\Questions\ZdjecieQuestion.cs" />
     <Compile Include="Model\RiskCategory.cs" />
     <Compile Include="Model\RiskFactor.cs" />
     <Compile Include="Model\RiskField.cs" />
@@ -212,5 +228,6 @@
   <ItemGroup>
     <Resource Include="Resources\logo_v2.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
