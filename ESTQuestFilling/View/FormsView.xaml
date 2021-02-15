@@ -5,10 +5,18 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ESTQuestFilling.View"
              xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:viewModel="clr-namespace:ESTQuestFilling.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <ResourceDictionary Source="StylesDictionary.xaml"></ResourceDictionary>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="StylesDictionary.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+            <DataTemplate DataType="{x:Type viewModel:CompanyViewModel}">
+                <local:CompanyView/>
+            </DataTemplate>
+        </ResourceDictionary>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -17,8 +25,10 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <b:Interaction.Triggers>
-                <b:EventTrigger SourceObject="{Binding ElementName=CompanyNameComboBox}" EventName="SelectionChanged">
-                    <b:InvokeCommandAction Command="{Binding CreateCompanyViewModelFromNameCommand}" CommandParameter="{Binding ElementName=CompanyNameComboBox, Path=SelectedItem}"/>
+                <b:EventTrigger SourceObject="{Binding ElementName=CompanyNameComboBox}" 
+                                EventName="SelectionChanged">
+                    <b:InvokeCommandAction Command="{Binding CreateCompanyViewModelFromNameCommand}" 
+                                           CommandParameter="{Binding ElementName=CompanyNameComboBox, Path=SelectedItem}"/>
                 </b:EventTrigger>
             </b:Interaction.Triggers>
             <Grid.ColumnDefinitions>
@@ -35,7 +45,8 @@
                       Style="{StaticResource ComboBoxTransparentStyle}"
                       Height="40"
                       Margin="30, 0, 0, 0"
-                      ItemsSource="{Binding CompanyListCollection}" 
+                      ItemsSource="{Binding CompanyListCollection}"
+                      SelectedIndex="{Binding SelectedCompanyIndex}"
                       FontSize="18">
                 <ComboBox.Background>
                     <LinearGradientBrush EndPoint="0,1" StartPoint="0.5,1">
@@ -52,9 +63,9 @@
             </ComboBox>
             <TextBox Grid.Column="1"
                      Height="30" Width="200" 
-                     BorderThickness="0" FontSize="18" 
+                     BorderThickness="0" FontSize="12" 
                      HorizontalContentAlignment="Center" 
-                     VerticalContentAlignment="Stretch" IsEnabled="False">
+                     VerticalContentAlignment="Center" IsEnabled="False">
                 <TextBox.Resources>
                     <Style TargetType="{x:Type Border}">
                         <Setter Property="CornerRadius" Value="15"></Setter>

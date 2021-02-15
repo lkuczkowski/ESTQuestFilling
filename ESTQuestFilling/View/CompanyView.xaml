@@ -10,24 +10,6 @@
         <local:BoolToDataGridRowDetailsVisibilityModeConverter x:Key="BoolToDataGridRowDetailsVisibilityModeValueConverter"/>
     </UserControl.Resources>
     <DockPanel>
-        <Grid DockPanel.Dock="Top" Margin="5">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="20"></ColumnDefinition>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="20"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <Grid.Background>
-                <SolidColorBrush Color="#FFE3DFE4" Opacity="0.5"/>
-            </Grid.Background>
-            <TextBlock Margin="5,5,5,10" Grid.Column="1" MinHeight="20" Text="{Binding Name, Mode=OneWay, StringFormat='        {0}'}" FontWeight="Bold" FontSize="16" Foreground="DarkRed">
-                <TextBlock.Effect>
-                    <DropShadowEffect/>
-                </TextBlock.Effect>
-                <TextBlock.Background>
-                    <SolidColorBrush Color="#FFE3DFE4" Opacity="0.5"></SolidColorBrush>
-                </TextBlock.Background>
-            </TextBlock>
-        </Grid>
         <DockPanel DockPanel.Dock="Top">
             <Label DockPanel.Dock="Left" Content="Checkpoint list:"/>
             <CheckBox Name="DetailViewCheckBox" DockPanel.Dock="Left" Margin="25,2,2,2" VerticalAlignment="Center">Detail view</CheckBox>

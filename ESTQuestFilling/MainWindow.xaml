@@ -128,7 +128,8 @@
                 </Button.Template>
             </Button>
             <Button DockPanel.Dock="Top" Margin="55,10,10,10"
-                    IsEnabled="{Binding IsDatabaseRead}">
+                    IsEnabled="{Binding IsDatabaseRead}"
+                    Command="{Binding WriteToXmlCommand}">
                 <Button.Template>
                     <ControlTemplate>
                         <Border Name="OutsideBorder" BorderThickness="1">
