@@ -1,6 +1,7 @@
 ﻿using ESTQuestFilling.ViewModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace ESTQuestFilling
 {
@@ -12,7 +13,6 @@ namespace ESTQuestFilling
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = new ApplicationViewModel();
         }
     }
 }

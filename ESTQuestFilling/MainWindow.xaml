@@ -9,76 +9,280 @@
         xmlns:view="clr-namespace:ESTQuestFilling.View"
         xmlns:viewModel="clr-namespace:ESTQuestFilling.ViewModel"
         Name="MainWin"
-        d:DesignHeight="524"
-        Width="1477">
+        d:DesignHeight="650"
+        Width="1350" 
+        Background="Transparent" WindowStartupLocation="CenterOwner" WindowStyle="None" AllowsTransparency="True">
+    <Window.DataContext>
+        <viewModel:ApplicationViewModel/>
+    </Window.DataContext>
     <Window.Resources>
-        <view:BoolToDataGridRowDetailsVisibilityModeConverter x:Key="BoolToDataGridRowDetailsVisibilityModeValueConverter"></view:BoolToDataGridRowDetailsVisibilityModeConverter>
-        <view:StringToBoolVisibilityConverter x:Key="StringToBoolVisibilityConverter"></view:StringToBoolVisibilityConverter>
+        
         <DataTemplate DataType="{x:Type viewModel:RiskFactorsViewModel}">
-                <view:RiskFactorsView/>
+            <view:RiskFactorsView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModel:QuestionsDatabaseViewModel}">
             <view:QuestionsDatabaseView/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModel:CompanyViewModel}">
-            <view:CompanyView/>
+        <DataTemplate DataType="{x:Type viewModel:FormsViewModel}">
+            <view:FormsView/>
         </DataTemplate>
     </Window.Resources>
-    <Grid Margin="0,0,2,10">
-        <TabControl>
-            <TabItem Header="Main">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="300"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
-                    </Grid.ColumnDefinitions>
-                    <DockPanel HorizontalAlignment="Stretch" LastChildFill="False">
-                        <Label DockPanel.Dock="Top" Content="Database read" FontWeight="Bold"/>
-                        <GroupBox DockPanel.Dock="Top" Header="Database info:">
-                            <StackPanel>
-                                <TextBlock Margin="2" TextWrapping="Wrap" Text="{Binding DatabaseName}"></TextBlock>
-                                <TextBlock Name="DatabasePathTextBox" Margin="2" TextWrapping="Wrap" Text="{Binding DatabasePath}"></TextBlock>
-                            </StackPanel>
-                        </GroupBox>
-                        <Button DockPanel.Dock="Top" Margin="10" Command="{Binding ReadDatabaseCommand}" Height="44">Read database</Button>
-                        <Label DockPanel.Dock="Top">Tables in Database:</Label>
-                        <ListBox DockPanel.Dock="Top" Margin="10" Height="150" ItemsSource="{Binding DatabaseTableNamesList}">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding}" />
-                                    </StackPanel>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                        <Button DockPanel.Dock="Bottom" HorizontalAlignment="Right" Margin="10" Content="Exit" Width="75" Command="{Binding CloseAppCommand}"/>
-                    </DockPanel>
-                    <DockPanel Grid.Column="1" IsEnabled="{Binding ElementName=DatabasePathTextBox, Path=Text, Converter={StaticResource StringToBoolVisibilityConverter}}">
-                        <Label DockPanel.Dock="Top" Content="Generate XML code" FontWeight="Bold"></Label>
-                        <Border Margin="5" DockPanel.Dock="Top" BorderBrush="#FFA893AE" BorderThickness="2" CornerRadius="5">
+    <Grid Background="#FFF6F7FB">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <DockPanel Grid.Column="0" 
+                       LastChildFill="False">
+            <DockPanel.InputBindings>
+                <MouseBinding 
+                        MouseAction="LeftDoubleClick" 
+                        Command="{Binding MinMaxWindowCommand}">
+                </MouseBinding>
+                <MouseBinding 
+                        MouseAction="LeftClick"
+                        Command="{Binding DragMoveMainWindowCommand}"></MouseBinding>
+            </DockPanel.InputBindings>
+            <DockPanel.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="Black" Offset="0"/>
+                    <GradientStop Color="#FF006BA5" Offset="1"/>
+                </LinearGradientBrush>
+            </DockPanel.Background>
+            <Button DockPanel.Dock="Top" Margin="15,40,10,0" 
+                        Command="{Binding ReadDatabaseCommand}">
+                <Button.Template>
+                    <ControlTemplate>
+                        <Border Name="OutsideBorder" BorderThickness="1">
                             <Border.Background>
-                                <SolidColorBrush Color="#FFF5EAF5" Opacity="0.5"/>
+                                <SolidColorBrush Color="White" Opacity="0"/>
                             </Border.Background>
-                            <StackPanel DockPanel.Dock="Top" Orientation="Horizontal">
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger SourceObject="{Binding ElementName=CompanyNameComboBox}" EventName="SelectionChanged">
-                                        <i:InvokeCommandAction Command="{Binding CreateCompanyViewModelFromNameCommand}" CommandParameter="{Binding ElementName=CompanyNameComboBox, Path=SelectedItem}"/>
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>
-                                <ComboBox x:Name="CompanyNameComboBox" Width="200" Height="25" DockPanel.Dock="Top" Margin="10,10,60,10" ItemsSource="{Binding CompanyListCollection}"/>
-                                <Button DockPanel.Dock="Top" Margin="10" Content="Write to files" Height="30" Width="100"  Command="{Binding WriteInstitutionCheckpointsToFilesCommand}"/>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Image Height="40" Source="Resources/connect_to_db_icon.png"></Image>
+                                <TextBlock VerticalAlignment="Center" Margin="15,0,0,0" 
+                                           TextWrapping="WrapWithOverflow" FontSize="16" 
+                                           FontWeight="Bold" Foreground="White">
+                                    Connect to DB
+                                </TextBlock>
                             </StackPanel>
                         </Border>
-                        <ContentControl Content="{Binding CurrentCompanyViewModel, UpdateSourceTrigger=PropertyChanged}"/>
-                    </DockPanel>
-                </Grid>
-            </TabItem>
-            <TabItem IsEnabled="{Binding ElementName=DatabasePathTextBox, Path=Text, Converter={StaticResource StringToBoolVisibilityConverter}}" Name="QuestionDatabaseTab" Header="Questions database">
-                <ContentControl Content="{Binding QuestionsDatabaseViewModel}"/>
-            </TabItem>
-            <TabItem IsEnabled="{Binding ElementName=DatabasePathTextBox, Path=Text, Converter={StaticResource StringToBoolVisibilityConverter}}" Name="RiskFactorsTab" Header="Risk Factors">
-                <ContentControl Content="{Binding RiskFactorsViewModel}"/>
-            </TabItem>
-        </TabControl>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="UIElement.IsMouseOver" Value="True">
+                                <Setter Property="Border.BorderBrush" Value="White" TargetName="OutsideBorder"></Setter>
+                            </Trigger>
+                            <Trigger Property="Button.IsPressed" Value="True">
+                                <Setter Property="Button.RenderTransformOrigin" Value="0.5,0.5"></Setter>
+                                <Setter Property="Button.RenderTransform">
+                                    <Setter.Value>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleX="0.9" ScaleY="0.9"/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button DockPanel.Dock="Top" Margin="15,40,10,10" 
+                        Command="{Binding SetFormsView}"
+                        IsEnabled="{Binding IsDatabaseRead}">
+                <Button.Template>
+                    <ControlTemplate>
+                        <Border Name="OutsideBorder" BorderThickness="1">
+                            <Border.Background>
+                                <SolidColorBrush Color="White" Opacity="0"/>
+                            </Border.Background>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Image Height="40" Source="Resources/forms_icon.png"></Image>
+                                <TextBlock VerticalAlignment="Center" Margin="15,0,0,0" 
+                                           TextWrapping="WrapWithOverflow" FontSize="16" 
+                                           FontWeight="Bold" Foreground="White">
+                                    Forms view
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="UIElement.IsMouseOver" Value="True">
+                                <Setter Property="Border.BorderBrush" Value="White" TargetName="OutsideBorder"></Setter>
+                            </Trigger>
+                            <Trigger Property="Button.IsPressed" Value="True">
+                                <Setter Property="Button.RenderTransformOrigin" Value="0.5,0.5"></Setter>
+                                <Setter Property="Button.RenderTransform">
+                                    <Setter.Value>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleX="0.9" ScaleY="0.9"/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button DockPanel.Dock="Top" Margin="55,10,10,10"
+                    IsEnabled="{Binding IsDatabaseRead}">
+                <Button.Template>
+                    <ControlTemplate>
+                        <Border Name="OutsideBorder" BorderThickness="1">
+                            <Border.Background>
+                                <SolidColorBrush Color="White" Opacity="0"/>
+                            </Border.Background>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Image Height="30" Source="Resources/write_to_xml_icon.png"></Image>
+                                <TextBlock VerticalAlignment="Center" Margin="15,0,0,0" 
+                                           TextWrapping="WrapWithOverflow" FontSize="10" 
+                                           FontWeight="Bold" Foreground="White">
+                                    Write to XML
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="UIElement.IsMouseOver" Value="True">
+                                <Setter Property="Border.BorderBrush" Value="White" TargetName="OutsideBorder"></Setter>
+                            </Trigger>
+                            <Trigger Property="Button.IsPressed" Value="True">
+                                <Setter Property="Button.RenderTransformOrigin" Value="0.5,0.5"></Setter>
+                                <Setter Property="Button.RenderTransform">
+                                    <Setter.Value>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleX="0.9" ScaleY="0.9"/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button DockPanel.Dock="Top" Margin="15,60,10,10" 
+                        Command="{Binding SetQuestionsDatabaseView}"
+                        IsEnabled="{Binding IsDatabaseRead}">
+                <Button.Template>
+                    <ControlTemplate>
+                        <Border Name="OutsideBorder" BorderThickness="1">
+                            <Border.Background>
+                                <SolidColorBrush Color="White" Opacity="0"/>
+                            </Border.Background>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Image Height="40" Source="Resources/search_in_database_icon.png"></Image>
+                                <TextBlock VerticalAlignment="Center" Margin="15,0,0,0" 
+                                           TextWrapping="WrapWithOverflow" FontSize="16" 
+                                           FontWeight="Bold" Foreground="White">
+                                    Questions list
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="UIElement.IsMouseOver" Value="True">
+                                <Setter Property="Border.BorderBrush" Value="White" TargetName="OutsideBorder"></Setter>
+                            </Trigger>
+                            <Trigger Property="Button.IsPressed" Value="True">
+                                <Setter Property="Button.RenderTransformOrigin" Value="0.5,0.5"></Setter>
+                                <Setter Property="Button.RenderTransform">
+                                    <Setter.Value>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleX="0.9" ScaleY="0.9"/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button DockPanel.Dock="Top" Margin="15,10,10,10" 
+                        Command="{Binding SetRiskFactorsView}"
+                        IsEnabled="{Binding IsDatabaseRead}">
+                <Button.Template>
+                    <ControlTemplate>
+                        <Border Name="OutsideBorder" BorderThickness="1">
+                            <Border.Background>
+                                <SolidColorBrush Color="White" Opacity="0"/>
+                            </Border.Background>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Image Height="40" Source="Resources/risk_factors_icon.png"></Image>
+                                <TextBlock VerticalAlignment="Center" Margin="15,0,0,0" 
+                                           TextWrapping="WrapWithOverflow" FontSize="16" 
+                                           FontWeight="Bold" Foreground="White">
+                                    Risk factors
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="UIElement.IsMouseOver" Value="True">
+                                <Setter Property="Border.BorderBrush" Value="White" TargetName="OutsideBorder"></Setter>
+                            </Trigger>
+                            <Trigger Property="Button.IsPressed" Value="True">
+                                <Setter Property="Button.RenderTransformOrigin" Value="0.5,0.5"></Setter>
+                                <Setter Property="Button.RenderTransform">
+                                    <Setter.Value>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleX="0.9" ScaleY="0.9"/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+            <Button DockPanel.Dock="Bottom" Margin="15,0,10,40" 
+                        Command="{Binding CloseAppCommand}">
+                <Button.Template>
+                    <ControlTemplate>
+                        <Border Name="OutsideBorder" BorderThickness="1">
+                            <Border.Background>
+                                <SolidColorBrush Color="White" Opacity="0"/>
+                            </Border.Background>
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                <Image Height="40" Source="Resources/exit_button_icon.png"></Image>
+                                <TextBlock VerticalAlignment="Center" Margin="15,0,0,0" 
+                                           TextWrapping="WrapWithOverflow" FontSize="16" 
+                                           FontWeight="Bold" Foreground="White">
+                                    Exit
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="UIElement.IsMouseOver" Value="True">
+                                <Setter Property="Border.BorderBrush" Value="White" TargetName="OutsideBorder"></Setter>
+                            </Trigger>
+                            <Trigger Property="Button.IsPressed" Value="True">
+                                <Setter Property="Button.RenderTransformOrigin" Value="0.5,0.5"></Setter>
+                                <Setter Property="Button.RenderTransform">
+                                    <Setter.Value>
+                                        <TransformGroup>
+                                            <ScaleTransform ScaleX="0.9" ScaleY="0.9"/>
+                                            <SkewTransform/>
+                                            <RotateTransform/>
+                                            <TranslateTransform/>
+                                        </TransformGroup>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </DockPanel>
+        <ContentControl Grid.Column="1" 
+                            Content="{Binding CurrentView}">
+        </ContentControl>
     </Grid>
 </Window>

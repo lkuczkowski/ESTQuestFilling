@@ -73,7 +73,7 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Resources\logo_v2.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\logo_v3.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <ManifestCertificateThumbprint>E826A72AFBF39A4DBCD2D8F8501BBF38075A5AC1</ManifestCertificateThumbprint>
@@ -116,7 +116,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Model\CommentHandler.cs" />
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Model\IXmlCodeProducer.cs" />
     <Compile Include="Model\Questions\BRAKUWAG_uwagiTekstQuestion.cs" />
     <Compile Include="Model\Questions\Data_BezOcenyQuestion.cs" />
@@ -144,6 +146,8 @@
     <Compile Include="ViewModel\BindableBase.cs" />
     <Compile Include="ViewModel\CheckpointViewModel.cs" />
     <Compile Include="ViewModel\CompanyViewModel.cs" />
+    <Compile Include="ViewModel\FormsViewModel.cs" />
+    <Compile Include="ViewModel\PageViewModelBase.cs" />
     <Compile Include="ViewModel\QuestionsDatabaseViewModel.cs" />
     <Compile Include="ViewModel\QuestionViewModel.cs" />
     <Compile Include="ViewModel\RiskFactorsViewModel.cs" />
@@ -158,6 +162,9 @@
       <DependentUpon>RiskFactorsView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\StringToBoolVisibilityConverter.cs" />
+    <Compile Include="View\FormsView.xaml.cs">
+      <DependentUpon>FormsView.xaml</DependentUpon>
+    </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -166,10 +173,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
+    <Page Include="View\StylesDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\CompanyView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -179,6 +186,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\RiskFactorsView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\FormsView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -228,6 +239,26 @@
   <ItemGroup>
     <Resource Include="Resources\logo_v2.ico" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\write_to_xml_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\connect_to_db_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\search_in_database_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\exit_button_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\risk_factors_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\forms_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\logo_v3.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
