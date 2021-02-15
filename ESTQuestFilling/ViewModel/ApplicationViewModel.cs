@@ -13,27 +13,20 @@ namespace ESTQuestFilling.ViewModel
 {
     class ApplicationViewModel : BindableBase
     {
-        public static ObservableCollection<string> CompanyListCollection { get; } = new ObservableCollection<string>()
-        {
-            "No database read"
-        };
+        private PageViewModelBase _currentView;
 
-        public string CurrentInstitutionName { get; set; } = "No institution read";
-
-        private CompanyViewModel _currentCompanyViewModel;
-        public CompanyViewModel CurrentCompanyViewModel
+        public PageViewModelBase CurrentView
         {
-            get => _currentCompanyViewModel;
+            get => _currentView;
             set
             {
-                _currentCompanyViewModel = value;
-                CurrentInstitutionName = value.Name;
-                OnPropertyChanged(nameof(CurrentCompanyViewModel));
-                OnPropertyChanged(nameof(CurrentInstitutionName));
+                _currentView = value;
+                OnPropertyChanged();
             }
         }
 
         private string _databasePath;
+
         public string DatabasePath
         {
             get => _databasePath;
@@ -45,6 +38,7 @@ namespace ESTQuestFilling.ViewModel
         }
 
         private string _databaseName;
+
         public string DatabaseName
         {
             get => _databaseName;
@@ -55,7 +49,28 @@ namespace ESTQuestFilling.ViewModel
             }
         }
 
-        public ObservableCollection<string> DatabaseTableNamesList { get; set; } = new ObservableCollection<string>();
+        private bool _isDatabaseRead;
+
+        public bool IsDatabaseRead
+        {
+            get => _isDatabaseRead;
+            set
+            {
+                _isDatabaseRead = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private FormsViewModel _formsViewModel;
+        public FormsViewModel FormsViewModel
+        {
+            get => _formsViewModel;
+            set
+            {
+                _formsViewModel = value;
+                OnPropertyChanged();
+            }
+        }
 
         private RiskFactorsViewModel _riskFactorsViewModel;
         public RiskFactorsViewModel RiskFactorsViewModel
@@ -69,7 +84,6 @@ namespace ESTQuestFilling.ViewModel
         }
 
         private QuestionsDatabaseViewModel _questionsDatabaseViewModel;
-
         public QuestionsDatabaseViewModel QuestionsDatabaseViewModel
         {
             get { return _questionsDatabaseViewModel; }
@@ -80,29 +94,42 @@ namespace ESTQuestFilling.ViewModel
             }
         }
 
+        
         public ApplicationViewModel()
         {
-            CreateCompanyViewModelFromNameCommand = new DelegateCommand(CreateCompanyViewModelFromName);
             // TODO - Fix null CurrentCompanyViewModel bug
-            WriteInstitutionCheckpointsToFilesCommand = new DelegateCommand((object parameter) => CurrentCompanyViewModel.WriteCheckpointsToFiles());
-            ReadDatabaseCommand = new DelegateCommand((object parameter) =>
-            {
-                ReadDatebase();
-            });
-            CloseAppCommand = new DelegateCommand((object n) => Application.Current.Shutdown());
-            
+            ReadDatabaseCommand = new DelegateCommand(parameter => ReadDatebase());
+            CloseAppCommand = new DelegateCommand(n => Application.Current.Shutdown());
+            IsDatabaseRead = false;
+            SetFormsViewCommand = new DelegateCommand(n => CurrentView = FormsViewModel);
+            SetQuestionsDatabaseViewCommand = new DelegateCommand(n => CurrentView = QuestionsDatabaseViewModel);
+            SetRiskFactorsViewCommand = new DelegateCommand(n => CurrentView = RiskFactorsViewModel);
+            WriteToXmlCommand = new DelegateCommand(n => WriteToXmlFiles());
+            MinMaxWindowCommand = new DelegateCommand(n => MinMaxWindow());
+            DragMoveMainWindowCommand = new DelegateCommand(n => Application.Current.MainWindow.DragMove());
+
             DatabaseName = "Not read";
             DatabasePath = "Not read";
         }
 
-        public DelegateCommand CreateCompanyViewModelFromNameCommand { get; }
-        public DelegateCommand WriteInstitutionCheckpointsToFilesCommand { get; }
         public DelegateCommand ReadDatabaseCommand { get; }
         public DelegateCommand CloseAppCommand { get; }
-
-        private void CreateCompanyViewModelFromName(object parameter)
+        public DelegateCommand SetRiskFactorsViewCommand { get; }
+        public DelegateCommand SetFormsViewCommand { get; }
+        public DelegateCommand SetQuestionsDatabaseViewCommand { get; }
+        public DelegateCommand WriteToXmlCommand { get; }
+        public DelegateCommand MinMaxWindowCommand { get; }
+        public DelegateCommand DragMoveMainWindowCommand { get; }
+        
+        private void MinMaxWindow()
         {
-            CurrentCompanyViewModel = new CompanyViewModel(parameter.ToString(), DatabasePath);
+            Application.Current.MainWindow.WindowState = Application.Current.MainWindow.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+        }
+
+        private void WriteToXmlFiles()
+        {
+            if (CurrentView is FormsViewModel currentView)
+                currentView.WriteCurrentCompanyFormsToXml();
         }
 
         // TODO - Repository pattern
@@ -115,9 +142,6 @@ namespace ESTQuestFilling.ViewModel
                 DatabaseName = fileDialog.SafeFileName;
             }
 
-            RiskFactorsViewModel = new RiskFactorsViewModel(DatabasePath);
-            QuestionsDatabaseViewModel = new QuestionsDatabaseViewModel(DatabasePath);
-            
             string connectionString =
                 "Provider=Microsoft.ACE.OLEDB.12.0;Data Source="
                 + DatabasePath
@@ -137,23 +161,8 @@ namespace ESTQuestFilling.ViewModel
             {
                 try
                 {
-                    connection.Open();
-                    string[] restrictions = new string[4];
-                    restrictions[3] = "Table";
-                    DataTable dt = connection.GetSchema("Tables", restrictions);
-                    DatabaseTableNamesList.Clear();
-                    for (int i = 0; i < dt.Rows.Count; i++)
-                    {
-                        DatabaseTableNamesList.Add(dt.Rows[i][2].ToString());
-                    }
-
-                    CompanyListCollection.Clear();
-                    foreach (var companyName in DatabaseTableNamesList.Where((s) => s.EndsWith(" - Pytania")).Select((m) => m.Replace(" - Pytania", "")))
-                    {
-                        CompanyListCollection.Add(companyName);
-                    }
-
                     // TODO - scalić z wczytywaniem RiskFactors do karty z RiskFactorsView
+                    connection.Open();
                     OleDbCommand command = new OleDbCommand(queryRiskFactors, connection);
                     OleDbDataReader reader = command.ExecuteReader();
                     QuestionViewModel.RiskFactors = new Dictionary<int, string>();
@@ -162,12 +171,17 @@ namespace ESTQuestFilling.ViewModel
                         QuestionViewModel.RiskFactors.Add((int)reader[0], $"{reader[1]} - {reader[2]} --> {reader[3]}");
                     }
                     QuestionViewModel.RiskFactors.Add(0, "brak");
+                    IsDatabaseRead = true;
                 }
+
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Cannot read database from {DatabasePath}\nException message:\n" + ex.Message);
+                    MessageBox.Show($"Application View Model cannot read database from {DatabasePath}\nException message:\n" + ex.Message);
                 }
             }
+            FormsViewModel = new FormsViewModel(DatabasePath);
+            RiskFactorsViewModel = new RiskFactorsViewModel(DatabasePath);
+            QuestionsDatabaseViewModel = new QuestionsDatabaseViewModel(DatabasePath);
         }
     }
 }
