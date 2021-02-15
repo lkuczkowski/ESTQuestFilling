@@ -10,7 +10,7 @@ using ESTQuestFilling.Model;
 
 namespace ESTQuestFilling.ViewModel
 {
-    class QuestionsDatabaseViewModel : BindableBase
+    class QuestionsDatabaseViewModel : PageViewModelBase
     {
         private ObservableCollection<QuestionViewModel> _searchQuestionCollection;
 

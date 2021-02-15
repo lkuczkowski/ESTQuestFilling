@@ -13,8 +13,43 @@
             <i:InvokeCommandAction Command="{Binding ReadRiskFactorsCommand}"/>
         </i:EventTrigger>
     </i:Interaction.Triggers>
-    <DockPanel>
-        <GroupBox DockPanel.Dock="Top" Margin="5" Header="Risk Factors List">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="300"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="2,0" StartPoint="0,0.5">
+                    <GradientStop Color="Black"/>
+                    <GradientStop Color="#FF006BA5" Offset="1"/>
+                </LinearGradientBrush>
+            </Grid.Background>
+            <TextBlock Grid.Column="0" Foreground="White" 
+                       FontSize="22" FontWeight="Bold"
+                       HorizontalAlignment="Center" VerticalAlignment="Center">
+                Risk Factors
+            </TextBlock>
+            <TextBox Grid.Column="1" Name="SearchTextBox"
+                     Height="30" Width="200" 
+                     BorderThickness="0" FontSize="12" 
+                     HorizontalContentAlignment="Center" 
+                     VerticalContentAlignment="Center" IsEnabled="False">
+                <TextBox.Resources>
+                    <Style TargetType="{x:Type Border}">
+                        <Setter Property="CornerRadius" Value="15"></Setter>
+                    </Style>
+                </TextBox.Resources>
+                <TextBox.Foreground>
+                    <SolidColorBrush Color="#FF22827D" Opacity="0.7"/>
+                </TextBox.Foreground>
+            </TextBox>
+            </Grid>
+        <GroupBox Grid.Row="1" Margin="5" Header="Risk Factors List">
             <DataGrid Name="RiskFactorsDataGrid" ItemsSource="{Binding RiskFactors}" AutoGenerateColumns="False" ScrollViewer.CanContentScroll="False">
                 <DataGrid.Columns>
                     <DataGridTextColumn Width="50"  Header="Numer" Binding="{Binding Number, Mode=OneWay}" IsReadOnly="True" />
@@ -25,5 +60,5 @@
                 </DataGrid.Columns>
             </DataGrid>
         </GroupBox>
-    </DockPanel>
+        </Grid>
 </UserControl>
