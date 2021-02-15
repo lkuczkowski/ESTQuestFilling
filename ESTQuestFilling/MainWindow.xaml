@@ -11,12 +11,12 @@
         Name="MainWin"
         d:DesignHeight="650"
         Width="1350" 
-        Background="Transparent" WindowStartupLocation="CenterOwner" WindowStyle="None" AllowsTransparency="True">
+        Background="Transparent" 
+        WindowStartupLocation="CenterOwner" WindowStyle="None">
     <Window.DataContext>
         <viewModel:ApplicationViewModel/>
     </Window.DataContext>
     <Window.Resources>
-        
         <DataTemplate DataType="{x:Type viewModel:RiskFactorsViewModel}">
             <view:RiskFactorsView/>
         </DataTemplate>
@@ -41,7 +41,8 @@
                 </MouseBinding>
                 <MouseBinding 
                         MouseAction="LeftClick"
-                        Command="{Binding DragMoveMainWindowCommand}"></MouseBinding>
+                        Command="{Binding DragMoveMainWindowCommand}">
+                </MouseBinding>
             </DockPanel.InputBindings>
             <DockPanel.Background>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -88,7 +89,7 @@
                 </Button.Template>
             </Button>
             <Button DockPanel.Dock="Top" Margin="15,40,10,10" 
-                        Command="{Binding SetFormsView}"
+                        Command="{Binding SetFormsViewCommand}"
                         IsEnabled="{Binding IsDatabaseRead}">
                 <Button.Template>
                     <ControlTemplate>
@@ -145,7 +146,10 @@
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="UIElement.IsMouseOver" Value="True">
-                                <Setter Property="Border.BorderBrush" Value="White" TargetName="OutsideBorder"></Setter>
+                                <Setter Property="Border.BorderBrush" 
+                                        Value="White" 
+                                        TargetName="OutsideBorder">
+                                </Setter>
                             </Trigger>
                             <Trigger Property="Button.IsPressed" Value="True">
                                 <Setter Property="Button.RenderTransformOrigin" Value="0.5,0.5"></Setter>
@@ -165,7 +169,7 @@
                 </Button.Template>
             </Button>
             <Button DockPanel.Dock="Top" Margin="15,60,10,10" 
-                        Command="{Binding SetQuestionsDatabaseView}"
+                        Command="{Binding SetQuestionsDatabaseViewCommand}"
                         IsEnabled="{Binding IsDatabaseRead}">
                 <Button.Template>
                     <ControlTemplate>
@@ -204,7 +208,7 @@
                 </Button.Template>
             </Button>
             <Button DockPanel.Dock="Top" Margin="15,10,10,10" 
-                        Command="{Binding SetRiskFactorsView}"
+                        Command="{Binding SetRiskFactorsViewCommand}"
                         IsEnabled="{Binding IsDatabaseRead}">
                 <Button.Template>
                     <ControlTemplate>
